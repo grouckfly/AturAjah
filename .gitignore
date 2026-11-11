@@ -58,6 +58,10 @@ migrate_working_dir/
 **/ios/**/xcuserdata
 **/ios/.generated/
 
-# Application binaries (distribute via GitHub Releases)
+# Application binaries (allow release APKs for Vercel deployment)
 *.apk
+!AturAjah.apk
+!AturAjah-universal.apk
+!public/*.apk
+releases/*.apk
 *.aab
