@@ -1,0 +1,37 @@
+name: dapur_flow
+description: "AturAjah - Daily Task & Shift Schedule Manager"
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+  flutter: ">=3.10.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+
+  # Local Persistence & Database (100% Offline)
+  sqflite: ^2.3.3+1
+  path: ^1.9.0
+  shared_preferences: ^2.2.3
+
+  # State Management (Decoupled, Lightweight)
+  provider: ^6.1.2
+
+  # Offline Exact Alarms & Notifications
+  flutter_local_notifications: ^17.1.2
+  timezone: ^0.9.3
+
+  # Internationalization & Formatting
+  intl: ^0.20.3
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+
+flutter:
+  uses-material-design: true

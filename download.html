@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Unduh AturAjah — Daily Task & Schedule Manager</title>
+  <meta name="description" content="Aplikasi pengatur jadwal dan tugas harian 100% offline dengan matriks prioritas Eisenhower dan alarm presisi.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #F4511E;
+      --primary-hover: #E64A19;
+      --secondary: #1B5E20;
+      --background: #F7F7F2;
+      --surface: #FFFFFF;
+      --text-primary: #1A1A1A;
+      --text-secondary: #555555;
+      --border: #E8E8E0;
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+    body {
+      background-color: var(--background);
+      color: var(--text-primary);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 32px 16px;
+    }
+    .card {
+      background: var(--surface);
+      max-width: 520px;
+      width: 100%;
+      border-radius: 28px;
+      padding: 36px 28px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+      border: 1px solid var(--border);
+      text-align: center;
+    }
+    .app-icon {
+      width: 88px;
+      height: 88px;
+      background: linear-gradient(135deg, #FF6E40, #F4511E);
+      border-radius: 22px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+      box-shadow: 0 12px 24px rgba(244, 81, 30, 0.28);
+    }
+    .app-icon svg {
+      width: 48px;
+      height: 48px;
+      fill: #ffffff;
+    }
+    h1 {
+      font-size: 32px;
+      font-weight: 800;
+      letter-spacing: -0.8px;
+      margin-bottom: 8px;
+      color: var(--text-primary);
+    }
+    .subtitle {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--primary);
+      margin-bottom: 12px;
+    }
+    .description {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      margin-bottom: 28px;
+    }
+    .badge-row {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 28px;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 6px 12px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 700;
+      background: #FFF3E0;
+      color: #E65100;
+      border: 1px solid #FFE0B2;
+    }
+    .badge.green {
+      background: #E8F5E9;
+      color: #1B5E20;
+      border-color: #C8E6C9;
+    }
+    .btn-main {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      background: var(--primary);
+      color: white;
+      text-decoration: none;
+      font-size: 16px;
+      font-weight: 700;
+      padding: 16px 24px;
+      border-radius: 16px;
+      transition: background 0.2s, transform 0.1s;
+      box-shadow: 0 6px 18px rgba(244, 81, 30, 0.35);
+      margin-bottom: 14px;
+      cursor: pointer;
+      border: none;
+      width: 100%;
+    }
+    .btn-main:hover {
+      background: var(--primary-hover);
+      transform: translateY(-1px);
+    }
+    .btn-secondary {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background: transparent;
+      color: var(--text-primary);
+      text-decoration: none;
+      font-size: 13.5px;
+      font-weight: 600;
+      padding: 12px 18px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      transition: background 0.2s;
+      width: 100%;
+      cursor: pointer;
+    }
+    .btn-secondary:hover {
+      background: #F0F0EA;
+    }
+    .divider {
+      height: 1px;
+      background: var(--border);
+      margin: 28px 0;
+    }
+    .guide-title {
+      font-size: 14.5px;
+      font-weight: 700;
+      text-align: left;
+      margin-bottom: 12px;
+      color: var(--text-primary);
+    }
+    .steps {
+      text-align: left;
+      list-style-position: inside;
+      font-size: 13.5px;
+      color: var(--text-secondary);
+      line-height: 1.8;
+    }
+    .steps li {
+      margin-bottom: 6px;
+    }
+    .footer {
+      margin-top: 24px;
+      font-size: 12px;
+      color: #888888;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <div class="app-icon">
+      <!-- Calendar Clock Schedule SVG -->
+      <svg viewBox="0 0 24 24">
+        <path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11zM7 11h5v5H7z"/>
+      </svg>
+    </div>
+
+    <h1>AturAjah</h1>
+    <div class="subtitle">Manajemen Tugas & Jadwal Harian Presisi</div>
+    <p class="description">
+      Aplikasi pengatur jadwal cerdas berbasis <strong>Matriks Eisenhower (4 Kategori)</strong>, alarm pengingat tepat waktu, 100% offline, tanpa iklan, dan sangat hemat baterai.
+    </p>
+
+    <div class="badge-row">
+      <span class="badge green">✓ 100% Offline</span>
+      <span class="badge">Ringan (~18 MB)</span>
+      <span class="badge green">Android 7.0+</span>
+      <span class="badge">Bilingual (ID / EN)</span>
+    </div>
+
+    <!-- Download Primary CTA (Targeting latest release) -->
+    <a id="downloadBtn" href="AturAjah.apk" class="btn-main" download>
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+        <path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM17 13l-5 5-5-5h3V9h4v4h3z"/>
+      </svg>
+      Unduh APK Versi Terbaru (v1.0.0)
+    </a>
+
+    <!-- Universal APK Alternative -->
+    <a href="AturAjah-universal.apk" class="btn-secondary" download>
+      Unduh Versi Universal (Semua Perangkat)
+    </a>
+
+    <div class="divider"></div>
+
+    <div class="guide-title">📱 Cara Pemasangan di HP Android:</div>
+    <ol class="steps">
+      <li>Klik tombol <strong>Unduh APK</strong> di atas.</li>
+      <li>Setelah selesai, buka file <strong>AturAjah.apk</strong> dari notifikasi atau folder <em>Download</em> di File Manager Anda.</li>
+      <li>Jika muncul konfirmasi keamanan, pilih <strong>Setelan</strong> lalu aktifkan <strong>"Izinkan dari sumber ini"</strong>.</li>
+      <li>Ketuk <strong>Pasang / Install</strong> dan AturAjah siap digunakan!</li>
+    </ol>
+  </div>
+
+  <div class="footer">
+    AturAjah • 100% Offline, Privacy First • Dibuat dengan Flutter
+  </div>
+
+  <script>
+    // Automatically trigger download if URL has query parameter ?download=true
+    window.addEventListener('DOMContentLoaded', () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get('download') === 'true') {
+        const link = document.getElementById('downloadBtn');
+        if (link) {
+          link.click();
+        }
+      }
+    });
+  </script>
+</body>
+</html>
