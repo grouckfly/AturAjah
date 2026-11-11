@@ -1,207 +1,211 @@
-# AturAjah — Daily Task & Schedule Manager
+# AturAjah - Daily Task and Schedule Manager
 
-<p align="center">
-  <img src="android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png" width="96" height="96" alt="AturAjah Logo" />
-  <br>
-  <strong>Aplikasi Manajemen Tugas Harian & Jadwal Praktis 100% Offline</strong>
-  <br>
-  <em>Berbasis Matriks Prioritas Eisenhower (4 Kuadran) & Pengingat Alarm Presisi</em>
-</p>
+Aplikasi Manajemen Tugas Harian dan Jadwal Praktis 100% Offline
+Berbasis Matriks Prioritas Eisenhower (4 Kuadran) dan Pengingat Alarm Presisi.
 
-<p align="center">
-  <a href="#-tautan-unduh-otomatis-versi-terbaru"><img src="https://img.shields.io/badge/Download-Latest%20APK-orange?style=for-the-badge&logo=android" alt="Download APK" /></a>
-  <img src="https://img.shields.io/badge/Platform-Android%20%7C%20iOS-blue?style=for-the-badge" alt="Platform" />
-  <img src="https://img.shields.io/badge/100%25-Offline-success?style=for-the-badge" alt="Offline" />
-  <img src="https://img.shields.io/badge/APK%20Size-~18%20MB-brightgreen?style=for-the-badge" alt="Size" />
-</p>
+[![Download Android](https://img.shields.io/badge/Download-Android%20(APK)-orange?style=for-the-badge)](https://github.com/<USERNAME>/<REPO>/releases/latest/download/AturAjah.apk)
+[![Download iOS](https://img.shields.io/badge/Download-iOS%20(TestFlight%20/%20Build)-blue?style=for-the-badge)](#panduan-instalasi-dan-build-di-ios)
+[![Platform](https://img.shields.io/badge/Platform-Android%20%7C%20iOS-lightgrey?style=for-the-badge)](https://flutter.dev)
+[![Offline](https://img.shields.io/badge/Database-100%25%20Offline-green?style=for-the-badge)](#arsitektur-offline)
+[![Size](https://img.shields.io/badge/APK%20Size-~18%20MB-brightgreen?style=for-the-badge)](#unduh-aplikasi)
 
 ---
 
-## 🚀 Sekilas Tentang AturAjah
+## Unduh Aplikasi
 
-**AturAjah** adalah aplikasi pengatur jadwal dan to-do list harian yang dirancang untuk produktivitas maksimal, ringan, dan **100% offline** tanpa memerlukan login, internet, maupun layanan pihak ketiga (bebas analitik dan pelacak).
+Pilih tautan unduhan sesuai perangkat Anda:
 
-Dibangun menggunakan **Flutter (Dart)** dengan fokus pada performa tinggi (60fps mulus pada ponsel berusia 7+ tahun) dan memori rendah.
+* **[Download Android (APK Versi Stabil Terbaru)](https://github.com/<USERNAME>/<REPO>/releases/latest/download/AturAjah.apk)**
+  * Unduh langsung file APK rilis stabil terbaru (arsitektur 64-bit modern, ukuran ~18.8 MB).
+  * Pengguna Android dapat langsung membuka file hasil unduhan untuk memasang aplikasi.
+* **[Download Android (APK Universal - Semua Perangkat)](https://github.com/<USERNAME>/<REPO>/releases/latest/download/AturAjah-universal.apk)**
+  * Versi universal yang mendukung seluruh jenis arsitektur prosesor Android (ukuran ~53.5 MB).
+* **[Download iOS (TestFlight / Panduan Build)](#panduan-instalasi-dan-build-di-ios)**
+  * Ikuti instruksi pemasangan untuk iPhone / iPad melalui Apple TestFlight atau kompilasi via Xcode.
+* **[Website Unduhan (Vercel)](download.html)**
+  * Halaman portal unduhan siap pasang di Vercel dengan tombol unduh otomatis.
 
-### ✨ Fitur Unggulan
-* **100% Offline & Privat:** Semua data tugas dan jadwal disimpan secara lokal di perangkat Anda menggunakan SQLite (`sqflite`). Tidak ada data yang keluar dari ponsel Anda.
+---
+
+## Sekilas Tentang AturAjah
+
+AturAjah adalah aplikasi manajemen jadwal dan to-do list harian yang dirancang untuk produktivitas maksimal, ringan, dan 100% offline tanpa membutuhkan akun login, koneksi internet, maupun dependensi layanan cloud eksternal.
+
+Aplikasi dikembangkan menggunakan Flutter (Dart) dengan fokus performa 60fps yang stabil dan penggunaan memori yang efisien bahkan pada perangkat keras berusia 7 tahun ke atas.
+
+### Fitur Utama
+
+* **100% Offline dan Privat:** Seluruh data tugas dan jadwal tersimpan lokal di perangkat menggunakan SQLite (sqflite). Tidak ada data pengguna yang dikirim ke server luar.
 * **Matriks Prioritas Eisenhower (4 Kuadran):**
-  - 🔴 **Kerjakan Dahulu** (*Mendesak & Penting*): Prioritas utama yang harus diselesaikan segera.
-  - 🔵 **Jadwalkan** (*Tidak Mendesak & Penting*): Rencana kerja fokus harian.
-  - 🟡 **Delegasikan** (*Mendesak & Tidak Penting*): Tugas operasional singkat.
-  - ⚪ **Nanti** (*Tidak Mendesak & Tidak Penting*): Catatan cadangan prioritas rendah.
-* **Full CRUD:** Tambah tugas baru, tandai selesai/belum selesai, edit isi tugas sewaktu-waktu, dan hapus tugas dengan dialog konfirmasi.
-* **Tampilan Jadwal Berdasarkan Kategori:** Tab Jadwal mengelompokkan tugas secara rapi berdasarkan 4 kategori prioritas lengkap dengan jam target dan durasi.
-* **Alarm Tepat Waktu & Nada Dering Sistem:** Alarm menggunakan nada dering jam alarm standar bawaan HP Anda (`content://settings/system/alarm_alert`), bukan suara notifikasi biasa.
-* **Mesin Getaran Hardware Responsif:** Getaran menggunakan akses hardware *Android Vibrator* langsung via Kotlin MethodChannel. Tetap bergetar presisi bahkan ketika dilakukan pengujian berulang kali secara cepat (*spam testing*), dan mati total jika opsi getar dinonaktifkan.
-* **Pengingat Layar Penuh & Tunda (Snooze):** Saat target waktu tiba, muncul modal pengingat layar penuh dengan opsi tunda (+5, +10, +15 menit).
-* **Buka Tanpa Blank Screen:** Dilengkapi *native splash screen* Android yang langsung merender latar dan logo sejak milidetik pertama aplikasi dibuka.
-* **Dua Bahasa (Bilingual):** Bahasa Indonesia sebagai bahasa utama dan English (US), dapat diubah instan tanpa perlu memuat ulang aplikasi.
-* **Ukuran Sangat Ringan:** Hanya **~18.8 MB** (arsitektur 64-bit modern), jauh lebih hemat penyimpanan dibanding aplikasi sejenis.
+  * **[1] Kerjakan Dahulu (Mendesak & Penting):** Tugas utama yang wajib diselesaikan segera.
+  * **[2] Jadwalkan (Tidak Mendesak & Penting):** Perencanaan fokus harian jangka menengah.
+  * **[3] Delegasikan (Mendesak & Tidak Penting):** Tugas operasional cepat.
+  * **[4] Nanti (Tidak Mendesak & Tidak Penting):** Catatan tugas cadangan berprioritas rendah.
+* **Full CRUD:** Menambah tugas baru, menandai selesai atau belum selesai, mengedit rincian tugas sewaktu-waktu, dan menghapus tugas dengan dialog konfirmasi.
+* **Tampilan Jadwal Berdasarkan Kategori:** Tab Jadwal mengelompokkan tugas secara kronologis berdasarkan 4 kuadran prioritas lengkap dengan jam target dan durasi pengerjaan.
+* **Alarm Tepat Waktu dengan Nada Dering Sistem:** Alarm menggunakan nada dering alarm standar bawaan sistem ponsel (content://settings/system/alarm_alert).
+* **Mesin Getaran Hardware Responsif:** Getaran mengontrol driver hardware Android Vibrator / VibratorManager secara langsung melalui Kotlin MethodChannel, menjamin respons instan pada pengujian beruntun (spam testing) serta mati total saat fitur getar dinonaktifkan.
+* **Pengingat Layar Penuh dan Tunda (Snooze):** Dialog pengingat interaktif saat waktu tiba dengan pilihan tunda 5, 10, atau 15 menit.
+* **Layar Pembuka Instan:** Konfigurasi native splash Android mencegah munculnya layar kosong (blank screen) saat aplikasi pertama kali dibuka.
+* **Dukungan Dua Bahasa (Bilingual):** Bahasa Indonesia sebagai bahasa utama dan English (US), dapat dialihkan secara instan tanpa perlu memulai ulang aplikasi.
+* **Ukuran Sangat Ringan:** Hanya ~18.8 MB pada build rilis ARM64.
 
 ---
 
-## 🔗 Tautan Unduh Otomatis Versi Terbaru
+## Panduan Instalasi di Android
 
-### Cara Membagikan Tautan Otomatis ke Pengguna Lain
-Setelah repositori ini diunggah ke GitHub dan Anda membuat **GitHub Release**, bagikan tautan resmi berikut kepada pengguna lain:
-
-```text
-https://github.com/<USERNAME>/<REPO>/releases/latest/download/AturAjah.apk
-```
-> **Catatan:** Ganti `<USERNAME>` dan `<REPO>` dengan akun GitHub dan nama repositori Anda. Tautan di atas adalah fitur resmi GitHub yang **otomatis mengunduh file APK dari rilis stabil paling baru** tanpa perlu memperbarui tautan setiap kali Anda merilis versi baru!
-
-### Halaman Web Unduhan Siap Pakai (`download.html`)
-Proyek ini juga menyertakan file [`download.html`](download.html) yang bisa langsung dibuka di browser atau di-hosting di **GitHub Pages**. Pengguna yang membuka link dengan parameter `?download=true` akan langsung memicu unduhan otomatis ke perangkat mereka.
-
----
-
-## 📥 Panduan Instalasi
-
-### 🤖 A. Instalasi di Android
-
-#### Cara 1: Mengunduh dan Memasang File APK (Paling Mudah)
-1. Unduh file **`AturAjah.apk`** (atau `AturAjah-arm64.apk` untuk HP Android modern) dari link rilis stabil di atas.
-2. Buka notifikasi unduhan atau buka aplikasi **Pengelola File (File Manager)** ➔ masuk ke folder **Download**.
-3. Ketuk file **`AturAjah.apk`**.
+### Cara 1: Unduh dan Pasang Langsung File APK (Direkomendasikan)
+1. Buka tautan **[Download Android (APK)](https://github.com/<USERNAME>/<REPO>/releases/latest/download/AturAjah.apk)** melalui peramban (browser) di ponsel Android Anda.
+2. Tunggu hingga proses unduhan selesai, lalu ketuk notifikasi unduhan atau buka aplikasi **Pengelola File (File Manager)** pada folder **Download**.
+3. Ketuk file **AturAjah.apk**.
 4. Jika muncul peringatan keamanan sistem Android:
-   - Ketuk **Setelan (Settings)**.
-   - Aktifkan tombol **"Izinkan dari sumber ini"** (*Allow from this source*).
-   - Kembali dan ketuk **Pasang (Install)** / **Perbarui (Update)**.
-5. Buka **AturAjah** dan aplikasi siap digunakan 100% offline!
+   * Pilih **Setelan (Settings)**.
+   * Aktifkan opsi **Izinkan dari sumber ini (Allow from this source)**.
+   * Kembali ke menu pemasangan lalu pilih **Pasang (Install)** atau **Perbarui (Update)**.
+5. Aplikasi AturAjah siap digunakan secara penuh.
 
-#### Cara 2: Pasang via ADB (Khusus Pengembang / Developer)
-Sambungkan ponsel Android Anda ke PC dengan kabel USB (aktifkan *USB Debugging*), lalu jalankan perintah terminal:
+### Cara 2: Pasang via ADB (Developer / Power User)
+Sambungkan ponsel Android ke komputer dengan USB Debugging aktif, kemudian jalankan:
 ```bash
 adb install -r AturAjah.apk
 ```
 
 ---
 
-### 🍎 B. Panduan Instalasi & Build di iOS
+## Panduan Instalasi dan Build di iOS
 
-Karena kebijakan keamanan Apple iOS tidak mengizinkan pemasangan file aplikasi mentah tanpa sertifikat pengembang, aplikasi Flutter untuk iOS harus dikompilasi menggunakan Xcode.
+Kebijakan keamanan sistem operasi Apple iOS tidak mengizinkan instalasi file biner mentah (.ipa) secara langsung dari peramban web tanpa sertifikat terdaftar. Pemasangan pada perangkat iOS dapat dilakukan melalui dua jalur berikut:
+
+### Jalur 1: Menggunakan Apple TestFlight (Rekomendasi untuk Pengguna Biasa)
+1. Daftarkan akun pengembang di Apple Developer Program.
+2. Buat build rilis iOS dengan perintah:
+   ```bash
+   flutter build ipa --release
+   ```
+3. Unggah arsip build ke App Store Connect dan aktifkan pengujian publik via TestFlight.
+4. Bagikan tautan publik TestFlight kepada pengguna (contoh: `https://testflight.apple.com/join/xxxxxx`). Pengguna cukup mengetuk link tersebut di iPhone untuk langsung memasang aplikasi.
+
+### Jalur 2: Build Manual Melalui Xcode (Developer / Pengujian Pribadi)
 
 #### Prasyarat:
-* Komputer **Mac (macOS)** dengan Xcode 14+ terpasang.
-* Flutter SDK & CocoaPods (`sudo gem install cocoapods`).
-* Akun Apple Developer (bisa menggunakan akun gratis untuk testing langsung di perangkat fisik).
+* Komputer Mac (macOS Monterey atau versi lebih baru)
+* Xcode 14+ terpasang
+* CocoaPods (`sudo gem install cocoapods`)
+* Akun Apple ID (dapat menggunakan akun personal gratis)
 
-#### Langkah-Langkah Build & Jalankan:
-1. Buka terminal di direktori proyek:
+#### Langkah Pengerjaan:
+1. Unduh atau clone repositori proyek:
    ```bash
-   cd "ToDoApp"
-   flutter pub get
+   git clone https://github.com/<USERNAME>/<REPO>.git
+   cd <REPO>
    ```
-2. Pasang dependensi Pod untuk iOS:
+2. Pasang dependensi aplikasi dan CocoaPods:
    ```bash
+   flutter pub get
    cd ios
    pod install
    cd ..
    ```
-3. Buka proyek iOS di Xcode:
+3. Buka workspace di Xcode:
    ```bash
    open ios/Runner.xcworkspace
    ```
 4. Di Xcode:
-   - Pilih target **Runner** di panel kiri.
-   - Buka tab **Signing & Capabilities**.
-   - Pada bagian **Team**, pilih akun Apple ID / Tim Pengembang Anda.
-   - Pastikan **Bundle Identifier** unik (contoh: `com.aturajah.app`).
-5. Hubungkan perangkat iPhone fisik atau pilih salah satu iOS Simulator.
-6. Tekan tombol **Play / Run** (`Cmd + R`) di Xcode, atau jalankan perintah Flutter di terminal:
+   * Pilih target **Runner** pada panel sebelah kiri.
+   * Masuk ke tab **Signing & Capabilities**.
+   * Pada dropdown **Team**, pilih akun Apple ID Anda.
+   * Pastikan **Bundle Identifier** unik.
+5. Sambungkan perangkat iPhone atau pilih salah satu iOS Simulator.
+6. Tekan tombol **Run** (Command + R) pada Xcode atau jalankan via terminal:
    ```bash
    flutter run -d ios
    ```
-7. **Membuat File IPA (Untuk Distribusi Ad-Hoc / TestFlight):**
-   ```bash
-   flutter build ipa --release
-   ```
-   File hasil build `.ipa` akan berada di folder `build/ios/archive/` dan siap diunggah ke Apple TestFlight atau App Store Connect.
 
 ---
 
-## 🛠️ Membangun dari Source Code (Developer Guide)
+## Panduan Pengembang (Build dari Source Code)
 
-### Prasyarat
-* **Flutter SDK:** Version `>= 3.10.0`
-* **Dart SDK:** Version `>= 3.0.0 < 4.0.0`
-* **Java:** OpenJDK 17
-* **Android SDK:** `minSdkVersion 24` (Android 7.0+), `targetSdkVersion 34`
+### Prasyarat Lingkungan Kerja
+* Flutter SDK: Versi >= 3.10.0
+* Dart SDK: Versi >= 3.0.0 < 4.0.0
+* Java: OpenJDK 17
+* Android SDK: minSdkVersion 24 (Android 7.0+), compileSdkVersion 34
 
-### Perintah Kompilasi
+### Perintah Pembangunan Proyek
 
-1. **Unduh seluruh paket dependensi:**
+1. **Mengambil dependensi proyek:**
    ```bash
    flutter pub get
    ```
 
-2. **Jalankan pengecekan kualitas kode:**
+2. **Menjalankan analisis sintaks dan kualitas kode:**
    ```bash
    flutter analyze
    ```
 
-3. **Jalankan di perangkat yang tersambung (Debug Mode):**
+3. **Menjalankan aplikasi dalam mode pengembangan:**
    ```bash
    flutter run
    ```
 
-4. **Kompilasi Release APK Ringan (Split Per-ABI — Rekomendasi):**
+4. **Membangun APK Rilis Terpisah Per Arsitektur (Sangat Ringan):**
    ```bash
    flutter build apk --release --split-per-abi
    ```
-   *Hasil APK berada di `build/app/outputs/flutter-apk/`:*
-   - `app-arm64-v8a-release.apk` (**~18.8 MB** — Untuk 95%+ ponsel Android modern).
-   - `app-armeabi-v7a-release.apk` (**~16.4 MB** — Untuk ponsel 32-bit lama).
+   File keluaran:
+   * `build/app/outputs/flutter-apk/app-arm64-v8a-release.apk` (~18.8 MB)
+   * `build/app/outputs/flutter-apk/app-armeabi-v7a-release.apk` (~16.4 MB)
 
-5. **Kompilasi Universal Release APK (Mendukung semua arsitektur dalam 1 file):**
+5. **Membangun APK Rilis Universal (Mendukung Seluruh Perangkat):**
    ```bash
    flutter build apk --release
    ```
-   *Hasil APK:* `build/app/outputs/flutter-apk/app-release.apk` (**~53 MB**).
+   File keluaran:
+   * `build/app/outputs/flutter-apk/app-release.apk` (~53.5 MB)
 
 ---
 
-## 📁 Struktur Direktori
+## Struktur Direktori
 
 ```text
 ToDoApp/
-├── android/                          <-- Kode native Android & Kotlin MethodChannel
+├── android/
 │   └── app/src/main/
-│       ├── kotlin/.../MainActivity.kt <-- Direct Hardware Vibrator (VibratorManager)
+│       ├── kotlin/.../MainActivity.kt <-- Akses native Android Vibrator
 │       └── AndroidManifest.xml       <-- Label: AturAjah, Izin alarm & getar
 ├── ios/                              <-- Runner Xcode & Info.plist iOS
 ├── lib/
 │   ├── constants/
-│   │   ├── app_colors.dart           <-- Palet warna tema terang presisi
-│   │   └── app_theme.dart            <-- Light Theme ONLY (Performa 60fps)
+│   │   ├── app_colors.dart           <-- Palet warna tema terang
+│   │   └── app_theme.dart            <-- Konfigurasi tema Light 60fps
 │   ├── l10n/
 │   │   └── app_localizations.dart    <-- Kamus bilingual (Indonesia & English)
 │   ├── models/
-│   │   ├── priority_quadrant.dart    <-- Model 4 Kuadran Matriks Eisenhower
+│   │   ├── priority_quadrant.dart    <-- Model 4 Kuadran Prioritas
 │   │   └── task_model.dart           <-- Entitas tugas SQLite
 │   ├── providers/
-│   │   ├── locale_provider.dart      <-- Manajemen ganti bahasa instan
-│   │   └── task_provider.dart        <-- State management Full CRUD tugas
+│   │   ├── locale_provider.dart      <-- State manajemen bahasa
+│   │   └── task_provider.dart        <-- State manajemen CRUD tugas
 │   ├── services/
-│   │   ├── database_helper.dart      <-- SQLite 100% Offline
-│   │   ├── notification_service.dart <-- Dual-channel alarm ringtone sistem
-│   │   ├── settings_service.dart     <-- Preferensi getar & durasi alarm
-│   │   └── vibration_service.dart    <-- Layanan getar hardware instan
+│   │   ├── database_helper.dart      <-- Pengelola database SQLite offline
+│   │   ├── notification_service.dart <-- Pengelola dual-channel alarm sistem
+│   │   ├── settings_service.dart     <-- Pengelola durasi alarm & opsi getar
+│   │   └── vibration_service.dart    <-- Layanan pemicu getar hardware native
 │   ├── screens/
-│   │   ├── splash_screen.dart        <-- Layanan pembuka kilat tanpa blank screen
-│   │   ├── daily_dashboard_screen.dart<-- Dasbor tugas & checklist
-│   │   ├── schedule_timeline_screen.dart<-- Jadwal per 4 kategori prioritas
-│   │   ├── task_input_screen.dart    <-- Form input tugas & edit tugas
-│   │   ├── settings_screen.dart      <-- Pengaturan durasi alarm & uji coba getar
+│   │   ├── splash_screen.dart        <-- Layar pembuka instan tanpa blank screen
+│   │   ├── daily_dashboard_screen.dart<-- Dasbor tugas & checklist progres
+│   │   ├── schedule_timeline_screen.dart<-- Jadwal per kategori kuadran
+│   │   ├── task_input_screen.dart    <-- Form input tugas & pengeditan
+│   │   ├── settings_screen.dart      <-- Setelan durasi alarm & uji getar
 │   │   └── task_reminder_modal.dart  <-- Modal pengingat layar penuh
 │   └── main.dart                     <-- Titik masuk aplikasi (AturAjahApp)
-├── download.html                     <-- Halaman web unduh otomatis versi terbaru
-├── README.md                         <-- Dokumentasi lengkap proyek
-└── pubspec.yaml                      <-- Dependensi stabil
+├── download.html                     <-- Portal unduhan web siap pasang di Vercel
+├── README.md                         <-- Dokumentasi proyek
+└── pubspec.yaml                      <-- Konfigurasi dependensi aplikasi
 ```
 
 ---
 
-## 📄 Lisensi
-Didistribusikan di bawah lisensi **MIT License**. Bebas dimodifikasi, dipelajari, dan digunakan untuk kebutuhan operasional pribadi maupun tim.
+## Lisensi
+
+Didistribusikan di bawah lisensi **MIT License**. Bebas digunakan, dipelajari, dan dikembangkan kembali untuk kebutuhan pribadi maupun organisasi.

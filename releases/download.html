@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Unduh AturAjah — Daily Task & Schedule Manager</title>
+  <title>Unduh AturAjah - Daily Task & Schedule Manager</title>
   <meta name="description" content="Aplikasi pengatur jadwal dan tugas harian 100% offline dengan matriks prioritas Eisenhower dan alarm presisi.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -12,6 +12,8 @@
     :root {
       --primary: #F4511E;
       --primary-hover: #E64A19;
+      --ios-color: #007AFF;
+      --ios-hover: #0062CC;
       --secondary: #1B5E20;
       --background: #F7F7F2;
       --surface: #FFFFFF;
@@ -77,7 +79,7 @@
       font-size: 14px;
       color: var(--text-secondary);
       line-height: 1.6;
-      margin-bottom: 28px;
+      margin-bottom: 24px;
     }
     .badge-row {
       display: flex;
@@ -102,45 +104,53 @@
       color: #1B5E20;
       border-color: #C8E6C9;
     }
-    .btn-main {
+    .button-group {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+    .btn {
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 10px;
-      background: var(--primary);
-      color: white;
       text-decoration: none;
-      font-size: 16px;
+      font-size: 15.5px;
       font-weight: 700;
-      padding: 16px 24px;
+      padding: 16px 20px;
       border-radius: 16px;
       transition: background 0.2s, transform 0.1s;
-      box-shadow: 0 6px 18px rgba(244, 81, 30, 0.35);
-      margin-bottom: 14px;
       cursor: pointer;
       border: none;
       width: 100%;
     }
-    .btn-main:hover {
+    .btn-android {
+      background: var(--primary);
+      color: white;
+      box-shadow: 0 6px 18px rgba(244, 81, 30, 0.35);
+    }
+    .btn-android:hover {
       background: var(--primary-hover);
       transform: translateY(-1px);
     }
+    .btn-ios {
+      background: #1C1C1E;
+      color: white;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
+    }
+    .btn-ios:hover {
+      background: #2C2C2E;
+      transform: translateY(-1px);
+    }
     .btn-secondary {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
       background: transparent;
       color: var(--text-primary);
-      text-decoration: none;
       font-size: 13.5px;
       font-weight: 600;
       padding: 12px 18px;
       border-radius: 12px;
       border: 1px solid var(--border);
-      transition: background 0.2s;
-      width: 100%;
-      cursor: pointer;
     }
     .btn-secondary:hover {
       background: #F0F0EA;
@@ -148,7 +158,7 @@
     .divider {
       height: 1px;
       background: var(--border);
-      margin: 28px 0;
+      margin: 24px 0;
     }
     .guide-title {
       font-size: 14.5px;
@@ -188,38 +198,56 @@
     <h1>AturAjah</h1>
     <div class="subtitle">Manajemen Tugas & Jadwal Harian Presisi</div>
     <p class="description">
-      Aplikasi pengatur jadwal cerdas berbasis <strong>Matriks Eisenhower (4 Kategori)</strong>, alarm pengingat tepat waktu, 100% offline, tanpa iklan, dan sangat hemat baterai.
+      Aplikasi pengatur jadwal cerdas berbasis <strong>Matriks Prioritas Eisenhower (4 Kuadran)</strong>, alarm pengingat tepat waktu, 100% offline, tanpa iklan, dan hemat baterai.
     </p>
 
     <div class="badge-row">
-      <span class="badge green">✓ 100% Offline</span>
+      <span class="badge green">100% Offline</span>
       <span class="badge">Ringan (~18 MB)</span>
       <span class="badge green">Android 7.0+</span>
+      <span class="badge">iOS 13.0+</span>
       <span class="badge">Bilingual (ID / EN)</span>
     </div>
 
-    <!-- Download Primary CTA (Targeting latest release) -->
-    <a id="downloadBtn" href="AturAjah.apk" class="btn-main" download>
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
-        <path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM17 13l-5 5-5-5h3V9h4v4h3z"/>
-      </svg>
-      Unduh APK Versi Terbaru (v1.0.0)
-    </a>
+    <div class="button-group">
+      <!-- Download Android Primary CTA -->
+      <a id="downloadAndroidBtn" href="AturAjah.apk" class="btn btn-android" download>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+          <path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM17 13l-5 5-5-5h3V9h4v4h3z"/>
+        </svg>
+        Download Android (APK v1.0.0)
+      </a>
 
-    <!-- Universal APK Alternative -->
-    <a href="AturAjah-universal.apk" class="btn-secondary" download>
-      Unduh Versi Universal (Semua Perangkat)
-    </a>
+      <!-- Download iOS CTA (Links to TestFlight or GitHub iOS instructions) -->
+      <a id="downloadIosBtn" href="https://github.com" target="_blank" class="btn btn-ios">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+          <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 6.37c.62-.75 1.04-1.8 0.92-2.85-.9.04-2 .6-2.65 1.35-.58.67-1.08 1.74-.95 2.77 1.01.08 2.05-.52 2.68-1.27z"/>
+        </svg>
+        Download iOS (Apple TestFlight)
+      </a>
+
+      <!-- Universal APK Alternative -->
+      <a href="AturAjah-universal.apk" class="btn btn-secondary" download>
+        Download Android Universal APK (Semua Perangkat)
+      </a>
+    </div>
 
     <div class="divider"></div>
 
-    <div class="guide-title">📱 Cara Pemasangan di HP Android:</div>
+    <div class="guide-title">Cara Pemasangan di HP Android:</div>
     <ol class="steps">
-      <li>Klik tombol <strong>Unduh APK</strong> di atas.</li>
-      <li>Setelah selesai, buka file <strong>AturAjah.apk</strong> dari notifikasi atau folder <em>Download</em> di File Manager Anda.</li>
-      <li>Jika muncul konfirmasi keamanan, pilih <strong>Setelan</strong> lalu aktifkan <strong>"Izinkan dari sumber ini"</strong>.</li>
-      <li>Ketuk <strong>Pasang / Install</strong> dan AturAjah siap digunakan!</li>
+      <li>Klik tombol <strong>Download Android</strong> di atas.</li>
+      <li>Setelah unduhan selesai, buka file <strong>AturAjah.apk</strong> dari notifikasi atau folder <em>Download</em> di File Manager Anda.</li>
+      <li>Jika muncul konfirmasi keamanan sistem, pilih <strong>Setelan</strong> lalu aktifkan <strong>"Izinkan dari sumber ini"</strong>.</li>
+      <li>Ketuk <strong>Pasang / Install</strong> dan AturAjah siap digunakan secara offline!</li>
     </ol>
+
+    <div class="divider"></div>
+
+    <div class="guide-title">Cara Pemasangan di iOS:</div>
+    <p style="font-size: 13.5px; color: var(--text-secondary); text-align: left; line-height: 1.6;">
+      Pengguna iPhone dapat memasang aplikasi melalui tautan <strong>Apple TestFlight</strong> resmi atau melakukan build langsung menggunakan Xcode.
+    </p>
   </div>
 
   <div class="footer">
@@ -227,11 +255,11 @@
   </div>
 
   <script>
-    // Automatically trigger download if URL has query parameter ?download=true
+    // Automatically trigger download on Android devices if ?download=true is in URL
     window.addEventListener('DOMContentLoaded', () => {
       const urlParams = new URLSearchParams(window.location.search);
       if (urlParams.get('download') === 'true') {
-        const link = document.getElementById('downloadBtn');
+        const link = document.getElementById('downloadAndroidBtn');
         if (link) {
           link.click();
         }
