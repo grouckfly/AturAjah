@@ -1,29 +1,30 @@
 # AturAjah - Daily Task and Schedule Manager
 
 Aplikasi Manajemen Tugas Harian dan Jadwal Praktis 100% Offline
-Berbasis Matriks Prioritas Eisenhower (4 Kuadran) dan Pengingat Alarm Presisi.
+Berbasis 4 Kategori Prioritas Praktis dan Pengingat Alarm Presisi.
 
-[![Download Android](https://img.shields.io/badge/Download-Android%20(APK)-orange?style=for-the-badge)](https://github.com/<USERNAME>/<REPO>/releases/latest/download/AturAjah.apk)
+[![Website Vercel](https://img.shields.io/badge/Website-aturajah.vercel.app-black?style=for-the-badge)](https://aturajah.vercel.app)
+[![Download Android](https://img.shields.io/badge/Download-Android%20(APK)-orange?style=for-the-badge)](https://aturajah.vercel.app)
 [![Download iOS](https://img.shields.io/badge/Download-iOS%20(TestFlight%20/%20Build)-blue?style=for-the-badge)](#panduan-instalasi-dan-build-di-ios)
 [![Platform](https://img.shields.io/badge/Platform-Android%20%7C%20iOS-lightgrey?style=for-the-badge)](https://flutter.dev)
-[![Offline](https://img.shields.io/badge/Database-100%25%20Offline-green?style=for-the-badge)](#arsitektur-offline)
+[![Offline](https://img.shields.io/badge/Database-100%25%20Offline-green?style=for-the-badge)](#sekilas-tentang-aturajah)
 [![Size](https://img.shields.io/badge/APK%20Size-~18%20MB-brightgreen?style=for-the-badge)](#unduh-aplikasi)
 
 ---
 
 ## Unduh Aplikasi
 
-Pilih tautan unduhan sesuai perangkat Anda:
+Kunjungi portal web resmi atau pilih tautan unduhan sesuai perangkat Anda:
 
-* **[Download Android (APK Versi Stabil Terbaru)](https://github.com/<USERNAME>/<REPO>/releases/latest/download/AturAjah.apk)**
-  * Unduh langsung file APK rilis stabil terbaru (arsitektur 64-bit modern, ukuran ~18.8 MB).
+* **[Website Resmi & Portal Unduhan Vercel](https://aturajah.vercel.app)**
+  * Akses laman web langsung dari ponsel Android atau iPhone untuk mengunduh aplikasi secara otomatis.
+* **[Download Android (APK Versi Stabil Terbaru)](https://aturajah.vercel.app/AturAjah.apk)**
+  * Unduh langsung file APK rilis stabil terbaru (arsitektur 64-bit modern, ukuran ringan ~18.8 MB).
   * Pengguna Android dapat langsung membuka file hasil unduhan untuk memasang aplikasi.
-* **[Download Android (APK Universal - Semua Perangkat)](https://github.com/<USERNAME>/<REPO>/releases/latest/download/AturAjah-universal.apk)**
+* **[Download Android (APK Universal - Semua Perangkat)](https://aturajah.vercel.app/AturAjah-universal.apk)**
   * Versi universal yang mendukung seluruh jenis arsitektur prosesor Android (ukuran ~53.5 MB).
 * **[Download iOS (TestFlight / Panduan Build)](#panduan-instalasi-dan-build-di-ios)**
   * Ikuti instruksi pemasangan untuk iPhone / iPad melalui Apple TestFlight atau kompilasi via Xcode.
-* **[Website Unduhan (Vercel)](download.html)**
-  * Halaman portal unduhan siap pasang di Vercel dengan tombol unduh otomatis.
 
 ---
 
@@ -36,13 +37,18 @@ Aplikasi dikembangkan menggunakan Flutter (Dart) dengan fokus performa 60fps yan
 ### Fitur Utama
 
 * **100% Offline dan Privat:** Seluruh data tugas dan jadwal tersimpan lokal di perangkat menggunakan SQLite (sqflite). Tidak ada data pengguna yang dikirim ke server luar.
-* **Matriks Prioritas Eisenhower (4 Kuadran):**
-  * **[1] Kerjakan Dahulu (Mendesak & Penting):** Tugas utama yang wajib diselesaikan segera.
-  * **[2] Jadwalkan (Tidak Mendesak & Penting):** Perencanaan fokus harian jangka menengah.
-  * **[3] Delegasikan (Mendesak & Tidak Penting):** Tugas operasional cepat.
-  * **[4] Nanti (Tidak Mendesak & Tidak Penting):** Catatan tugas cadangan berprioritas rendah.
+* **Sistem Pembagian Tugas yang Praktis (4 Kategori):**
+  Memudahkan Anda memilah mana tugas yang harus diselesaikan sekarang dan mana yang bisa ditunda tanpa pusing:
+  * **[1] Kerjakan Sekarang (Paling Mendesak & Sangat Penting):**
+    Tugas darurat atau paling genting hari ini yang tidak bisa ditunda sama sekali. Wajib Anda selesaikan paling pertama (contoh: pesanan yang harus dikirim siang ini, masalah peralatan mati, menyelesaikan deadline penting hari ini).
+  * **[2] Jadwalkan Nanti (Penting, tapi Masih Ada Waktu):**
+    Rencana kerja penting untuk masa depan yang tidak perlu buru-buru, tapi harus dijadwalkan agar tidak terlupakan (contoh: belanja stok bahan mingguan, menyusun rencana kerja besok, evaluasi berkala).
+  * **[3] Minta Bantuan / Bagi Tugas (Mendesak, tapi Bisa Dikerjakan Orang Lain):**
+    Tugas yang butuh diselesaikan cepat, tapi sebenarnya tidak harus Anda sendiri yang mengerjakannya (contoh: mencuci piring, merapikan meja, membalas pesan konfirmasi pelanggan).
+  * **[4] Simpan Dulu (Santai & Tidak Mendesak):**
+    Pekerjaan ringan atau ide tambahan yang sifatnya santai dan opsional. Hanya dikerjakan jika semua tugas penting lainnya sudah selesai (contoh: merapikan arsip lama, mencoba ide dekorasi baru).
 * **Full CRUD:** Menambah tugas baru, menandai selesai atau belum selesai, mengedit rincian tugas sewaktu-waktu, dan menghapus tugas dengan dialog konfirmasi.
-* **Tampilan Jadwal Berdasarkan Kategori:** Tab Jadwal mengelompokkan tugas secara kronologis berdasarkan 4 kuadran prioritas lengkap dengan jam target dan durasi pengerjaan.
+* **Tampilan Jadwal Berdasarkan Kategori:** Tab Jadwal mengelompokkan tugas secara kronologis berdasarkan 4 kategori di atas lengkap dengan jam target dan durasi pengerjaan.
 * **Alarm Tepat Waktu dengan Nada Dering Sistem:** Alarm menggunakan nada dering alarm standar bawaan sistem ponsel (content://settings/system/alarm_alert).
 * **Mesin Getaran Hardware Responsif:** Getaran mengontrol driver hardware Android Vibrator / VibratorManager secara langsung melalui Kotlin MethodChannel, menjamin respons instan pada pengujian beruntun (spam testing) serta mati total saat fitur getar dinonaktifkan.
 * **Pengingat Layar Penuh dan Tunda (Snooze):** Dialog pengingat interaktif saat waktu tiba dengan pilihan tunda 5, 10, atau 15 menit.
@@ -54,15 +60,16 @@ Aplikasi dikembangkan menggunakan Flutter (Dart) dengan fokus performa 60fps yan
 
 ## Panduan Instalasi di Android
 
-### Cara 1: Unduh dan Pasang Langsung File APK (Direkomendasikan)
-1. Buka tautan **[Download Android (APK)](https://github.com/<USERNAME>/<REPO>/releases/latest/download/AturAjah.apk)** melalui peramban (browser) di ponsel Android Anda.
-2. Tunggu hingga proses unduhan selesai, lalu ketuk notifikasi unduhan atau buka aplikasi **Pengelola File (File Manager)** pada folder **Download**.
-3. Ketuk file **AturAjah.apk**.
-4. Jika muncul peringatan keamanan sistem Android:
+### Cara 1: Unduh dan Pasang Langsung dari Web Vercel (Direkomendasikan)
+1. Buka laman **[aturajah.vercel.app](https://aturajah.vercel.app)** melalui peramban (browser) di ponsel Android Anda.
+2. Ketuk tombol **Download Android (APK)**.
+3. Tunggu hingga proses unduhan selesai, lalu ketuk notifikasi unduhan atau buka aplikasi **Pengelola File (File Manager)** pada folder **Download**.
+4. Ketuk file **AturAjah.apk**.
+5. Jika muncul peringatan keamanan sistem Android:
    * Pilih **Setelan (Settings)**.
    * Aktifkan opsi **Izinkan dari sumber ini (Allow from this source)**.
    * Kembali ke menu pemasangan lalu pilih **Pasang (Install)** atau **Perbarui (Update)**.
-5. Aplikasi AturAjah siap digunakan secara penuh.
+6. Aplikasi AturAjah siap digunakan secara penuh.
 
 ### Cara 2: Pasang via ADB (Developer / Power User)
 Sambungkan ponsel Android ke komputer dengan USB Debugging aktif, kemudian jalankan:
@@ -181,7 +188,7 @@ ToDoApp/
 │   ├── l10n/
 │   │   └── app_localizations.dart    <-- Kamus bilingual (Indonesia & English)
 │   ├── models/
-│   │   ├── priority_quadrant.dart    <-- Model 4 Kuadran Prioritas
+│   │   ├── priority_quadrant.dart    <-- Model 4 Kategori Prioritas
 │   │   └── task_model.dart           <-- Entitas tugas SQLite
 │   ├── providers/
 │   │   ├── locale_provider.dart      <-- State manajemen bahasa
@@ -199,7 +206,8 @@ ToDoApp/
 │   │   ├── settings_screen.dart      <-- Setelan durasi alarm & uji getar
 │   │   └── task_reminder_modal.dart  <-- Modal pengingat layar penuh
 │   └── main.dart                     <-- Titik masuk aplikasi (AturAjahApp)
-├── download.html                     <-- Portal unduhan web siap pasang di Vercel
+├── index.html                        <-- Portal unduhan web utama di Vercel
+├── download.html                     <-- Portal unduhan cadangan
 ├── README.md                         <-- Dokumentasi proyek
 └── pubspec.yaml                      <-- Konfigurasi dependensi aplikasi
 ```
