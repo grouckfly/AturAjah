@@ -6,7 +6,6 @@ import '../l10n/app_localizations.dart';
 import '../models/task_model.dart';
 import '../providers/locale_provider.dart';
 import '../providers/task_provider.dart';
-import '../widgets/live_status_banner.dart';
 import '../widgets/task_card.dart';
 import 'settings_screen.dart';
 import 'task_input_screen.dart';
@@ -148,18 +147,10 @@ class DailyDashboardScreen extends StatelessWidget {
                 ),
               ),
 
-              // Live Status Banner
-              const SliverToBoxAdapter(
-                child: Padding(
-                  padding: EdgeInsets.fromLTRB(16, 8, 16, 16),
-                  child: LiveStatusBanner(),
-                ),
-              ),
-
               // Daily Summary & Checklist Header
               SliverToBoxAdapter(
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [

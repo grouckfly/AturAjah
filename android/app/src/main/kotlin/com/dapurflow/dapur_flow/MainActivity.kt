@@ -1,6 +1,7 @@
 package com.dapurflow.dapur_flow
 
 import android.content.Context
+import android.media.AudioAttributes
 import android.os.Build
 import android.os.VibrationEffect
 import android.os.Vibrator
@@ -45,16 +46,22 @@ class MainActivity : FlutterActivity() {
         try {
             val vibrator = getVibrator()
             vibrator.cancel()
+
+            val audioAttributes = AudioAttributes.Builder()
+                .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                .setUsage(AudioAttributes.USAGE_ALARM)
+                .setFlags(AudioAttributes.FLAG_AUDIBILITY_ENFORCED)
+                .build()
+
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                vibrator.vibrate(
-                    VibrationEffect.createOneShot(
-                        durationMs,
-                        VibrationEffect.DEFAULT_AMPLITUDE
-                    )
+                val effect = VibrationEffect.createOneShot(
+                    durationMs,
+                    VibrationEffect.DEFAULT_AMPLITUDE
                 )
+                vibrator.vibrate(effect, audioAttributes)
             } else {
                 @Suppress("DEPRECATION")
-                vibrator.vibrate(durationMs)
+                vibrator.vibrate(durationMs, audioAttributes)
             }
         } catch (e: Exception) {
             e.printStackTrace()

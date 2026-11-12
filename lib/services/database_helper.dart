@@ -1,7 +1,6 @@
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 import '../models/task_model.dart';
-import '../models/priority_quadrant.dart';
 
 /// 100% Offline SQLite database manager for Dapur Flow.
 class DatabaseHelper {
@@ -12,7 +11,7 @@ class DatabaseHelper {
 
   Future<Database> get database async {
     if (_database != null) return _database!;
-    _database = await _initDB('dapur_flow.db');
+    _database = await _initDB('atur_ajah.db');
     return _database!;
   }
 
@@ -46,52 +45,7 @@ class DatabaseHelper {
         created_at $textNotNull
       )
     ''');
-
-    // Populate realistic kitchen shift tasks for immediate operational experience
-    final today = _getTodayDateString();
-    await db.insert('tasks', {
-      'title': 'Potong sayuran & bahan salad segar',
-      'target_time': '09:15',
-      'duration_minutes': 45,
-      'assignee': null,
-      'priority_quadrant': PriorityQuadrant.doFirst.value,
-      'is_completed': 0,
-      'snooze_count': 0,
-      'created_at': today,
-    });
-
-    await db.insert('tasks', {
-      'title': 'Cek stok bumbu dasar & kaldu ayam',
-      'target_time': '10:00',
-      'duration_minutes': 30,
-      'assignee': null,
-      'priority_quadrant': PriorityQuadrant.schedule.value,
-      'is_completed': 1,
-      'snooze_count': 0,
-      'created_at': today,
-    });
-
-    await db.insert('tasks', {
-      'title': 'Restock packaging & cup take-away',
-      'target_time': '11:00',
-      'duration_minutes': 20,
-      'assignee': null,
-      'priority_quadrant': PriorityQuadrant.delegate.value,
-      'is_completed': 0,
-      'snooze_count': 0,
-      'created_at': today,
-    });
-
-    await db.insert('tasks', {
-      'title': 'Briefing cepat tim jelang Jam Sibuk (Rush)',
-      'target_time': '11:45',
-      'duration_minutes': 15,
-      'assignee': null,
-      'priority_quadrant': PriorityQuadrant.doFirst.value,
-      'is_completed': 0,
-      'snooze_count': 0,
-      'created_at': today,
-    });
+    // Fresh installation starts with clean empty task list
   }
 
   static String _getTodayDateString() {
