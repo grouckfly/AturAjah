@@ -2,6 +2,9 @@ package com.dapurflow.dapur_flow
 
 import android.content.Context
 import android.media.AudioAttributes
+import android.media.MediaPlayer
+import android.media.RingtoneManager
+import android.net.Uri
 import android.os.Build
 import android.os.Handler
 import android.os.Looper
@@ -15,29 +18,37 @@ import io.flutter.plugin.common.MethodChannel
 class MainActivity : FlutterActivity() {
     private val CHANNEL = "com.aturajah.app/vibrate"
     private val mainHandler = Handler(Looper.getMainLooper())
-    private var stopVibrationRunnable: Runnable? = null
+    private var stopAlarmRunnable: Runnable? = null
+    private var mediaPlayer: MediaPlayer? = null
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
 
         MethodChannel(flutterEngine.dartExecutor.binaryMessenger, CHANNEL).setMethodCallHandler { call, result ->
             when (call.method) {
+                "startAlarm" -> {
+                    val durationSeconds = call.argument<Int>("durationSeconds") ?: 30
+                    val withVibration = call.argument<Boolean>("withVibration") ?: true
+                    val withAudio = call.argument<Boolean>("withAudio") ?: true
+                    startAlarm(durationSeconds, withVibration, withAudio)
+                    result.success(true)
+                }
                 "startAlarmVibration" -> {
                     val durationSeconds = call.argument<Int>("durationSeconds") ?: 30
-                    startAlarmVibration(durationSeconds)
+                    startAlarm(durationSeconds, withVibration = true, withAudio = true)
                     result.success(true)
                 }
                 "vibrate" -> {
                     val durationMs = (call.argument<Int>("duration") ?: 400).toLong()
                     if (durationMs > 1000) {
-                        startAlarmVibration((durationMs / 1000).toInt())
+                        startAlarm((durationMs / 1000).toInt(), withVibration = true, withAudio = false)
                     } else {
                         triggerShortVibration(durationMs)
                     }
                     result.success(true)
                 }
-                "cancel" -> {
-                    cancelVibration()
+                "stopAlarm", "cancel" -> {
+                    stopAlarm()
                     result.success(true)
                 }
                 else -> result.notImplemented()
@@ -63,30 +74,53 @@ class MainActivity : FlutterActivity() {
             .build()
     }
 
-    private fun startAlarmVibration(durationSeconds: Int) {
+    private fun startAlarm(durationSeconds: Int, withVibration: Boolean, withAudio: Boolean) {
         try {
-            cancelVibration()
-
-            val vibrator = getVibrator()
-            if (!vibrator.hasVibrator()) return
+            stopAlarm()
 
             val audioAttributes = getAlarmAudioAttributes()
-            // Rhythmic alarm vibration: delay 0ms, vibrate 800ms, pause 400ms (repeats indefinitely)
-            val timings = longArrayOf(0, 800, 400)
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                val effect = VibrationEffect.createWaveform(timings, 0)
-                vibrator.vibrate(effect, audioAttributes)
-            } else {
-                @Suppress("DEPRECATION")
-                vibrator.vibrate(timings, 0, audioAttributes)
+            // 1. Loop alarm sound continuously (isLooping = true) so sound never expires before duration
+            if (withAudio) {
+                try {
+                    val alarmUri: Uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM)
+                        ?: RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE)
+                        ?: RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
+                        ?: android.provider.Settings.System.DEFAULT_ALARM_ALERT_URI
+
+                    mediaPlayer = MediaPlayer().apply {
+                        setDataSource(applicationContext, alarmUri)
+                        setAudioAttributes(audioAttributes)
+                        isLooping = true // Continuous seamless replay of alarm sound
+                        prepare()
+                        start()
+                    }
+                } catch (audioEx: Exception) {
+                    audioEx.printStackTrace()
+                }
             }
 
+            // 2. Continuous rhythmic alarm vibration
+            if (withVibration) {
+                val vibrator = getVibrator()
+                if (vibrator.hasVibrator()) {
+                    val timings = longArrayOf(0, 800, 400)
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        val effect = VibrationEffect.createWaveform(timings, 0)
+                        vibrator.vibrate(effect, audioAttributes)
+                    } else {
+                        @Suppress("DEPRECATION")
+                        vibrator.vibrate(timings, 0, audioAttributes)
+                    }
+                }
+            }
+
+            // 3. Auto-stop after durationSeconds (if > 0). If <= 0, continues until stopAlarm() is called.
             if (durationSeconds > 0) {
                 val runnable = Runnable {
-                    cancelVibration()
+                    stopAlarm()
                 }
-                stopVibrationRunnable = runnable
+                stopAlarmRunnable = runnable
                 mainHandler.postDelayed(runnable, durationSeconds.toLong() * 1000L)
             }
         } catch (e: Exception) {
@@ -96,7 +130,7 @@ class MainActivity : FlutterActivity() {
 
     private fun triggerShortVibration(durationMs: Long) {
         try {
-            cancelVibration()
+            stopAlarm()
 
             val vibrator = getVibrator()
             if (!vibrator.hasVibrator()) return
@@ -115,10 +149,26 @@ class MainActivity : FlutterActivity() {
         }
     }
 
-    private fun cancelVibration() {
+    private fun stopAlarm() {
         try {
-            stopVibrationRunnable?.let { mainHandler.removeCallbacks(it) }
-            stopVibrationRunnable = null
+            stopAlarmRunnable?.let { mainHandler.removeCallbacks(it) }
+            stopAlarmRunnable = null
+
+            // Stop and release audio player
+            mediaPlayer?.let {
+                try {
+                    if (it.isPlaying) {
+                        it.stop()
+                    }
+                } catch (_: Exception) {}
+                try {
+                    it.reset()
+                    it.release()
+                } catch (_: Exception) {}
+            }
+            mediaPlayer = null
+
+            // Stop vibrator
             val vibrator = getVibrator()
             vibrator.cancel()
         } catch (e: Exception) {
@@ -127,7 +177,7 @@ class MainActivity : FlutterActivity() {
     }
 
     override fun onDestroy() {
-        cancelVibration()
+        stopAlarm()
         super.onDestroy()
     }
 }

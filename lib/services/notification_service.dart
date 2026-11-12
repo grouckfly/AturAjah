@@ -140,8 +140,11 @@ class NotificationService {
   }
 
   /// Channel configuration for high-priority alarms using device default alarm sound & vibration
-  NotificationDetails _notificationDetails(
-      {required String title, required String body}) {
+  NotificationDetails _notificationDetails({
+    required String title,
+    required String body,
+    bool playSound = true,
+  }) {
     final settings = SettingsService.instance;
     final isVibrate = settings.vibrationEnabled;
 
@@ -166,7 +169,7 @@ class NotificationService {
           : 'Alarm waktu tugas menggunakan nada dering tanpa getaran',
       importance: Importance.max,
       priority: Priority.high,
-      playSound: true,
+      playSound: playSound,
       audioAttributesUsage: AudioAttributesUsage.alarm,
       category: AndroidNotificationCategory.alarm,
       sound: const UriAndroidNotificationSound(
@@ -178,13 +181,14 @@ class NotificationService {
       visibility: NotificationVisibility.public,
       ticker: 'AturAjah Task Alarm',
       onlyAlertOnce: false, // Ensures repetitive alerts are not silenced
+      additionalFlags: Int32List.fromList(<int>[4]), // FLAG_INSISTENT: loops notification audio
     );
 
-    const DarwinNotificationDetails iosPlatformChannelSpecifics =
+    final DarwinNotificationDetails iosPlatformChannelSpecifics =
         DarwinNotificationDetails(
       presentAlert: true,
       presentBadge: true,
-      presentSound: true,
+      presentSound: playSound,
     );
 
     return NotificationDetails(
@@ -297,6 +301,7 @@ class NotificationService {
       _notificationDetails(
         title: task.title,
         body: 'Target: ${task.targetTime}',
+        playSound: false, // Looping audio is handled seamlessly by MediaPlayer
       ),
       payload: id.toString(),
     );

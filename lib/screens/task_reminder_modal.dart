@@ -22,7 +22,7 @@ class TaskReminderModal extends StatelessWidget {
 
   static Future<void> show(BuildContext context, TaskModel task) {
     final durationSec = SettingsService.instance.alarmDurationSeconds;
-    VibrationService.startAlarmVibration(durationSeconds: durationSec);
+    VibrationService.startAlarm(durationSeconds: durationSec);
     return showGeneralDialog(
       context: context,
       barrierDismissible: false,
@@ -30,7 +30,7 @@ class TaskReminderModal extends StatelessWidget {
       transitionDuration: const Duration(milliseconds: 250),
       pageBuilder: (ctx, anim1, anim2) => TaskReminderModal(task: task),
     ).then((_) {
-      VibrationService.cancel();
+      VibrationService.stopAlarm();
       if (task.id != null) {
         NotificationService.instance.cancelTaskAlarm(task.id!);
       }

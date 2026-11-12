@@ -51,8 +51,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
       _isTestingAlarm = true;
     });
 
-    // Continuous rhythmic alarm vibration (0 = loop indefinitely)
-    await VibrationService.startAlarmVibration(durationSeconds: durationSec);
+    // Continuous rhythmic alarm audio & vibration loop (0 = loop indefinitely)
+    await VibrationService.startAlarm(durationSeconds: durationSec);
 
     const dummyTask = TaskModel(
       id: 9998,
