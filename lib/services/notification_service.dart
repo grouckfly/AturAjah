@@ -5,14 +5,16 @@ import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 import '../models/task_model.dart';
 import 'settings_service.dart';
+import 'vibration_service.dart';
 
 /// Offline exact alarm and local notification engine for kitchen shift tasks.
 class NotificationService {
   static final NotificationService instance = NotificationService._internal();
 
-  static const String channelIdVibrate = 'flow_alarm_v3_with_vibration';
-  static const String channelIdNoVibrate = 'flow_alarm_v3_no_vibration';
+  static const String channelIdVibrate = 'flow_alarm_v4_with_vibration';
+  static const String channelIdNoVibrate = 'flow_alarm_v4_no_vibration';
   static int _testCounter = 0;
+  Timer? _autoCancelTimer;
 
   final FlutterLocalNotificationsPlugin _notificationsPlugin =
       FlutterLocalNotificationsPlugin();
@@ -89,21 +91,32 @@ class NotificationService {
         await androidImplementation.deleteNotificationChannel('flow_alarm_channel');
         await androidImplementation.deleteNotificationChannel('flow_alarm_channel_v1');
         await androidImplementation.deleteNotificationChannel('flow_alarm_channel_v2');
+        await androidImplementation.deleteNotificationChannel('flow_alarm_v3_with_vibration');
+        await androidImplementation.deleteNotificationChannel('flow_alarm_v3_no_vibration');
       } catch (_) {}
 
-      // Channel 1: With vibration (standard alarm ringtone & default device vibration)
-      const AndroidNotificationChannel vibrateChannel =
+      // Continuous rhythmic alarm pattern: delay 0ms, vibrate 800ms, pause 400ms (repeats for 30s)
+      final Int64List alarmVibrationPattern = Int64List.fromList([
+        0, 800, 400, 800, 400, 800, 400, 800, 400, 800, 400,
+        800, 400, 800, 400, 800, 400, 800, 400, 800, 400,
+        800, 400, 800, 400, 800, 400, 800, 400, 800, 400,
+        800, 400, 800, 400, 800, 400, 800, 400, 800, 400,
+      ]);
+
+      // Channel 1: With vibration (standard alarm ringtone & continuous repeating alarm vibration)
+      final AndroidNotificationChannel vibrateChannel =
           AndroidNotificationChannel(
         channelIdVibrate,
         'Pengingat Tugas AturAjah (Dengan Getar)',
         description:
-            'Alarm waktu tugas menggunakan nada dering dan getaran standar perangkat',
+            'Alarm waktu tugas menggunakan nada dering dan getaran berulang standar perangkat',
         importance: Importance.max,
         playSound: true,
         audioAttributesUsage: AudioAttributesUsage.alarm,
-        sound: UriAndroidNotificationSound(
+        sound: const UriAndroidNotificationSound(
             'content://settings/system/alarm_alert'),
         enableVibration: true,
+        vibrationPattern: alarmVibrationPattern,
       );
 
       // Channel 2: Without vibration (alarm ringtone with zero vibration)
@@ -137,12 +150,19 @@ class NotificationService {
         ? 'Pengingat Tugas AturAjah (Dengan Getar)'
         : 'Pengingat Tugas AturAjah (Tanpa Getar)';
 
+    final Int64List continuousVibrationPattern = Int64List.fromList([
+      0, 800, 400, 800, 400, 800, 400, 800, 400, 800, 400,
+      800, 400, 800, 400, 800, 400, 800, 400, 800, 400,
+      800, 400, 800, 400, 800, 400, 800, 400, 800, 400,
+      800, 400, 800, 400, 800, 400, 800, 400, 800, 400,
+    ]);
+
     final AndroidNotificationDetails androidPlatformChannelSpecifics =
         AndroidNotificationDetails(
       channelId,
       channelName,
       channelDescription: isVibrate
-          ? 'Alarm waktu tugas menggunakan nada dering dan getar alarm standar perangkat'
+          ? 'Alarm waktu tugas menggunakan nada dering dan getar alarm berulang standar perangkat'
           : 'Alarm waktu tugas menggunakan nada dering tanpa getaran',
       importance: Importance.max,
       priority: Priority.high,
@@ -152,7 +172,8 @@ class NotificationService {
       sound: const UriAndroidNotificationSound(
           'content://settings/system/alarm_alert'),
       enableVibration: isVibrate,
-      vibrationPattern: isVibrate ? null : Int64List.fromList([0]),
+      vibrationPattern:
+          isVibrate ? continuousVibrationPattern : Int64List.fromList([0]),
       fullScreenIntent: true, // Wake device screen for alarm urgency
       visibility: NotificationVisibility.public,
       ticker: 'AturAjah Task Alarm',
@@ -249,7 +270,10 @@ class NotificationService {
   }
 
   /// Immediately trigger notification (for test alert / preview CTA)
-  Future<void> triggerImmediateNotification(TaskModel task) async {
+  Future<void> triggerImmediateNotification(TaskModel task,
+      {int? durationSeconds}) async {
+    _autoCancelTimer?.cancel();
+
     int id;
     if (task.id == null || task.id == 9998) {
       // Rotating notification ID so Android treats every spam test as a fresh notification
@@ -276,12 +300,36 @@ class NotificationService {
       ),
       payload: id.toString(),
     );
+
+    // Auto dismiss notification and stop vibration when alarm duration finishes
+    final duration =
+        durationSeconds ?? SettingsService.instance.alarmDurationSeconds;
+    _autoCancelTimer = Timer(Duration(seconds: duration), () {
+      cancelTaskAlarm(id);
+      VibrationService.cancel();
+    });
+  }
+
+  /// Cancel all test notifications and stop test vibration
+  Future<void> cancelTestAlarms() async {
+    _autoCancelTimer?.cancel();
+    _autoCancelTimer = null;
+    for (int i = 0; i < 15; i++) {
+      try {
+        await _notificationsPlugin.cancel(9900 + i);
+      } catch (_) {}
+    }
+    try {
+      await _notificationsPlugin.cancel(9998);
+    } catch (_) {}
+    await VibrationService.cancel();
   }
 
   /// Cancel notification for a task (when marked as done or deleted)
   Future<void> cancelTaskAlarm(int taskId) async {
     try {
       await _notificationsPlugin.cancel(taskId);
+      await VibrationService.cancel();
     } catch (e) {
       if (kDebugMode) {
         print('Error canceling notification: $e');
@@ -291,10 +339,15 @@ class NotificationService {
 
   /// Cancel all pending notifications
   Future<void> cancelAll() async {
+    _autoCancelTimer?.cancel();
+    _autoCancelTimer = null;
     await _notificationsPlugin.cancelAll();
+    await VibrationService.cancel();
   }
 
   void dispose() {
+    _autoCancelTimer?.cancel();
+    _autoCancelTimer = null;
     _onNotificationClickStream.close();
   }
 }

@@ -226,8 +226,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
             // 4. Test Alarm & Vibration Button
             ElevatedButton.icon(
               onPressed: () async {
-                // Directly trigger native hardware vibration if enabled (guaranteed spam response)
-                await VibrationService.vibrate(durationMs: 400);
+                final durationSec = settings.alarmDurationSeconds;
+
+                // Continuous rhythmic alarm vibration for the full alarm duration
+                await VibrationService.startAlarmVibration(
+                    durationSeconds: durationSec);
 
                 const dummyTask = TaskModel(
                   id: 9998,
@@ -238,8 +241,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   createdAt: '2026-11-11',
                 );
 
-                await NotificationService.instance
-                    .triggerImmediateNotification(dummyTask);
+                await NotificationService.instance.triggerImmediateNotification(
+                  dummyTask,
+                  durationSeconds: durationSec,
+                );
 
                 if (context.mounted) {
                   ScaffoldMessenger.of(context).hideCurrentSnackBar();
@@ -247,7 +252,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     SnackBar(
                       content: Text(context.tr('test_alarm_success')),
                       backgroundColor: AppColors.secondary,
-                      duration: const Duration(milliseconds: 1500),
+                      duration: Duration(seconds: durationSec.clamp(3, 10)),
+                      action: SnackBarAction(
+                        label: 'HENTIKAN',
+                        textColor: Colors.white,
+                        onPressed: () async {
+                          await NotificationService.instance.cancelTestAlarms();
+                        },
+                      ),
                     ),
                   );
                 }

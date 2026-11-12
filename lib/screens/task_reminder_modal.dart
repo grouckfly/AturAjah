@@ -4,6 +4,7 @@ import '../constants/app_colors.dart';
 import '../l10n/app_localizations.dart';
 import '../models/task_model.dart';
 import '../providers/task_provider.dart';
+import '../services/settings_service.dart';
 import '../services/shift_schedule_service.dart';
 import '../services/vibration_service.dart';
 import '../widgets/snooze_bottom_sheet.dart';
@@ -19,7 +20,8 @@ class TaskReminderModal extends StatelessWidget {
   });
 
   static Future<void> show(BuildContext context, TaskModel task) {
-    VibrationService.vibrate(durationMs: 600);
+    final durationSec = SettingsService.instance.alarmDurationSeconds;
+    VibrationService.startAlarmVibration(durationSeconds: durationSec);
     return showGeneralDialog(
       context: context,
       barrierDismissible: false,

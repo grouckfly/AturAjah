@@ -8,6 +8,26 @@ class VibrationService {
   static const MethodChannel _channel =
       MethodChannel('com.aturajah.app/vibrate');
 
+  /// Start repeating rhythmic alarm vibration for [durationSeconds].
+  /// Keeps vibrating rhythmically as long as the alarm is active.
+  static Future<void> startAlarmVibration({int? durationSeconds}) async {
+    final enabled = SettingsService.instance.vibrationEnabled;
+    if (!enabled) return;
+
+    final duration =
+        durationSeconds ?? SettingsService.instance.alarmDurationSeconds;
+
+    try {
+      await _channel.invokeMethod('startAlarmVibration', {
+        'durationSeconds': duration,
+      });
+    } catch (e) {
+      if (kDebugMode) {
+        print('Native startAlarmVibration error: $e');
+      }
+    }
+  }
+
   /// Trigger a strong hardware vibration if vibration is enabled by user.
   /// When called repeatedly (spam testing), each call cancels previous vibration
   /// and immediately fires anew.
@@ -24,7 +44,7 @@ class VibrationService {
     }
   }
 
-  /// Cancel any active vibration
+  /// Cancel any active vibration immediately
   static Future<void> cancel() async {
     try {
       await _channel.invokeMethod('cancel');
