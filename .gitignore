@@ -62,6 +62,7 @@ migrate_working_dir/
 *.apk
 !AturAjah.apk
 !AturAjah-universal.apk
+!AturAjah-arm64.apk
 !public/*.apk
 releases/*.apk
 *.aab

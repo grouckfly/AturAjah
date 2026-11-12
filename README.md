@@ -18,11 +18,11 @@ Kunjungi portal web resmi atau pilih tautan unduhan sesuai perangkat Anda:
 
 * **[Website Resmi & Portal Unduhan Vercel](https://aturajah.vercel.app)**
   * Akses laman web langsung dari ponsel Android atau iPhone untuk memasang aplikasi.
-* **[Download Android (APK Versi Stabil Terbaru)](https://aturajah.vercel.app/AturAjah.apk)**
-  * Unduh langsung file APK rilis stabil terbaru (arsitektur 64-bit modern, ukuran ringan ~18.8 MB).
+* **[Download Android (Universal APK - Semua Merek HP)](https://aturajah.vercel.app/AturAjah.apk)**
+  * Versi Universal APK resmi yang kompatibel 100% untuk seluruh merek ponsel Android (Samsung, Oppo, Vivo, Xiaomi, Realme, Infinix, Google Pixel, dll. Ukuran ~27 MB).
   * Pengguna Android dapat langsung membuka file hasil unduhan untuk memasang aplikasi.
-* **[Download Android (APK Universal - Semua Perangkat)](https://aturajah.vercel.app/AturAjah-universal.apk)**
-  * Versi universal yang mendukung seluruh jenis arsitektur prosesor Android (ukuran ~53.5 MB).
+* **[Download Android (Khusus 64-bit - Sangat Ringan)](https://aturajah.vercel.app/AturAjah-arm64.apk)**
+  * Versi teroptimasi khusus ponsel Android modern 64-bit (ukuran super hemat ~12.2 MB).
 * **[Panduan Pemasangan di iPhone (iOS)](#panduan-instalasi-di-iphone-ios)**
   * Panduan bagi pemilik iPhone untuk memasang aplikasi via Apple TestFlight (tanpa komputer) atau via Sideloadly (laptop Windows).
 
