@@ -134,8 +134,20 @@ class NotificationService {
         vibrationPattern: Int64List.fromList([0]),
       );
 
+      // Channel 3: App Updates Notification
+      const AndroidNotificationChannel updateChannel =
+          AndroidNotificationChannel(
+        'flow_app_updates',
+        'Pembaruan Aplikasi AturAjah',
+        description: 'Pemberitahuan pembaruan versi terbaru aplikasi',
+        importance: Importance.high,
+        playSound: true,
+        enableVibration: true,
+      );
+
       await androidImplementation.createNotificationChannel(vibrateChannel);
       await androidImplementation.createNotificationChannel(noVibrateChannel);
+      await androidImplementation.createNotificationChannel(updateChannel);
     }
   }
 
@@ -343,6 +355,37 @@ class NotificationService {
         print('Error canceling notification: $e');
       }
     }
+  }
+
+  /// Trigger an in-app update notification
+  Future<void> triggerUpdateNotification({
+    required String title,
+    required String body,
+  }) async {
+    const androidDetails = AndroidNotificationDetails(
+      'flow_app_updates',
+      'Pembaruan Aplikasi AturAjah',
+      channelDescription: 'Pemberitahuan pembaruan versi terbaru aplikasi',
+      importance: Importance.high,
+      priority: Priority.high,
+      playSound: true,
+      enableVibration: true,
+      visibility: NotificationVisibility.public,
+    );
+
+    const iosDetails = DarwinNotificationDetails(
+      presentAlert: true,
+      presentBadge: true,
+      presentSound: true,
+    );
+
+    await _notificationsPlugin.show(
+      8888, // Dedicated update notification ID
+      title,
+      body,
+      const NotificationDetails(android: androidDetails, iOS: iosDetails),
+      payload: 'update_check',
+    );
   }
 
   /// Cancel all pending notifications

@@ -8,7 +8,9 @@ import '../models/task_model.dart';
 import '../providers/locale_provider.dart';
 import '../services/notification_service.dart';
 import '../services/settings_service.dart';
+import '../services/update_service.dart';
 import '../services/vibration_service.dart';
+import '../widgets/update_dialog.dart';
 
 /// Settings Screen for Alarm Duration, Vibration, and Language
 class SettingsScreen extends StatefulWidget {
@@ -20,6 +22,7 @@ class SettingsScreen extends StatefulWidget {
 
 class _SettingsScreenState extends State<SettingsScreen> {
   bool _isTestingAlarm = false;
+  bool _isCheckingUpdate = false;
   Timer? _testResetTimer;
 
   @override
@@ -29,6 +32,35 @@ class _SettingsScreenState extends State<SettingsScreen> {
       NotificationService.instance.cancelTestAlarms();
     }
     super.dispose();
+  }
+
+  Future<void> _handleManualCheckUpdate() async {
+    setState(() {
+      _isCheckingUpdate = true;
+    });
+
+    final updateInfo = await UpdateService.instance.checkForUpdate();
+
+    if (!mounted) return;
+
+    setState(() {
+      _isCheckingUpdate = false;
+    });
+
+    if (updateInfo != null) {
+      UpdateDialog.show(context, updateInfo);
+    } else {
+      ScaffoldMessenger.of(context).hideCurrentSnackBar();
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            context.tr('app_is_up_to_date', [UpdateService.currentVersion]),
+          ),
+          backgroundColor: AppColors.secondary,
+          duration: const Duration(seconds: 2),
+        ),
+      );
+    }
   }
 
   Future<void> _stopAlarmTest() async {
@@ -380,9 +412,99 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ),
             ),
 
+            const SizedBox(height: 20),
+
+            // 4. App Updates Section
+            _buildSectionHeader(
+              title: context.tr('check_update_section'),
+              icon: Icons.system_update_outlined,
+            ),
+            const SizedBox(height: 10),
+            Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: AppColors.surface,
+                borderRadius: BorderRadius.circular(14),
+                border: Border.all(color: AppColors.divider, width: 1),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        'AturAjah v${UpdateService.currentVersion}',
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w700,
+                          color: AppColors.textPrimary,
+                        ),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8, vertical: 3),
+                        decoration: BoxDecoration(
+                          color: AppColors.background,
+                          borderRadius: BorderRadius.circular(6),
+                          border: Border.all(color: AppColors.divider),
+                        ),
+                        child: const Text(
+                          'Build ${UpdateService.currentVersionCode}',
+                          style: TextStyle(
+                            fontSize: 11,
+                            color: AppColors.textSecondary,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 14),
+                  SizedBox(
+                    width: double.infinity,
+                    child: OutlinedButton.icon(
+                      onPressed:
+                          _isCheckingUpdate ? null : _handleManualCheckUpdate,
+                      icon: _isCheckingUpdate
+                          ? const SizedBox(
+                              width: 15,
+                              height: 15,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                color: AppColors.primary,
+                              ),
+                            )
+                          : const Icon(Icons.sync, size: 18),
+                      label: Text(
+                        _isCheckingUpdate
+                            ? context.tr('checking_update')
+                            : context.tr('check_update_btn'),
+                        style: const TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      style: OutlinedButton.styleFrom(
+                        foregroundColor: AppColors.primary,
+                        side: const BorderSide(
+                          color: AppColors.primary,
+                          width: 1.2,
+                        ),
+                        padding: const EdgeInsets.symmetric(vertical: 11),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
             const SizedBox(height: 30),
 
-            // 4. Test Alarm & Vibration Button
+            // 5. Test Alarm & Vibration Button
             ElevatedButton.icon(
               onPressed: () async {
                 if (_isTestingAlarm) {

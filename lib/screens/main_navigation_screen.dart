@@ -3,6 +3,8 @@ import 'package:provider/provider.dart';
 import '../constants/app_colors.dart';
 import '../l10n/app_localizations.dart';
 import '../providers/task_provider.dart';
+import '../services/update_service.dart';
+import '../widgets/update_dialog.dart';
 import 'daily_dashboard_screen.dart';
 import 'schedule_timeline_screen.dart';
 import 'task_reminder_modal.dart';
@@ -28,7 +30,18 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _checkPendingReminder();
+      _checkAutoUpdate();
     });
+  }
+
+  Future<void> _checkAutoUpdate() async {
+    final updateInfo = await UpdateService.instance.checkForUpdate();
+    if (updateInfo != null && mounted) {
+      await UpdateService.instance.showUpdateNotification(updateInfo);
+      if (mounted) {
+        UpdateDialog.show(context, updateInfo);
+      }
+    }
   }
 
   void _checkPendingReminder() {

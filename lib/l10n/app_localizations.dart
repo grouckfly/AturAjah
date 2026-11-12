@@ -121,6 +121,23 @@ class AppLocalizations {
       'test_alarm_btn': 'Uji Coba Alarm & Getar',
       'test_alarm_success': 'Alarm dan getaran berhasil diuji coba!',
 
+      // App Update
+      'update_available_title': 'Pembaruan Tersedia',
+      'current_version_prefix': 'Saat ini',
+      'release_notes_label': 'Catatan Pembaruan',
+      'default_update_notes': 'Peningkatan stabilitas dan pembaruan performa aplikasi.',
+      'downloading': 'Mengunduh...',
+      'download_complete_install_prompt': 'Unduhan selesai! Membuka paket instalasi...',
+      'later_btn': 'Nanti',
+      'update_now_btn': 'Perbarui Sekarang',
+      'downloading_btn': 'Mengunduh...',
+      'install_now_btn': 'Pasang Sekarang',
+      'check_update_section': 'Pembaruan Aplikasi',
+      'check_update_btn': 'Periksa Pembaruan',
+      'app_is_up_to_date': 'Aplikasi sudah dalam versi terbaru (v%s)',
+      'update_check_failed': 'Tidak dapat memeriksa pembaruan. Periksa koneksi internet.',
+      'checking_update': 'Memeriksa pembaruan...',
+
       // General
       'language_switch': 'Bahasa',
       'close': 'Tutup',
@@ -227,6 +244,23 @@ class AppLocalizations {
       'vibrate_long': 'Long / Strong',
       'test_alarm_btn': 'Test Alarm & Vibration',
       'test_alarm_success': 'Test alarm and vibration triggered!',
+
+      // App Update
+      'update_available_title': 'Update Available',
+      'current_version_prefix': 'Current',
+      'release_notes_label': 'Release Notes',
+      'default_update_notes': 'Stability improvements and performance optimizations.',
+      'downloading': 'Downloading...',
+      'download_complete_install_prompt': 'Download complete! Opening package installer...',
+      'later_btn': 'Later',
+      'update_now_btn': 'Update Now',
+      'downloading_btn': 'Downloading...',
+      'install_now_btn': 'Install Now',
+      'check_update_section': 'App Updates',
+      'check_update_btn': 'Check for Updates',
+      'app_is_up_to_date': 'App is already up to date (v%s)',
+      'update_check_failed': 'Could not check for updates. Check internet connection.',
+      'checking_update': 'Checking for updates...',
 
       // General
       'language_switch': 'Language',

@@ -51,8 +51,45 @@ class MainActivity : FlutterActivity() {
                     stopAlarm()
                     result.success(true)
                 }
+                "getDownloadPath" -> {
+                    val cacheFile = java.io.File(applicationContext.cacheDir, "AturAjah-update.apk")
+                    result.success(cacheFile.absolutePath)
+                }
+                "installApk" -> {
+                    val path = call.argument<String>("filePath")
+                    if (path != null) {
+                        val success = installApk(path)
+                        result.success(success)
+                    } else {
+                        result.error("ERR_NULL_PATH", "File path is null", null)
+                    }
+                }
                 else -> result.notImplemented()
             }
+        }
+    }
+
+    private fun installApk(filePath: String): Boolean {
+        return try {
+            val file = java.io.File(filePath)
+            if (!file.exists()) return false
+
+            val apkUri = androidx.core.content.FileProvider.getUriForFile(
+                applicationContext,
+                "${applicationContext.packageName}.fileprovider",
+                file
+            )
+
+            val intent = android.content.Intent(android.content.Intent.ACTION_VIEW).apply {
+                setDataAndType(apkUri, "application/vnd.android.package-archive")
+                addFlags(android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK)
+            }
+            startActivity(intent)
+            true
+        } catch (e: Exception) {
+            e.printStackTrace()
+            false
         }
     }
 
