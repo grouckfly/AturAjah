@@ -4,6 +4,7 @@ import '../constants/app_colors.dart';
 import '../l10n/app_localizations.dart';
 import '../models/task_model.dart';
 import '../providers/task_provider.dart';
+import '../services/notification_service.dart';
 import '../services/settings_service.dart';
 import '../services/shift_schedule_service.dart';
 import '../services/vibration_service.dart';
@@ -30,6 +31,9 @@ class TaskReminderModal extends StatelessWidget {
       pageBuilder: (ctx, anim1, anim2) => TaskReminderModal(task: task),
     ).then((_) {
       VibrationService.cancel();
+      if (task.id != null) {
+        NotificationService.instance.cancelTaskAlarm(task.id!);
+      }
     });
   }
 

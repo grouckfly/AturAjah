@@ -302,12 +302,15 @@ class NotificationService {
     );
 
     // Auto dismiss notification and stop vibration when alarm duration finishes
+    // If duration <= 0, it rings continuously until user taps stop button
     final duration =
         durationSeconds ?? SettingsService.instance.alarmDurationSeconds;
-    _autoCancelTimer = Timer(Duration(seconds: duration), () {
-      cancelTaskAlarm(id);
-      VibrationService.cancel();
-    });
+    if (duration > 0) {
+      _autoCancelTimer = Timer(Duration(seconds: duration), () {
+        cancelTaskAlarm(id);
+        VibrationService.cancel();
+      });
+    }
   }
 
   /// Cancel all test notifications and stop test vibration

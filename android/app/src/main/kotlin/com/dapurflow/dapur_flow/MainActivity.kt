@@ -82,11 +82,13 @@ class MainActivity : FlutterActivity() {
                 vibrator.vibrate(timings, 0, audioAttributes)
             }
 
-            val runnable = Runnable {
-                cancelVibration()
+            if (durationSeconds > 0) {
+                val runnable = Runnable {
+                    cancelVibration()
+                }
+                stopVibrationRunnable = runnable
+                mainHandler.postDelayed(runnable, durationSeconds.toLong() * 1000L)
             }
-            stopVibrationRunnable = runnable
-            mainHandler.postDelayed(runnable, durationSeconds.toLong() * 1000L)
         } catch (e: Exception) {
             e.printStackTrace()
         }

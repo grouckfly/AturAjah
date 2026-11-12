@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../constants/app_colors.dart';
@@ -18,6 +19,85 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
+  bool _isTestingAlarm = false;
+  Timer? _testResetTimer;
+
+  @override
+  void dispose() {
+    _testResetTimer?.cancel();
+    if (_isTestingAlarm) {
+      NotificationService.instance.cancelTestAlarms();
+    }
+    super.dispose();
+  }
+
+  Future<void> _stopAlarmTest() async {
+    _testResetTimer?.cancel();
+    _testResetTimer = null;
+    await NotificationService.instance.cancelTestAlarms();
+    if (mounted) {
+      ScaffoldMessenger.of(context).hideCurrentSnackBar();
+      setState(() {
+        _isTestingAlarm = false;
+      });
+    }
+  }
+
+  Future<void> _startAlarmTest(SettingsService settings) async {
+    _testResetTimer?.cancel();
+    final durationSec = settings.alarmDurationSeconds;
+
+    setState(() {
+      _isTestingAlarm = true;
+    });
+
+    // Continuous rhythmic alarm vibration (0 = loop indefinitely)
+    await VibrationService.startAlarmVibration(durationSeconds: durationSec);
+
+    const dummyTask = TaskModel(
+      id: 9998,
+      title: 'Uji Coba Alarm & Getar AturAjah',
+      targetTime: 'Sekarang',
+      durationMinutes: 1,
+      priorityQuadrant: PriorityQuadrant.doFirst,
+      createdAt: '2026-11-11',
+    );
+
+    await NotificationService.instance.triggerImmediateNotification(
+      dummyTask,
+      durationSeconds: durationSec,
+    );
+
+    if (durationSec > 0) {
+      _testResetTimer = Timer(Duration(seconds: durationSec), () {
+        if (mounted) {
+          setState(() {
+            _isTestingAlarm = false;
+          });
+        }
+      });
+    }
+
+    if (mounted) {
+      ScaffoldMessenger.of(context).hideCurrentSnackBar();
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(context.tr('test_alarm_success')),
+          backgroundColor: AppColors.secondary,
+          duration: durationSec > 0
+              ? Duration(seconds: durationSec.clamp(3, 10))
+              : const Duration(minutes: 5),
+          action: SnackBarAction(
+            label: context.tr('stop').toUpperCase(),
+            textColor: Colors.white,
+            onPressed: () async {
+              await _stopAlarmTest();
+            },
+          ),
+        ),
+      );
+    }
+  }
   @override
   Widget build(BuildContext context) {
     final settings = SettingsService.instance;
@@ -119,6 +199,85 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         ),
                       );
                     }).toList(),
+                  ),
+
+                  const SizedBox(height: 10),
+
+                  // Option: Always ring until stopped (0 seconds)
+                  Builder(
+                    builder: (context) {
+                      final isAlwaysSelected =
+                          settings.alarmDurationSeconds == 0;
+                      return InkWell(
+                        onTap: () async {
+                          await settings.setAlarmDuration(0);
+                          setState(() {});
+                        },
+                        borderRadius: BorderRadius.circular(10),
+                        child: Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 11, horizontal: 14),
+                          decoration: BoxDecoration(
+                            color: isAlwaysSelected
+                                ? AppColors.primary.withValues(alpha: 0.1)
+                                : AppColors.background,
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(
+                              color: isAlwaysSelected
+                                  ? AppColors.primary
+                                  : AppColors.divider,
+                              width: isAlwaysSelected ? 1.8 : 1.2,
+                            ),
+                          ),
+                          child: Row(
+                            children: [
+                              Icon(
+                                isAlwaysSelected
+                                    ? Icons.radio_button_checked
+                                    : Icons.radio_button_unchecked,
+                                size: 19,
+                                color: isAlwaysSelected
+                                    ? AppColors.primary
+                                    : AppColors.textSecondary,
+                              ),
+                              const SizedBox(width: 10),
+                              Expanded(
+                                child: Text(
+                                  context.tr('alarm_always_until_stopped'),
+                                  style: TextStyle(
+                                    fontSize: 13,
+                                    fontWeight: isAlwaysSelected
+                                        ? FontWeight.w800
+                                        : FontWeight.w600,
+                                    color: isAlwaysSelected
+                                        ? AppColors.primary
+                                        : AppColors.textPrimary,
+                                  ),
+                                ),
+                              ),
+                              if (isAlwaysSelected)
+                                Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 8, vertical: 2),
+                                  decoration: BoxDecoration(
+                                    color: AppColors.primary,
+                                    borderRadius: BorderRadius.circular(6),
+                                  ),
+                                  child: const Text(
+                                    'Aktif',
+                                    style: TextStyle(
+                                      fontSize: 10.5,
+                                      fontWeight: FontWeight.w700,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
                   ),
                 ],
               ),
@@ -226,48 +385,25 @@ class _SettingsScreenState extends State<SettingsScreen> {
             // 4. Test Alarm & Vibration Button
             ElevatedButton.icon(
               onPressed: () async {
-                final durationSec = settings.alarmDurationSeconds;
-
-                // Continuous rhythmic alarm vibration for the full alarm duration
-                await VibrationService.startAlarmVibration(
-                    durationSeconds: durationSec);
-
-                const dummyTask = TaskModel(
-                  id: 9998,
-                  title: 'Uji Coba Alarm & Getar AturAjah',
-                  targetTime: 'Sekarang',
-                  durationMinutes: 1,
-                  priorityQuadrant: PriorityQuadrant.doFirst,
-                  createdAt: '2026-11-11',
-                );
-
-                await NotificationService.instance.triggerImmediateNotification(
-                  dummyTask,
-                  durationSeconds: durationSec,
-                );
-
-                if (context.mounted) {
-                  ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(context.tr('test_alarm_success')),
-                      backgroundColor: AppColors.secondary,
-                      duration: Duration(seconds: durationSec.clamp(3, 10)),
-                      action: SnackBarAction(
-                        label: 'HENTIKAN',
-                        textColor: Colors.white,
-                        onPressed: () async {
-                          await NotificationService.instance.cancelTestAlarms();
-                        },
-                      ),
-                    ),
-                  );
+                if (_isTestingAlarm) {
+                  await _stopAlarmTest();
+                } else {
+                  await _startAlarmTest(settings);
                 }
               },
-              icon: const Icon(Icons.notifications_active, size: 20),
-              label: Text(context.tr('test_alarm_btn')),
+              icon: Icon(
+                _isTestingAlarm ? Icons.stop_circle : Icons.notifications_active,
+                size: 20,
+              ),
+              label: Text(
+                _isTestingAlarm
+                    ? context.tr('stop_alarm_btn')
+                    : context.tr('test_alarm_btn'),
+              ),
               style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.primary,
+                backgroundColor: _isTestingAlarm
+                    ? const Color(0xFFD32F2F)
+                    : AppColors.primary,
                 foregroundColor: Colors.white,
                 minimumSize: const Size.fromHeight(50),
                 shape: RoundedRectangleBorder(
