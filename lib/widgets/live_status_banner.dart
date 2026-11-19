@@ -4,8 +4,8 @@ import '../l10n/app_localizations.dart';
 import '../models/shift_phase.dart';
 import '../services/shift_schedule_service.dart';
 
-/// Live Status Banner displaying current kitchen shift phase.
-/// High contrast, touch-friendly, uses Material symbols (no emoji).
+/// Live Status Banner displaying the current operational phase using the
+/// user's own quiet/peak windows (proposal feature 3).
 class LiveStatusBanner extends StatelessWidget {
   const LiveStatusBanner({super.key});
 
@@ -14,17 +14,25 @@ class LiveStatusBanner extends StatelessWidget {
     final shiftService = ShiftScheduleService.instance;
     final phase = shiftService.getCurrentPhase();
 
+    // Standard hours stay unobtrusive: nothing is announced.
+    if (phase == ShiftPhaseType.standard) {
+      return const SizedBox.shrink();
+    }
+
+    final quietWindow = shiftService.formatWindow(
+      shiftService.quietStart,
+      shiftService.quietEnd,
+    );
+    final peakWindow = shiftService.formatWindow(
+      shiftService.peakStart,
+      shiftService.peakEnd,
+    );
+
     Color bannerColor;
     Color textColor;
     Color iconColor;
     IconData iconData;
     String statusText;
-
-    // User requested to remove the standard operational hours banner.
-    // The banner only displays during active shift windows (Quiet Hours & Peak Hours).
-    if (phase == ShiftPhaseType.standard) {
-      return const SizedBox.shrink();
-    }
 
     switch (phase) {
       case ShiftPhaseType.quietHours:
@@ -32,7 +40,8 @@ class LiveStatusBanner extends StatelessWidget {
         textColor = AppColors.secondaryDark;
         iconColor = AppColors.secondary;
         iconData = Icons.soup_kitchen_outlined;
-        statusText = context.tr('live_quiet_hours');
+        statusText =
+            '${context.tr('quiet_hours_label')} • $quietWindow — ${context.tr('banner_quiet_now')}';
         break;
 
       case ShiftPhaseType.peakHours:
@@ -40,7 +49,8 @@ class LiveStatusBanner extends StatelessWidget {
         textColor = Colors.white;
         iconColor = Colors.white;
         iconData = Icons.local_fire_department_outlined;
-        statusText = context.tr('live_peak_hours');
+        statusText =
+            '${context.tr('peak_hours_label')} • $peakWindow — ${context.tr('banner_peak_now')}';
         break;
 
       case ShiftPhaseType.transition:
@@ -48,7 +58,8 @@ class LiveStatusBanner extends StatelessWidget {
         textColor = const Color(0xFFE65100);
         iconColor = const Color(0xFFE65100);
         iconData = Icons.swap_horiz_outlined;
-        statusText = 'Transisi ke Jam Sibuk (12:00)';
+        statusText =
+            '${context.tr('banner_transition')} • $peakWindow — ${context.tr('banner_transition_desc')}';
         break;
 
       case ShiftPhaseType.standard:

@@ -8,6 +8,7 @@ import '../widgets/update_dialog.dart';
 import 'daily_dashboard_screen.dart';
 import 'schedule_timeline_screen.dart';
 import 'task_reminder_modal.dart';
+import 'weekly_overview_screen.dart';
 
 /// Main navigation shell managing the 2-tab layout.
 class MainNavigationScreen extends StatefulWidget {
@@ -17,21 +18,39 @@ class MainNavigationScreen extends StatefulWidget {
   State<MainNavigationScreen> createState() => _MainNavigationScreenState();
 }
 
-class _MainNavigationScreenState extends State<MainNavigationScreen> {
+class _MainNavigationScreenState extends State<MainNavigationScreen>
+    with WidgetsBindingObserver {
   int _currentIndex = 0;
 
   final List<Widget> _screens = const [
     DailyDashboardScreen(),
     ScheduleTimelineScreen(),
+    WeeklyOverviewScreen(),
   ];
 
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _checkPendingReminder();
       _checkAutoUpdate();
     });
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    // Re-register alarms whenever the app comes back to the foreground: some
+    // devices drop scheduled alarms after a reboot or aggressive battery saver.
+    if (state == AppLifecycleState.resumed) {
+      Provider.of<TaskProvider>(context, listen: false).loadTasks();
+    }
   }
 
   Future<void> _checkAutoUpdate() async {
@@ -94,6 +113,11 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
               icon: const Icon(Icons.view_timeline_outlined),
               activeIcon: const Icon(Icons.view_timeline),
               label: context.tr('tab_schedule'),
+            ),
+            BottomNavigationBarItem(
+              icon: const Icon(Icons.insights_outlined),
+              activeIcon: const Icon(Icons.insights),
+              label: context.tr('tab_weekly'),
             ),
           ],
         ),

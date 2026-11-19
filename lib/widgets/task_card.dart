@@ -116,27 +116,95 @@ class TaskCard extends StatelessWidget {
                     ),
                     const SizedBox(height: 5),
 
-                    // Time, duration, assignee tags
-                    Row(
+                    // Time, duration, assignee, recurrence tags
+                    Wrap(
+                      spacing: 8,
+                      runSpacing: 3,
+                      crossAxisAlignment: WrapCrossAlignment.center,
                       children: [
-                        Icon(
-                          Icons.schedule,
-                          size: 13,
-                          color: isDone ? AppColors.textMuted : AppColors.textSecondary,
-                        ),
-                        const SizedBox(width: 4),
-                        Text(
-                          '${task.targetTime} • ${task.durationMinutes} $mntUnit',
-                          style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w500,
-                            color: isDone ? AppColors.textMuted : AppColors.textSecondary,
-                          ),
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(
+                              Icons.schedule,
+                              size: 13,
+                              color: isDone
+                                  ? AppColors.textMuted
+                                  : AppColors.textSecondary,
+                            ),
+                            const SizedBox(width: 4),
+                            Text(
+                              '${task.targetTime} • ${task.durationMinutes} $mntUnit',
+                              style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w500,
+                                color: isDone
+                                    ? AppColors.textMuted
+                                    : AppColors.textSecondary,
+                              ),
+                            ),
+                          ],
                         ),
 
+                        // Assignee chip (proposal feature 4)
+                        if (task.assignee != null && task.assignee!.isNotEmpty)
+                          Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(
+                                Icons.person_outline,
+                                size: 12,
+                                color: isDone
+                                    ? AppColors.textMuted
+                                    : AppColors.textSecondary,
+                              ),
+                              const SizedBox(width: 3),
+                              Text(
+                                task.assignee!,
+                                style: TextStyle(
+                                  fontSize: 11.5,
+                                  fontWeight: FontWeight.w600,
+                                  color: isDone
+                                      ? AppColors.textMuted
+                                      : AppColors.textSecondary,
+                                ),
+                              ),
+                            ],
+                          ),
+
+                        // Recurring template chip (proposal: repetitive prep)
+                        if (task.templateId != null)
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 6, vertical: 1.5),
+                            decoration: BoxDecoration(
+                              color: AppColors.primaryContainer,
+                              borderRadius: BorderRadius.circular(4),
+                              border: Border.all(
+                                color: AppColors.primaryLight,
+                                width: 0.8,
+                              ),
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                const Icon(Icons.repeat,
+                                    size: 10, color: AppColors.primaryDark),
+                                const SizedBox(width: 2),
+                                Text(
+                                  context.tr('repeat_badge'),
+                                  style: const TextStyle(
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.w600,
+                                    color: AppColors.primaryDark,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+
                         // Snooze indicator if task was snoozed
-                        if (task.snoozeCount > 0 && !isDone) ...[
-                          const SizedBox(width: 8),
+                        if (task.snoozeCount > 0 && !isDone)
                           Container(
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 6, vertical: 1.5),
@@ -157,7 +225,6 @@ class TaskCard extends StatelessWidget {
                               ),
                             ),
                           ),
-                        ],
                       ],
                     ),
                   ],

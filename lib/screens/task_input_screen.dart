@@ -5,6 +5,7 @@ import '../l10n/app_localizations.dart';
 import '../models/priority_quadrant.dart';
 import '../models/task_model.dart';
 import '../providers/task_provider.dart';
+import '../services/shift_schedule_service.dart';
 import '../widgets/priority_matrix_selector.dart';
 
 /// Screen 2: Task Input & Edit (Full CRUD)
@@ -22,9 +23,13 @@ class _TaskInputScreenState extends State<TaskInputScreen> {
   final _formKey = GlobalKey<FormState>();
   late final TextEditingController _titleController;
   late final TextEditingController _durationController;
+  late final TextEditingController _assigneeController;
 
   late TimeOfDay _selectedTime;
   late PriorityQuadrant _selectedQuadrant;
+  bool _makeRecurring = false;
+
+  final ShiftScheduleService _shiftService = ShiftScheduleService.instance;
 
   bool get isEditing => widget.taskToEdit != null;
 
@@ -36,11 +41,13 @@ class _TaskInputScreenState extends State<TaskInputScreen> {
       _titleController = TextEditingController(text: task.title);
       _durationController =
           TextEditingController(text: task.durationMinutes.toString());
+      _assigneeController = TextEditingController(text: task.assignee ?? '');
       _selectedTime = task.timeOfDay;
       _selectedQuadrant = task.priorityQuadrant;
     } else {
       _titleController = TextEditingController();
       _durationController = TextEditingController(text: '30');
+      _assigneeController = TextEditingController();
       _selectedTime = const TimeOfDay(hour: 9, minute: 30);
       _selectedQuadrant = PriorityQuadrant.doFirst;
     }
@@ -50,8 +57,12 @@ class _TaskInputScreenState extends State<TaskInputScreen> {
   void dispose() {
     _titleController.dispose();
     _durationController.dispose();
+    _assigneeController.dispose();
     super.dispose();
   }
+
+  String _formatTime(TimeOfDay time) =>
+      '${time.hour.toString().padLeft(2, '0')}:${time.minute.toString().padLeft(2, '0')}';
 
   Future<void> _pickTime() async {
     final picked = await showTimePicker(
@@ -79,13 +90,21 @@ class _TaskInputScreenState extends State<TaskInputScreen> {
     }
   }
 
+  /// Proposal feature 3: warn when prep work is planned inside the rush window
+  /// and offer a one-tap move to the quiet (prep) window.
+  void _applyQuietWindowSuggestion() {
+    setState(() {
+      _selectedTime = _shiftService.quietStart;
+    });
+  }
+
   Future<void> _saveOrUpdateTask() async {
     if (!_formKey.currentState!.validate()) return;
 
     final taskProvider = Provider.of<TaskProvider>(context, listen: false);
     final duration = int.tryParse(_durationController.text.trim()) ?? 30;
-    final timeStr =
-        '${_selectedTime.hour.toString().padLeft(2, '0')}:${_selectedTime.minute.toString().padLeft(2, '0')}';
+    final timeStr = _formatTime(_selectedTime);
+    final assignee = _assigneeController.text.trim();
 
     if (isEditing) {
       // Full CRUD: Update existing task
@@ -94,6 +113,8 @@ class _TaskInputScreenState extends State<TaskInputScreen> {
         targetTime: timeStr,
         durationMinutes: duration,
         priorityQuadrant: _selectedQuadrant,
+        assignee: assignee.isEmpty ? null : assignee,
+        clearAssignee: assignee.isEmpty,
       );
 
       await taskProvider.updateTask(updatedTask);
@@ -117,12 +138,12 @@ class _TaskInputScreenState extends State<TaskInputScreen> {
         title: _titleController.text.trim(),
         targetTime: timeStr,
         durationMinutes: duration,
-        assignee: null, // "Ditugaskan Kepada" option removed per user request
+        assignee: assignee.isEmpty ? null : assignee,
         priorityQuadrant: _selectedQuadrant,
         createdAt: todayStr,
       );
 
-      await taskProvider.addTask(newTask);
+      await taskProvider.addTask(newTask, makeRecurring: _makeRecurring);
 
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -171,8 +192,13 @@ class _TaskInputScreenState extends State<TaskInputScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final timeString =
-        '${_selectedTime.hour.toString().padLeft(2, '0')}:${_selectedTime.minute.toString().padLeft(2, '0')}';
+    final timeString = _formatTime(_selectedTime);
+    final inPeakWindow = _shiftService.isTimeInPeakWindow(_selectedTime);
+    final quietWindow = _shiftService.formatWindow(
+      _shiftService.quietStart,
+      _shiftService.quietEnd,
+    );
+    final suggestedTime = _formatTime(_shiftService.quietStart);
 
     return Scaffold(
       backgroundColor: AppColors.background,
@@ -315,7 +341,138 @@ class _TaskInputScreenState extends State<TaskInputScreen> {
                   ),
                 ],
               ),
-              const SizedBox(height: 22),
+              const SizedBox(height: 18),
+
+              // Quiet-hour suggestion (proposal feature 3)
+              if (inPeakWindow) ...[
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFFFF3E0),
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: const Color(0xFFFFB74D), width: 1),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          const Icon(Icons.lightbulb_outline,
+                              size: 18, color: AppColors.snoozeOrange),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: Text(
+                              context.tr('suggestion_peak_title'),
+                              style: const TextStyle(
+                                fontSize: 13,
+                                fontWeight: FontWeight.w700,
+                                color: AppColors.snoozeOrange,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 6),
+                      Text(
+                        context.tr('suggestion_peak_body', [quietWindow]),
+                        style: const TextStyle(
+                          fontSize: 12.5,
+                          color: AppColors.textSecondary,
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      OutlinedButton.icon(
+                        onPressed: _applyQuietWindowSuggestion,
+                        icon: const Icon(Icons.schedule, size: 16),
+                        label: Text(
+                          context.tr('suggestion_move_cta', [suggestedTime]),
+                          style: const TextStyle(
+                            fontSize: 12.5,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                        style: OutlinedButton.styleFrom(
+                          foregroundColor: AppColors.snoozeOrange,
+                          side: const BorderSide(
+                              color: AppColors.snoozeOrange, width: 1.2),
+                          minimumSize: const Size.fromHeight(42),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 18),
+              ],
+
+              // Assignee (proposal feature 4: tasks can be assigned to staff)
+              Text(
+                context.tr('assignee_label'),
+                style: const TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w700,
+                  color: AppColors.textPrimary,
+                ),
+              ),
+              const SizedBox(height: 6),
+              TextFormField(
+                controller: _assigneeController,
+                textInputAction: TextInputAction.next,
+                decoration: InputDecoration(
+                  hintText: context.tr('assignee_hint'),
+                  prefixIcon: const Icon(Icons.person_outline,
+                      color: AppColors.textSecondary),
+                ),
+              ),
+              const SizedBox(height: 18),
+
+              // Recurring template (proposal: repetitive daily prep work)
+              if (!isEditing)
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                  decoration: BoxDecoration(
+                    color: AppColors.surface,
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: AppColors.divider, width: 1),
+                  ),
+                  child: Row(
+                    children: [
+                      const Icon(Icons.repeat, size: 20, color: AppColors.primary),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              context.tr('repeat_daily_label'),
+                              style: const TextStyle(
+                                fontSize: 13.5,
+                                fontWeight: FontWeight.w700,
+                                color: AppColors.textPrimary,
+                              ),
+                            ),
+                            Text(
+                              context.tr('repeat_daily_desc'),
+                              style: const TextStyle(
+                                fontSize: 11.5,
+                                color: AppColors.textSecondary,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Switch(
+                        value: _makeRecurring,
+                        activeThumbColor: AppColors.primary,
+                        onChanged: (val) {
+                          setState(() {
+                            _makeRecurring = val;
+                          });
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              if (!isEditing) const SizedBox(height: 22),
 
               // Priority Matrix (2x2 Grid)
               Text(
@@ -336,7 +493,7 @@ class _TaskInputScreenState extends State<TaskInputScreen> {
                 },
               ),
 
-              const SizedBox(height: 32),
+              const SizedBox(height: 28),
 
               // Primary CTA Button (Full-width dark button at bottom)
               ElevatedButton(

@@ -8,9 +8,11 @@ import '../models/task_model.dart';
 import '../providers/locale_provider.dart';
 import '../services/notification_service.dart';
 import '../services/settings_service.dart';
+import '../services/shift_schedule_service.dart';
 import '../services/update_service.dart';
 import '../services/vibration_service.dart';
 import '../widgets/update_dialog.dart';
+import 'recurring_tasks_screen.dart';
 
 /// Settings Screen for Alarm Duration, Vibration, and Language
 class SettingsScreen extends StatefulWidget {
@@ -130,10 +132,133 @@ class _SettingsScreenState extends State<SettingsScreen> {
       );
     }
   }
+  String _formatTime(TimeOfDay time) =>
+      '${time.hour.toString().padLeft(2, '0')}:${time.minute.toString().padLeft(2, '0')}';
+
+  Future<TimeOfDay?> _pickTime(TimeOfDay initial) {
+    return showTimePicker(context: context, initialTime: initial);
+  }
+
+  /// Persist a new operating window; invalid ordering is rejected with a
+  /// message instead of silently corrupting the schedule (finding G10).
+  Future<void> _updateWindow({
+    TimeOfDay? quietStart,
+    TimeOfDay? quietEnd,
+    TimeOfDay? peakStart,
+    TimeOfDay? peakEnd,
+  }) async {
+    final shiftService = ShiftScheduleService.instance;
+    final saved = await shiftService.updateWindows(
+      quietStart: quietStart,
+      quietEnd: quietEnd,
+      peakStart: peakStart,
+      peakEnd: peakEnd,
+    );
+
+    if (!mounted) return;
+    setState(() {});
+
+    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          saved ? context.tr('hours_saved') : context.tr('invalid_hours_error'),
+        ),
+        backgroundColor: saved ? AppColors.secondary : Colors.red.shade700,
+        duration: const Duration(seconds: 3),
+      ),
+    );
+  }
+
+  Widget _buildWindowRow({
+    required String label,
+    required TimeOfDay start,
+    required TimeOfDay end,
+    required Color color,
+    required Future<void> Function(TimeOfDay) onStartPicked,
+    required Future<void> Function(TimeOfDay) onEndPicked,
+  }) {
+    final windowLabel = ShiftScheduleService.instance
+        .formatWindow(start, end);
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Container(
+              width: 8,
+              height: 8,
+              decoration: BoxDecoration(color: color, shape: BoxShape.circle),
+            ),
+            const SizedBox(width: 8),
+            Expanded(
+              child: Text(
+                label,
+                style: const TextStyle(
+                  fontSize: 13.5,
+                  fontWeight: FontWeight.w700,
+                  color: AppColors.textPrimary,
+                ),
+              ),
+            ),
+            Text(
+              windowLabel,
+              style: TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w700,
+                color: color,
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 8),
+        Row(
+          children: [
+            Expanded(
+              child: OutlinedButton(
+                onPressed: () async {
+                  final picked = await _pickTime(start);
+                  if (picked != null) await onStartPicked(picked);
+                },
+                style: OutlinedButton.styleFrom(
+                  minimumSize: const Size.fromHeight(44),
+                  side: const BorderSide(color: AppColors.divider, width: 1.2),
+                ),
+                child: Text(
+                  '${context.tr('window_start')} ${_formatTime(start)}',
+                  style: const TextStyle(fontSize: 12.5),
+                ),
+              ),
+            ),
+            const SizedBox(width: 8),
+            Expanded(
+              child: OutlinedButton(
+                onPressed: () async {
+                  final picked = await _pickTime(end);
+                  if (picked != null) await onEndPicked(picked);
+                },
+                style: OutlinedButton.styleFrom(
+                  minimumSize: const Size.fromHeight(44),
+                  side: const BorderSide(color: AppColors.divider, width: 1.2),
+                ),
+                child: Text(
+                  '${context.tr('window_end')} ${_formatTime(end)}',
+                  style: const TextStyle(fontSize: 12.5),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final settings = SettingsService.instance;
     final localeProvider = Provider.of<LocaleProvider>(context);
+    final shiftService = ShiftScheduleService.instance;
 
     return Scaffold(
       backgroundColor: AppColors.background,
@@ -148,6 +273,108 @@ class _SettingsScreenState extends State<SettingsScreen> {
         child: ListView(
           padding: const EdgeInsets.all(16),
           children: [
+            // 0. Operating Hours (proposal feature 3: user-defined traffic)
+            _buildSectionHeader(
+              title: context.tr('operational_hours_section'),
+              icon: Icons.storefront_outlined,
+            ),
+            const SizedBox(height: 10),
+            Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: AppColors.surface,
+                borderRadius: BorderRadius.circular(14),
+                border: Border.all(color: AppColors.divider, width: 1),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    context.tr('operational_hours_desc'),
+                    style: const TextStyle(
+                      fontSize: 12.5,
+                      color: AppColors.textSecondary,
+                    ),
+                  ),
+                  const SizedBox(height: 14),
+                  _buildWindowRow(
+                    label: context.tr('quiet_hours_label'),
+                    start: shiftService.quietStart,
+                    end: shiftService.quietEnd,
+                    color: AppColors.secondary,
+                    onStartPicked: (picked) =>
+                        _updateWindow(quietStart: picked),
+                    onEndPicked: (picked) => _updateWindow(quietEnd: picked),
+                  ),
+                  const SizedBox(height: 14),
+                  _buildWindowRow(
+                    label: context.tr('peak_hours_label'),
+                    start: shiftService.peakStart,
+                    end: shiftService.peakEnd,
+                    color: AppColors.peakHours,
+                    onStartPicked: (picked) => _updateWindow(peakStart: picked),
+                    onEndPicked: (picked) => _updateWindow(peakEnd: picked),
+                  ),
+                ],
+              ),
+            ),
+
+            const SizedBox(height: 20),
+
+            // 0b. Recurring tasks (proposal: repetitive prep work)
+            _buildSectionHeader(
+              title: context.tr('recurring_section'),
+              icon: Icons.repeat,
+            ),
+            const SizedBox(height: 10),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              decoration: BoxDecoration(
+                color: AppColors.surface,
+                borderRadius: BorderRadius.circular(14),
+                border: Border.all(color: AppColors.divider, width: 1),
+              ),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      context.tr('recurring_section_desc'),
+                      style: const TextStyle(
+                        fontSize: 12.5,
+                        color: AppColors.textSecondary,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  OutlinedButton(
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) => const RecurringTasksScreen(),
+                        ),
+                      );
+                    },
+                    style: OutlinedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(horizontal: 12),
+                      minimumSize: const Size(0, 40),
+                      side: const BorderSide(
+                          color: AppColors.primary, width: 1.2),
+                    ),
+                    child: Text(
+                      context.tr('open_recurring_btn'),
+                      style: const TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w700,
+                        color: AppColors.primary,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            const SizedBox(height: 20),
+
             // 1. Alarm Duration Section
             _buildSectionHeader(
               title: context.tr('alarm_section'),

@@ -63,6 +63,17 @@ class ScheduleTimelineScreen extends StatelessWidget {
         child: ListView(
           padding: const EdgeInsets.fromLTRB(16, 12, 16, 40),
           children: [
+            // Time-window summary (proposal feature 3: quiet vs peak hours)
+            ListenableBuilder(
+              listenable: shiftService,
+              builder: (context, _) => _buildTimeWindowSummary(
+                context: context,
+                shiftService: shiftService,
+                taskProvider: taskProvider,
+              ),
+            ),
+            const SizedBox(height: 14),
+
             // Category 1: Kerjakan Dahulu (Do First)
             _buildCategoryBlock(
               context: context,
@@ -118,6 +129,111 @@ class ScheduleTimelineScreen extends StatelessWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  /// Compact overview of the user's quiet/peak windows with the number of
+  /// tasks planned inside each one.
+  Widget _buildTimeWindowSummary({
+    required BuildContext context,
+    required ShiftScheduleService shiftService,
+    required TaskProvider taskProvider,
+  }) {
+    final windows = <({String label, String window, int count, Color color})>[
+      (
+        label: context.tr('quiet_hours_label'),
+        window: shiftService.formatWindow(
+            shiftService.quietStart, shiftService.quietEnd),
+        count: taskProvider.quietHoursTasks.length,
+        color: AppColors.quietHours,
+      ),
+      (
+        label: context.tr('transition_tasks_header'),
+        window: shiftService.formatWindow(
+            shiftService.quietEnd, shiftService.peakStart),
+        count: taskProvider.transitionTasks.length,
+        color: AppColors.snoozeOrange,
+      ),
+      (
+        label: context.tr('peak_hours_label'),
+        window: shiftService.formatWindow(
+            shiftService.peakStart, shiftService.peakEnd),
+        count: taskProvider.peakHoursTasks.length,
+        color: AppColors.peakHours,
+      ),
+      (
+        label: context.tr('other_tasks_header'),
+        window: context.tr('other_tasks_window'),
+        count: taskProvider.otherTasks.length,
+        color: AppColors.textMuted,
+      ),
+    ];
+
+    return Container(
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: AppColors.divider, width: 1),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              const Icon(Icons.view_timeline_outlined,
+                  size: 16, color: AppColors.textSecondary),
+              const SizedBox(width: 6),
+              Text(
+                context.tr('operational_hours_section'),
+                style: const TextStyle(
+                  fontSize: 12.5,
+                  fontWeight: FontWeight.w700,
+                  color: AppColors.textSecondary,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          ...windows.map(
+            (entry) => Padding(
+              padding: const EdgeInsets.symmetric(vertical: 3),
+              child: Row(
+                children: [
+                  Container(
+                    width: 8,
+                    height: 8,
+                    decoration: BoxDecoration(
+                      color: entry.color,
+                      shape: BoxShape.circle,
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      '${entry.label} • ${entry.window}',
+                      style: const TextStyle(
+                        fontSize: 12,
+                        color: AppColors.textPrimary,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  Text(
+                    context.tr('tasks_count', ['${entry.count}']),
+                    style: TextStyle(
+                      fontSize: 11.5,
+                      fontWeight: FontWeight.w700,
+                      color: entry.color,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -195,7 +311,7 @@ class ScheduleTimelineScreen extends StatelessWidget {
                     ),
                   ),
                   child: Text(
-                    '${tasks.length} tugas',
+                    context.tr('tasks_count', ['${tasks.length}']),
                     style: TextStyle(
                       fontSize: 11,
                       fontWeight: FontWeight.w700,
@@ -317,7 +433,11 @@ class ScheduleTimelineScreen extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                   ),
                   Text(
-                    '${task.durationMinutes} ${context.tr('minutes_short')}',
+                    [
+                      '${task.durationMinutes} ${context.tr('minutes_short')}',
+                      if (task.assignee != null && task.assignee!.isNotEmpty)
+                        task.assignee!,
+                    ].join(' • '),
                     style: const TextStyle(
                       fontSize: 11,
                       color: AppColors.textSecondary,

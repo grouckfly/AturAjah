@@ -85,6 +85,7 @@ class PriorityMatrixSelector extends StatelessWidget {
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 150),
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+          constraints: const BoxConstraints(minHeight: 104),
           decoration: BoxDecoration(
             color: quadrant.backgroundColor,
             borderRadius: BorderRadius.circular(12),
@@ -146,13 +147,13 @@ class PriorityMatrixSelector extends StatelessWidget {
               Text(
                 context.tr(subtitleKey),
                 style: TextStyle(
-                  fontSize: 11.5,
+                  fontSize: 11,
                   fontWeight: FontWeight.w500,
                   color: isSelected
                       ? quadrant.indicatorColor
                       : AppColors.textSecondary,
                 ),
-                maxLines: 1,
+                maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),
             ],

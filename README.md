@@ -48,6 +48,12 @@ Aplikasi dikembangkan menggunakan Flutter (Dart) dengan fokus performa 60fps yan
   * **[4] Simpan Dulu (Santai & Tidak Mendesak):**
     Pekerjaan ringan atau ide tambahan yang sifatnya santai dan opsional. Hanya dikerjakan jika semua tugas penting lainnya sudah selesai (contoh: merapikan arsip lama, mencoba ide dekorasi baru).
 * **Full CRUD:** Menambah tugas baru, menandai selesai atau belum selesai, mengedit rincian tugas sewaktu-waktu, dan menghapus tugas dengan dialog konfirmasi.
+* **Jam Operasional yang Dapat Diatur:** Pengguna menentukan sendiri jam tenang (persiapan) dan jam sibuk (layanan). Pengaturan ini dipakai untuk menandai tugas, menampilkan banner status, dan memvalidasi urutan jam.
+* **Saran Pindah ke Jam Tenang:** Jika tugas persiapan dijadwalkan pada jam sibuk, form menampilkan peringatan dengan tombol satu ketuk untuk memindahkannya ke jam tenang.
+* **Tugas Berulang Harian:** Tugas yang sama (mis. menyiapkan bumbu) dapat disimpan sebagai template dan otomatis dibuat setiap hari saat aplikasi dibuka, sehingga daftar harian tidak perlu diketik ulang.
+* **Ringkasan Mingguan:** Tab Mingguan menampilkan 7 hari terakhir lengkap dengan jumlah tugas, tugas selesai, dan tugas yang pernah ditunda.
+* **Penugasan ke Karyawan:** Setiap tugas dapat diberi nama penanggung jawab (opsional) yang tampil pada kartu tugas dan timeline jadwal.
+* **Alarm Zona Waktu Lokal:** Penjadwalan alarm dikonversi ke zona waktu perangkat (bukan UTC), dengan fallback otomatis ke alarm inexact bila izin exact alarm tidak tersedia, serta pengingat in-app saat aplikasi terbuka.
 * **Tampilan Jadwal Berdasarkan Kategori:** Tab Jadwal mengelompokkan tugas secara kronologis berdasarkan 4 kategori di atas lengkap dengan jam target dan durasi pengerjaan.
 * **Alarm Tepat Waktu dengan Nada Dering Sistem:** Alarm menggunakan nada dering alarm standar bawaan sistem ponsel (content://settings/system/alarm_alert).
 * **Mesin Getaran Hardware Responsif:** Getaran mengontrol driver hardware Android Vibrator / VibratorManager secara langsung melalui Kotlin MethodChannel, menjamin respons instan pada pengujian beruntun (spam testing) serta mati total saat fitur getar dinonaktifkan.

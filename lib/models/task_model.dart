@@ -12,6 +12,7 @@ class TaskModel {
   final bool isCompleted;
   final int snoozeCount;
   final String createdAt; // "YYYY-MM-DD"
+  final int? templateId; // set when generated from a recurring template
 
   const TaskModel({
     this.id,
@@ -23,6 +24,7 @@ class TaskModel {
     this.isCompleted = false,
     this.snoozeCount = 0,
     required this.createdAt,
+    this.templateId,
   });
 
   /// Parse "HH:mm" to TimeOfDay
@@ -63,6 +65,7 @@ class TaskModel {
       'is_completed': isCompleted ? 1 : 0,
       'snooze_count': snoozeCount,
       'created_at': createdAt,
+      'template_id': templateId,
     };
   }
 
@@ -78,6 +81,7 @@ class TaskModel {
       isCompleted: (map['is_completed'] as int) == 1,
       snoozeCount: (map['snooze_count'] as int?) ?? 0,
       createdAt: map['created_at'] as String,
+      templateId: map['template_id'] as int?,
     );
   }
 
@@ -91,17 +95,20 @@ class TaskModel {
     bool? isCompleted,
     int? snoozeCount,
     String? createdAt,
+    int? templateId,
+    bool clearAssignee = false,
   }) {
     return TaskModel(
       id: id ?? this.id,
       title: title ?? this.title,
       targetTime: targetTime ?? this.targetTime,
       durationMinutes: durationMinutes ?? this.durationMinutes,
-      assignee: assignee ?? this.assignee,
+      assignee: clearAssignee ? null : (assignee ?? this.assignee),
       priorityQuadrant: priorityQuadrant ?? this.priorityQuadrant,
       isCompleted: isCompleted ?? this.isCompleted,
       snoozeCount: snoozeCount ?? this.snoozeCount,
       createdAt: createdAt ?? this.createdAt,
+      templateId: templateId ?? this.templateId,
     );
   }
 }

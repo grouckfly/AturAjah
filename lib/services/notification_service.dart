@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
@@ -27,10 +28,65 @@ class NotificationService {
 
   NotificationService._internal();
 
+  /// Replaceable clock so scheduling can be tested deterministically.
+  @visibleForTesting
+  DateTime Function() nowProvider = DateTime.now;
+
+  bool _timeZonesReady = false;
+
+  /// Zones that are stable (no DST) and common for this app's users. Preferring
+  /// them avoids picking an exotic zone with the same current offset but
+  /// different daylight-saving rules.
+  static const List<String> _preferredZones = [
+    'Asia/Jakarta',
+    'Asia/Makassar',
+    'Asia/Jayapura',
+    'Asia/Singapore',
+    'Asia/Kuala_Lumpur',
+    'Asia/Bangkok',
+    'Asia/Tokyo',
+    'Asia/Shanghai',
+    'UTC',
+  ];
+
+  /// Prepares the timezone database and — critically — points `tz.local` at a
+  /// location that matches the device offset.
+  ///
+  /// `tz.initializeTimeZones()` resets `tz.local` to **UTC**, so scheduling a
+  /// task at 12:00 used to register a 12:00 *UTC* alarm (e.g. 19:00 WIB), which
+  /// is why reminders never fired at the expected hour.
+  void ensureTimeZones() {
+    if (_timeZonesReady) return;
+    tz.initializeTimeZones();
+    tz.setLocalLocation(resolveLocationForOffset(DateTime.now().timeZoneOffset));
+    _timeZonesReady = true;
+  }
+
+  /// A location whose UTC offset equals [offset] at [at] (defaults to now).
+  /// Used instead of a plugin so the app stays fully offline.
+  @visibleForTesting
+  tz.Location resolveLocationForOffset(Duration offset, {DateTime? at}) {
+    final moment = at ?? DateTime.now();
+
+    for (final name in _preferredZones) {
+      final location = tz.getLocation(name);
+      if (tz.TZDateTime.from(moment, location).timeZoneOffset == offset) {
+        return location;
+      }
+    }
+
+    for (final location in tz.timeZoneDatabase.locations.values) {
+      if (tz.TZDateTime.from(moment, location).timeZoneOffset == offset) {
+        return location;
+      }
+    }
+    return tz.UTC;
+  }
+
   /// Initialize local notification channels and timezone database
   Future<void> initialize() async {
-    // Initialize timezone database for exact scheduling
-    tz.initializeTimeZones();
+    // Initialize timezone database for exact scheduling (and fix tz.local).
+    ensureTimeZones();
 
     // Android notification setup
     const AndroidInitializationSettings androidSettings =
@@ -209,14 +265,57 @@ class NotificationService {
     );
   }
 
+  /// Schedules a notification with an exact alarm when the OS allows it and
+  /// falls back to an inexact alarm otherwise, so a reminder is never silently
+  /// dropped when exact-alarm permission is missing.
+  Future<void> _scheduleWithFallback({
+    required int id,
+    required String title,
+    required String body,
+    required tz.TZDateTime when,
+    required String payload,
+  }) async {
+    final details = _notificationDetails(title: title, body: body);
+    try {
+      await _notificationsPlugin.zonedSchedule(
+        id,
+        title,
+        body,
+        when,
+        details,
+        androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+        uiLocalNotificationDateInterpretation:
+            UILocalNotificationDateInterpretation.absoluteTime,
+        payload: payload,
+      );
+    } on PlatformException catch (e) {
+      if (e.code != 'exact_alarms_not_permitted') rethrow;
+      if (kDebugMode) {
+        debugPrint('Exact alarms not permitted, falling back to inexact.');
+      }
+      await _notificationsPlugin.zonedSchedule(
+        id,
+        title,
+        body,
+        when,
+        details,
+        androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
+        uiLocalNotificationDateInterpretation:
+            UILocalNotificationDateInterpretation.absoluteTime,
+        payload: payload,
+      );
+    }
+  }
+
   /// Schedule an exact notification for a task at its targetTime
   Future<void> scheduleTaskAlarm(TaskModel task) async {
     if (task.id == null || task.isCompleted) return;
+    ensureTimeZones();
 
     try {
-      final now = DateTime.now();
+      final now = nowProvider();
       final tod = task.timeOfDay;
-      var scheduledDate = DateTime(
+      final scheduledDate = DateTime(
         now.year,
         now.month,
         now.day,
@@ -232,18 +331,12 @@ class NotificationService {
 
       final tzScheduled = tz.TZDateTime.from(scheduledDate, tz.local);
 
-      await _notificationsPlugin.zonedSchedule(
-        task.id!,
-        'AturAjah: ${task.title}',
-        'Waktunya mengerjakan: ${task.targetTime} • ${task.durationMinutes} menit',
-        tzScheduled,
-        _notificationDetails(
-          title: task.title,
-          body: 'Target: ${task.targetTime}',
-        ),
-        androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
-        uiLocalNotificationDateInterpretation:
-            UILocalNotificationDateInterpretation.absoluteTime,
+      await _scheduleWithFallback(
+        id: task.id!,
+        title: 'AturAjah: ${task.title}',
+        body:
+            'Waktunya mengerjakan: ${task.targetTime} • ${task.durationMinutes} menit',
+        when: tzScheduled,
         payload: task.id.toString(),
       );
     } catch (e) {
@@ -256,26 +349,21 @@ class NotificationService {
   /// Schedule a snooze repeating alarm after N minutes
   Future<void> scheduleSnoozeAlarm(TaskModel task, int snoozeMinutes) async {
     if (task.id == null) return;
+    ensureTimeZones();
 
     await cancelTaskAlarm(task.id!);
 
     try {
       final scheduledDate =
-          DateTime.now().add(Duration(minutes: snoozeMinutes));
+          nowProvider().add(Duration(minutes: snoozeMinutes));
       final tzScheduled = tz.TZDateTime.from(scheduledDate, tz.local);
 
-      await _notificationsPlugin.zonedSchedule(
-        task.id!,
-        'PENGINGAT BERULANG (Snooze): ${task.title}',
-        'Tugas ditunda. Waktu pengerjaan sekarang! (${task.durationMinutes} mnt)',
-        tzScheduled,
-        _notificationDetails(
-          title: task.title,
-          body: 'Snoozed alarm',
-        ),
-        androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
-        uiLocalNotificationDateInterpretation:
-            UILocalNotificationDateInterpretation.absoluteTime,
+      await _scheduleWithFallback(
+        id: task.id!,
+        title: 'PENGINGAT BERULANG (Snooze): ${task.title}',
+        body:
+            'Tugas ditunda. Waktu pengerjaan sekarang! (${task.durationMinutes} mnt)',
+        when: tzScheduled,
         payload: task.id.toString(),
       );
     } catch (e) {

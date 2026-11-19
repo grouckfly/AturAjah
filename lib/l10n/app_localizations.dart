@@ -91,8 +91,8 @@ class AppLocalizations {
       'reminder_quiet_note': 'Direncanakan untuk jam tenang • Estimasi: %s menit',
       'reminder_peak_note': 'Peringatan: Jadwal jatuh pada jam sibuk layanan',
       'reminder_standard_note': 'Waktu pengerjaan tugas operasional • %s menit',
-      'mark_done_cta': '✓ Tandai Selesai',
-      'snooze_reschedule_cta': 'Zz Tunda / Jadwal Ulang',
+      'mark_done_cta': 'Tandai Selesai',
+      'snooze_reschedule_cta': 'Tunda / Jadwal Ulang',
       'snoozed_times_label': 'Ditunda: %s kali',
 
       // Snooze Bottom Sheet
@@ -137,6 +137,65 @@ class AppLocalizations {
       'app_is_up_to_date': 'Aplikasi sudah dalam versi terbaru (v%s)',
       'update_check_failed': 'Tidak dapat memeriksa pembaruan. Periksa koneksi internet.',
       'checking_update': 'Memeriksa pembaruan...',
+
+      // Operating Hours (propsal feature 3)
+      'operational_hours_section': 'Jam Operasional',
+      'operational_hours_desc':
+          'Sesuaikan jam tenang (persiapan) dan jam sibuk (layanan) dengan pola pelanggan Anda',
+      'quiet_hours_label': 'Jam Tenang (Persiapan)',
+      'peak_hours_label': 'Jam Sibuk (Layanan)',
+      'window_start': 'Mulai',
+      'window_end': 'Selesai',
+      'invalid_hours_error':
+          'Urutan jam tidak valid: Jam Tenang harus selesai sebelum Jam Sibuk dimulai',
+      'hours_saved': 'Jam operasional diperbarui',
+      'banner_quiet_now': 'Waktu persiapan — selesaikan tugas persiapan sekarang',
+      'banner_peak_now': 'Fokus layanan pelanggan',
+      'banner_transition': 'Menuju jam sibuk',
+      'banner_transition_desc': 'Siapkan bahan sebelum pelanggan datang',
+      'other_tasks_header': 'Jam Lain',
+      'other_tasks_window': 'di luar jam tenang & sibuk',
+      'recurring_section': 'Tugas Berulang',
+      'recurring_section_desc': 'Kelola tugas yang dibuat otomatis setiap hari',
+      'open_recurring_btn': 'Kelola Tugas Berulang',
+
+      // Task input extras
+      'assignee_label': 'Ditugaskan Kepada (opsional)',
+      'assignee_hint': 'Contoh: Sari',
+      'repeat_daily_label': 'Ulangi setiap hari',
+      'repeat_daily_desc': 'Tugas dibuat otomatis setiap hari saat aplikasi dibuka',
+      'repeat_badge': 'Harian',
+
+      // Quiet-hour suggestion
+      'suggestion_peak_title': 'Jadwal ini jatuh di jam sibuk',
+      'suggestion_peak_body':
+          'Pindahkan ke jam tenang (%s) agar persiapan selesai sebelum pelanggan datang.',
+      'suggestion_move_cta': 'Pindahkan ke %s',
+      'task_moved_to': 'Tugas dipindahkan ke %s',
+
+      // Schedule view switch
+      'view_by_priority': 'Prioritas',
+      'view_by_time': 'Waktu',
+      'tasks_count': '%s tugas',
+
+      // Recurring tasks screen
+      'recurring_title': 'Tugas Berulang',
+      'recurring_empty':
+          'Belum ada tugas berulang. Aktifkan opsi "Ulangi setiap hari" saat membuat tugas.',
+      'recurring_active': 'Aktif',
+      'recurring_inactive': 'Nonaktif',
+      'delete_template_confirm':
+          'Hapus tugas berulang ini? Tugas hari ini tidak ikut terhapus.',
+
+      // Weekly overview
+      'tab_weekly': 'Mingguan',
+      'weekly_title': 'Ringkasan Mingguan',
+      'weekly_subtitle': '7 hari terakhir',
+      'weekly_total_tasks': 'Total tugas',
+      'weekly_completed': 'Selesai',
+      'weekly_snoozed': 'Pernah ditunda',
+      'weekly_no_tasks': 'Tidak ada tugas',
+      'weekly_today': 'Hari ini',
 
       // General
       'language_switch': 'Bahasa',
@@ -215,8 +274,8 @@ class AppLocalizations {
       'reminder_quiet_note': 'Planned for quiet hours • Est: %s min',
       'reminder_peak_note': 'Warning: Scheduled during busy customer service peak',
       'reminder_standard_note': 'Operational task window • %s min',
-      'mark_done_cta': '✓ Mark as Done',
-      'snooze_reschedule_cta': 'Zz Snooze / Reschedule',
+      'mark_done_cta': 'Mark as Done',
+      'snooze_reschedule_cta': 'Snooze / Reschedule',
       'snoozed_times_label': 'Snoozed: %s times',
 
       // Snooze Bottom Sheet
@@ -261,6 +320,65 @@ class AppLocalizations {
       'app_is_up_to_date': 'App is already up to date (v%s)',
       'update_check_failed': 'Could not check for updates. Check internet connection.',
       'checking_update': 'Checking for updates...',
+
+      // Operating hours (proposal feature 3)
+      'operational_hours_section': 'Operating Hours',
+      'operational_hours_desc':
+          'Match the quiet (prep) and peak (service) windows to your customer traffic',
+      'quiet_hours_label': 'Quiet Hours (Prep)',
+      'peak_hours_label': 'Peak Hours (Service)',
+      'window_start': 'Start',
+      'window_end': 'End',
+      'invalid_hours_error':
+          'Invalid order: Quiet Hours must end before Peak Hours start',
+      'hours_saved': 'Operating hours updated',
+      'banner_quiet_now': 'Prep time — finish preparation tasks now',
+      'banner_peak_now': 'Focus on customer service',
+      'banner_transition': 'Approaching peak hours',
+      'banner_transition_desc': 'Prepare ingredients before customers arrive',
+      'other_tasks_header': 'Other Hours',
+      'other_tasks_window': 'outside quiet & peak windows',
+      'recurring_section': 'Recurring Tasks',
+      'recurring_section_desc': 'Manage tasks that are created automatically every day',
+      'open_recurring_btn': 'Manage Recurring Tasks',
+
+      // Task input extras
+      'assignee_label': 'Assigned To (optional)',
+      'assignee_hint': 'e.g. Sari',
+      'repeat_daily_label': 'Repeat every day',
+      'repeat_daily_desc': 'The task is created automatically each day the app opens',
+      'repeat_badge': 'Daily',
+
+      // Quiet-hour suggestion
+      'suggestion_peak_title': 'This slot falls in peak hours',
+      'suggestion_peak_body':
+          'Move it to the quiet window (%s) so prep is done before customers arrive.',
+      'suggestion_move_cta': 'Move to %s',
+      'task_moved_to': 'Task moved to %s',
+
+      // Schedule view switch
+      'view_by_priority': 'Priority',
+      'view_by_time': 'Time',
+      'tasks_count': '%s tasks',
+
+      // Recurring tasks screen
+      'recurring_title': 'Recurring Tasks',
+      'recurring_empty':
+          'No recurring tasks yet. Turn on "Repeat every day" when creating a task.',
+      'recurring_active': 'Active',
+      'recurring_inactive': 'Inactive',
+      'delete_template_confirm':
+          'Delete this recurring task? Today\'s task stays untouched.',
+
+      // Weekly overview
+      'tab_weekly': 'Weekly',
+      'weekly_title': 'Weekly Summary',
+      'weekly_subtitle': 'Last 7 days',
+      'weekly_total_tasks': 'Total tasks',
+      'weekly_completed': 'Completed',
+      'weekly_snoozed': 'Snoozed',
+      'weekly_no_tasks': 'No tasks',
+      'weekly_today': 'Today',
 
       // General
       'language_switch': 'Language',

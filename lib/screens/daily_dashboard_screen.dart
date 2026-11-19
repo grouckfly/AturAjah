@@ -6,6 +6,8 @@ import '../l10n/app_localizations.dart';
 import '../models/task_model.dart';
 import '../providers/locale_provider.dart';
 import '../providers/task_provider.dart';
+import '../services/shift_schedule_service.dart';
+import '../widgets/live_status_banner.dart';
 import '../widgets/task_card.dart';
 import 'settings_screen.dart';
 import 'task_input_screen.dart';
@@ -143,6 +145,17 @@ class DailyDashboardScreen extends StatelessWidget {
                         ],
                       ),
                     ],
+                  ),
+                ),
+              ),
+
+              // Live phase banner (uses the user's quiet/peak windows)
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 4, 16, 4),
+                  child: ListenableBuilder(
+                    listenable: ShiftScheduleService.instance,
+                    builder: (context, _) => const LiveStatusBanner(),
                   ),
                 ),
               ),
