@@ -66,3 +66,8 @@ migrate_working_dir/
 !public/*.apk
 releases/*.apk
 *.aab
+
+# Release signing material — never commit
+android/key.properties
+**/*.jks
+**/*.keystore

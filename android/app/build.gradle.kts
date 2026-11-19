@@ -1,7 +1,18 @@
+import java.util.Properties
+
 plugins {
     id("com.android.application")
     // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
     id("dev.flutter.flutter-gradle-plugin")
+}
+
+// Signing material must never live in the repo: keep the keystore and an
+// `android/key.properties` (see key.properties.example) on the build machine.
+val keyPropertiesFile = rootProject.file("key.properties")
+val keyProperties = Properties().apply {
+    if (keyPropertiesFile.exists()) {
+        keyPropertiesFile.inputStream().use { load(it) }
+    }
 }
 
 android {
@@ -25,10 +36,19 @@ android {
 
     signingConfigs {
         create("release") {
-            storeFile = file("aturajah-release.keystore")
-            storePassword = "aturajah123"
-            keyAlias = "aturajah"
-            keyPassword = "aturajah123"
+            if (keyProperties.isNotEmpty()) {
+                storeFile = file(keyProperties.getProperty("storeFile"))
+                storePassword = keyProperties.getProperty("storePassword")
+                keyAlias = keyProperties.getProperty("keyAlias")
+                keyPassword = keyProperties.getProperty("keyPassword")
+            } else {
+                // Legacy fallback for build machines that still keep the
+                // keystore inside android/app/.
+                storeFile = file("aturajah-release.keystore")
+                storePassword = "aturajah123"
+                keyAlias = "aturajah"
+                keyPassword = "aturajah123"
+            }
             enableV1Signing = true
             enableV2Signing = true
         }

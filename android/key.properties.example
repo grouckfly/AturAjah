@@ -1,0 +1,6 @@
+# Salin file ini menjadi android/key.properties di mesin build,
+# lalu isi dengan data keystore rilis Anda. JANGAN commit file aslinya.
+storeFile=app/aturajah-release.keystore
+storePassword=ISI_DI_SINI
+keyAlias=aturajah
+keyPassword=ISI_DI_SINI
