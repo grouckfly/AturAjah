@@ -1,273 +1,437 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Unduh AturAjah - Daily Task & Schedule Manager</title>
-  <meta name="description" content="Aplikasi pengatur jadwal dan tugas harian 100% offline dengan matriks prioritas Eisenhower dan alarm presisi.">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --primary: #F4511E;
-      --primary-hover: #E64A19;
-      --ios-color: #007AFF;
-      --ios-hover: #0062CC;
-      --secondary: #1B5E20;
-      --background: #F7F7F2;
-      --surface: #FFFFFF;
-      --text-primary: #1A1A1A;
-      --text-secondary: #555555;
-      --border: #E8E8E0;
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unduh AturAjah — Pengatur Tugas & Jadwal Harian untuk UMKM</title>
+<meta name="description" content="AturAjah membantu pemilik usaha kecil memprioritaskan tugas harian dengan matriks Eisenhower, jam operasional, alarm presisi, dan tugas berulang. 100% offline, tanpa iklan.">
+<meta name="theme-color" content="#F4511E">
+<meta property="og:title" content="Unduh AturAjah">
+<meta property="og:description" content="Pengatur tugas & jadwal harian untuk UMKM. Matriks prioritas, jam operasional, alarm presisi. 100% offline.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='6' fill='%23F4511E'/%3E%3Cpath d='M7 7h4v4H7zm6 0h4v4h-4zM7 13h4v4H7zm6 0h4v4h-4z' fill='white'/%3E%3C/svg%3E">
+<style>
+  :root{
+    --primary:#F4511E; --primary-dark:#D84315; --primary-soft:#FFF1EB;
+    --ink:#17150F; --ink-soft:#5A554C; --line:#E9E4DA;
+    --bg:#FBF9F4; --surface:#FFFFFF; --green:#1B5E20; --green-soft:#E8F5E9; --green-ink:#1B5E20;
+    --shadow:0 18px 40px -18px rgba(23,21,15,.22);
+    --shadow-sm:0 6px 18px -10px rgba(23,21,15,.28);
+    --radius:22px;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --ink:#F5F1E8; --ink-soft:#B5AFA4; --line:#2E2B26;
+      --bg:#141310; --surface:#1D1B17; --primary-soft:#2A1D13; --green-soft:#15240F;
+      --green-ink:#9BE7A5; --shadow:0 18px 40px -18px rgba(0,0,0,.7); --shadow-sm:0 6px 18px -10px rgba(0,0,0,.6);
     }
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-    }
-    body {
-      background-color: var(--background);
-      color: var(--text-primary);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 32px 16px;
-    }
-    .card {
-      background: var(--surface);
-      max-width: 520px;
-      width: 100%;
-      border-radius: 28px;
-      padding: 36px 28px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-      border: 1px solid var(--border);
-      text-align: center;
-    }
-    .app-icon {
-      width: 88px;
-      height: 88px;
-      background: linear-gradient(135deg, #FF6E40, #F4511E);
-      border-radius: 22px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 20px;
-      box-shadow: 0 12px 24px rgba(244, 81, 30, 0.28);
-    }
-    .app-icon svg {
-      width: 48px;
-      height: 48px;
-      fill: #ffffff;
-    }
-    h1 {
-      font-size: 32px;
-      font-weight: 800;
-      letter-spacing: -0.8px;
-      margin-bottom: 8px;
-      color: var(--text-primary);
-    }
-    .subtitle {
-      font-size: 15px;
-      font-weight: 600;
-      color: var(--primary);
-      margin-bottom: 12px;
-    }
-    .description {
-      font-size: 14px;
-      color: var(--text-secondary);
-      line-height: 1.6;
-      margin-bottom: 24px;
-    }
-    .badge-row {
-      display: flex;
-      justify-content: center;
-      gap: 8px;
-      flex-wrap: wrap;
-      margin-bottom: 28px;
-    }
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      padding: 6px 12px;
-      border-radius: 12px;
-      font-size: 12px;
-      font-weight: 700;
-      background: #FFF3E0;
-      color: #E65100;
-      border: 1px solid #FFE0B2;
-    }
-    .badge.green {
-      background: #E8F5E9;
-      color: #1B5E20;
-      border-color: #C8E6C9;
-    }
-    .button-group {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      margin-bottom: 24px;
-    }
-    .btn {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      text-decoration: none;
-      font-size: 15.5px;
-      font-weight: 700;
-      padding: 16px 20px;
-      border-radius: 16px;
-      transition: background 0.2s, transform 0.1s;
-      cursor: pointer;
-      border: none;
-      width: 100%;
-    }
-    .btn-android {
-      background: var(--primary);
-      color: white;
-      box-shadow: 0 6px 18px rgba(244, 81, 30, 0.35);
-    }
-    .btn-android:hover {
-      background: var(--primary-hover);
-      transform: translateY(-1px);
-    }
-    .btn-ios {
-      background: #1C1C1E;
-      color: white;
-      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
-    }
-    .btn-ios:hover {
-      background: #2C2C2E;
-      transform: translateY(-1px);
-    }
-    .btn-secondary {
-      background: transparent;
-      color: var(--text-primary);
-      font-size: 13.5px;
-      font-weight: 600;
-      padding: 12px 18px;
-      border-radius: 12px;
-      border: 1px solid var(--border);
-    }
-    .btn-secondary:hover {
-      background: #F0F0EA;
-    }
-    .divider {
-      height: 1px;
-      background: var(--border);
-      margin: 24px 0;
-    }
-    .guide-title {
-      font-size: 14.5px;
-      font-weight: 700;
-      text-align: left;
-      margin-bottom: 12px;
-      color: var(--text-primary);
-    }
-    .steps {
-      text-align: left;
-      list-style-position: inside;
-      font-size: 13.5px;
-      color: var(--text-secondary);
-      line-height: 1.8;
-    }
-    .steps li {
-      margin-bottom: 6px;
-    }
-    .footer {
-      margin-top: 24px;
-      font-size: 12px;
-      color: #888888;
-      text-align: center;
-    }
-  </style>
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:'Plus Jakarta Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+    background:var(--bg); color:var(--ink); line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+  a{color:inherit}
+  .skip{position:absolute;left:-999px}
+  .skip:focus{left:16px;top:16px;background:var(--surface);padding:10px 16px;border-radius:10px;z-index:99}
+
+  /* ---------- header ---------- */
+  header{position:sticky;top:0;z-index:20;backdrop-filter:blur(14px);
+    background:color-mix(in srgb,var(--bg) 82%,transparent);border-bottom:1px solid var(--line)}
+  .nav{display:flex;align-items:center;justify-content:space-between;gap:16px;height:64px}
+  .brand{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:-.02em;font-size:17px}
+  .brand-mark{width:32px;height:32px;border-radius:9px;background:linear-gradient(140deg,#FF7043,var(--primary));
+    display:grid;place-items:center;box-shadow:0 6px 14px -6px rgba(244,81,30,.8)}
+  .brand-mark svg{width:18px;height:18px;fill:#fff}
+  .nav-links{display:flex;gap:22px;font-size:14px;font-weight:600;color:var(--ink-soft)}
+  .nav-links a{text-decoration:none}
+  .nav-links a:hover{color:var(--primary)}
+  .nav-cta{display:inline-flex;align-items:center;gap:8px;background:var(--primary-dark);color:#fff;text-decoration:none;
+    font-weight:700;font-size:14px;padding:11px 18px;border-radius:12px;box-shadow:0 8px 20px -10px rgba(244,81,30,.9)}
+  .nav-cta:hover{background:#BF360C}
+  @media(max-width:820px){.nav-links{display:none}}
+
+  /* ---------- hero ---------- */
+  .hero{padding:64px 0 40px;display:grid;grid-template-columns:1.15fr .85fr;gap:48px;align-items:center}
+  @media(max-width:900px){.hero{grid-template-columns:1fr;gap:36px;padding-top:44px}}
+  .eyebrow{display:inline-flex;align-items:center;gap:8px;background:var(--primary-soft);color:var(--primary-dark);
+    font-size:12.5px;font-weight:700;padding:7px 13px;border-radius:999px;border:1px solid color-mix(in srgb,var(--primary) 22%,transparent)}
+  h1{font-size:clamp(34px,5vw,54px);line-height:1.08;letter-spacing:-.035em;font-weight:800;margin:18px 0 14px}
+  h1 span{color:var(--primary)}
+  .lede{font-size:16.5px;color:var(--ink-soft);max-width:52ch}
+  .meta{display:flex;flex-wrap:wrap;gap:8px;margin:22px 0 26px}
+  .chip{font-size:12.5px;font-weight:700;padding:7px 12px;border-radius:10px;border:1px solid var(--line);
+    background:var(--surface);color:var(--ink-soft)}
+  .chip.ok{background:var(--green-soft);color:var(--green-ink);border-color:color-mix(in srgb,var(--green) 18%,transparent)}
+  .cta-row{display:flex;flex-wrap:wrap;gap:12px}
+  .cta-row .btn{flex:1 1 190px}
+  @media(max-width:560px){.cta-row .btn{flex:1 1 100%}}
+  @media(min-width:561px){#btnShare{flex:0 0 auto;font-size:13.5px;padding:11px 16px;border-radius:12px}}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;text-decoration:none;
+    font-weight:700;font-size:15px;padding:15px 22px;border-radius:14px;border:1px solid transparent;
+    transition:transform .12s ease,background .18s ease,box-shadow .18s ease}
+  .btn:active{transform:translateY(1px)}
+  .btn-primary{background:var(--primary-dark);color:#fff;box-shadow:0 14px 26px -14px rgba(216,67,21,.95)}
+  .btn-primary:hover{background:#BF360C}
+  .btn-ghost{background:var(--surface);color:var(--ink);border-color:var(--line);box-shadow:var(--shadow-sm)}
+  .btn-ghost:hover{border-color:color-mix(in srgb,var(--primary) 40%,var(--line))}
+  .btn svg{width:18px;height:18px;fill:currentColor;flex:none}
+  .pnote{display:flex;gap:11px;align-items:flex-start;background:var(--primary-soft);border:1px solid color-mix(in srgb,var(--primary) 24%,transparent);
+    border-radius:14px;padding:13px 15px;margin:14px 0 18px;font-size:13.5px;line-height:1.5;color:var(--ink)}
+  .pnote svg{width:18px;height:18px;fill:var(--primary);flex:none;margin-top:2px}
+  .pnote strong{font-weight:800}
+  .link-btn{background:none;border:none;padding:0;font:inherit;color:var(--primary-dark);font-weight:700;cursor:pointer;text-decoration:underline}
+  .fineprint{margin-top:14px;font-size:12.5px;color:var(--ink-soft)}
+  .fineprint a{color:var(--primary);font-weight:600;text-decoration:none}
+
+  /* phone mock */
+  .phone{position:relative;justify-self:center;width:290px;aspect-ratio:9/18.5;border-radius:38px;
+    background:var(--surface);border:1px solid var(--line);box-shadow:var(--shadow);padding:14px;overflow:hidden}
+  .phone::before{content:"";position:absolute;top:10px;left:50%;transform:translateX(-50%);
+    width:74px;height:6px;border-radius:99px;background:var(--line)}
+  .screen{margin-top:16px;display:flex;flex-direction:column;gap:10px;height:calc(100% - 16px)}
+  .s-title{font-size:11px;font-weight:800;letter-spacing:.08em;color:var(--ink-soft);text-transform:uppercase}
+  .s-head{font-size:19px;font-weight:800;letter-spacing:-.02em}
+  .banner{border-radius:12px;padding:10px 12px;background:var(--green);color:#F2FBF3;
+    font-size:11.5px;font-weight:700;line-height:1.35}
+  .row{display:flex;align-items:center;gap:9px;border:1px solid var(--line);border-radius:12px;padding:10px}
+  .dot{width:9px;height:9px;border-radius:99px;flex:none}
+  .r-txt{font-size:11.5px;font-weight:700;line-height:1.25}
+  .r-sub{font-size:10.5px;color:var(--ink-soft);font-weight:600}
+  .tabs{display:flex;gap:6px;margin-top:auto;padding-top:8px;border-top:1px solid var(--line);font-size:10px;font-weight:700;color:var(--ink-soft)}
+  .tabs span{flex:1;text-align:center;padding:6px 0;border-radius:8px}
+  .tabs .on{background:var(--primary-soft);color:var(--primary-dark)}
+
+  /* ---------- sections ---------- */
+  section{padding:56px 0}
+  .sec-head{max-width:60ch;margin-bottom:32px}
+  .sec-head h2{font-size:clamp(24px,3.2vw,34px);letter-spacing:-.03em;font-weight:800;margin-bottom:10px}
+  .sec-head p{color:var(--ink-soft);font-size:15.5px}
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  @media(max-width:900px){.grid{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:620px){.grid{grid-template-columns:1fr}}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:22px;
+    box-shadow:var(--shadow-sm)}
+  .card .ico{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;margin-bottom:14px;
+    background:var(--primary-soft)}
+  .card .ico svg{width:20px;height:20px;fill:var(--primary)}
+  .card h3{font-size:16px;font-weight:800;letter-spacing:-.01em;margin-bottom:6px}
+  .card p{font-size:14px;color:var(--ink-soft)}
+
+  /* steps */
+  .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;counter-reset:s}
+  @media(max-width:900px){.steps{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:560px){.steps{grid-template-columns:1fr}}
+  .step{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:22px;position:relative}
+  .step::before{counter-increment:s;content:counter(s);position:absolute;top:-14px;left:22px;width:30px;height:30px;
+    border-radius:10px;background:var(--primary);color:#fff;font-weight:800;font-size:14px;display:grid;place-items:center}
+  .step h3{font-size:14.5px;font-weight:800;margin:8px 0 6px}
+  .step p{font-size:13.5px;color:var(--ink-soft)}
+  code{background:var(--primary-soft);color:var(--primary-dark);padding:2px 6px;border-radius:6px;font-size:12.5px}
+
+  /* faq */
+  details{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px 18px;margin-bottom:10px}
+  details+details{margin-top:10px}
+  summary{cursor:pointer;font-weight:700;font-size:14.5px;list-style:none;display:flex;justify-content:space-between;gap:14px}
+  summary::-webkit-details-marker{display:none}
+  summary::after{content:"+";color:var(--primary);font-weight:800;font-size:18px;line-height:1}
+  details[open] summary::after{content:"–"}
+  details p{font-size:14px;color:var(--ink-soft);margin-top:12px}
+
+  /* release box */
+  .release{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:24px;box-shadow:var(--shadow-sm)}
+  .release-top{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-bottom:10px}
+  .ver{font-size:20px;font-weight:800;letter-spacing:-.02em}
+  .notes{font-size:14px;color:var(--ink-soft)}
+  .hash{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11.5px;color:var(--ink-soft);
+    word-break:break-all;background:var(--bg);border:1px dashed var(--line);border-radius:10px;padding:10px 12px;margin-top:14px}
+
+  footer{border-top:1px solid var(--line);padding:30px 0 44px;font-size:13px;color:var(--ink-soft)}
+  .foot{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+  .foot a{text-decoration:none;color:var(--ink-soft)}
+  .foot a:hover{color:var(--primary)}
+</style>
 </head>
 <body>
+<a class="skip" href="#unduh">Lompat ke tombol unduh</a>
 
-  <div class="card">
-    <div class="app-icon">
-      <!-- Calendar Clock Schedule SVG -->
-      <svg viewBox="0 0 24 24">
-        <path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11zM7 11h5v5H7z"/>
-      </svg>
+<header>
+  <div class="wrap nav">
+    <div class="brand">
+      <span class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24"><path d="M7 7h4v4H7zm6 0h4v4h-4zM7 13h4v4H7zm6 0h4v4h-4z"/></svg>
+      </span>
+      AturAjah
     </div>
-
-    <h1>AturAjah</h1>
-    <div class="subtitle">Manajemen Tugas & Jadwal Harian Presisi</div>
-    <p class="description">
-      Aplikasi pengatur jadwal cerdas berbasis <strong>4 Kategori Prioritas Praktis</strong>, alarm pengingat tepat waktu, 100% offline, tanpa iklan, dan hemat baterai.
-    </p>
-
-    <div class="badge-row">
-      <span class="badge green">100% Offline</span>
-      <span class="badge">Universal (Semua Merek HP)</span>
-      <span class="badge green">Android 7.0+</span>
-      <span class="badge">iOS 13.0+</span>
-      <span class="badge">Bilingual (ID / EN)</span>
-    </div>
-
-    <div class="button-group">
-      <!-- Download Android Primary CTA (Universal APK for all brands) -->
-      <a id="downloadAndroidBtn" href="AturAjah.apk" class="btn btn-android" download>
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
-          <path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM17 13l-5 5-5-5h3V9h4v4h3z"/>
-        </svg>
-        Download Android (Universal APK - Semua HP)
-      </a>
-
-      <!-- Download iOS CTA (Links to TestFlight or GitHub iOS instructions) -->
-      <a id="downloadIosBtn" href="https://github.com" target="_blank" class="btn btn-ios">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
-          <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 6.37c.62-.75 1.04-1.8 0.92-2.85-.9.04-2 .6-2.65 1.35-.58.67-1.08 1.74-.95 2.77 1.01.08 2.05-.52 2.68-1.27z"/>
-        </svg>
-        Download iOS (Apple TestFlight)
-      </a>
-
-      <!-- ARM64 Lightweight Alternative -->
-      <a href="AturAjah-arm64.apk" class="btn btn-secondary" download>
-        Download Versi Ringan (Khusus 64-bit ~12 MB)
-      </a>
-    </div>
-
-    <div class="divider"></div>
-
-    <div class="guide-title">Cara Pemasangan di HP Android:</div>
-    <ol class="steps">
-      <li>Klik tombol <strong>Download Android</strong> di atas.</li>
-      <li>Setelah unduhan selesai, buka file <strong>AturAjah.apk</strong> dari notifikasi atau folder <em>Download</em> di File Manager Anda.</li>
-      <li>Jika muncul konfirmasi keamanan sistem, pilih <strong>Setelan</strong> lalu aktifkan <strong>"Izinkan dari sumber ini"</strong>.</li>
-      <li>Ketuk <strong>Pasang / Install</strong> dan AturAjah siap digunakan secara offline!</li>
-    </ol>
-
-    <div class="divider"></div>
-
-    <div class="guide-title">Cara Pemasangan di iPhone (iOS):</div>
-    <ol class="steps">
-      <li>Unduh aplikasi gratis <strong>TestFlight</strong> dari App Store di iPhone Anda.</li>
-      <li>Klik tombol <strong>Download iOS (Apple TestFlight)</strong> di atas melalui Safari.</li>
-      <li>Ketuk <strong>Terima (Accept)</strong> lalu <strong>Pasang (Install)</strong>. Aplikasi langsung muncul di layar utama iPhone Anda tanpa butuh komputer!</li>
-      <li><em>Alternatif laptop Windows:</em> Anda juga bisa memasang file <code>AturAjah.ipa</code> ke iPhone menggunakan software gratis <strong>Sideloadly</strong>.</li>
-    </ol>
+    <nav class="nav-links" aria-label="Navigasi">
+      <a href="#fitur">Fitur</a>
+      <a href="#pasang">Cara Pasang</a>
+      <a href="#rilis">Rilis</a>
+      <a href="#tanya">FAQ</a>
+    </nav>
+    <a class="nav-cta" href="#unduh">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="#fff" aria-hidden="true"><path d="M12 3v10.6l3.3-3.3 1.4 1.4L12 17.4l-4.7-5.7 1.4-1.4L12 13.6V3zM5 19h14v2H5z"/></svg>
+      Unduh APK
+    </a>
   </div>
+</header>
 
-  <div class="footer">
-    AturAjah • 100% Offline, Privacy First • Dibuat dengan Flutter
+<main class="wrap">
+  <section class="hero" id="unduh">
+    <div>
+      <span class="eyebrow">Untuk UMKM &amp; usaha keluarga</span>
+      <div class="pnote" id="platformNote" hidden>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 7h2v6h-2zm0 8h2v2h-2zM12 2a10 10 0 100 20 10 10 0 000-20z"/></svg>
+        <div id="platformNoteText"></div>
+      </div>
+      <h1>Tugas harian beres, <span>tanpa lembur.</span></h1>
+      <p class="lede">AturAjah menyusun prioritas kerja dengan matriks Eisenhower, membagi waktu ke jam tenang dan jam sibuk, lalu membangunkan Anda tepat waktu — semuanya offline di HP.</p>
+
+      <div class="meta">
+        <span class="chip ok">100% offline</span>
+        <span class="chip" id="verChip">Versi 1.0.3</span>
+        <span class="chip">Android 7.0+</span>
+        <span class="chip">Bahasa ID / EN</span>
+      </div>
+
+      <div class="cta-row">
+        <a class="btn btn-primary" href="AturAjah.apk" download id="btnUniversal">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v10.6l3.3-3.3 1.4 1.4L12 17.4l-4.7-5.7 1.4-1.4L12 13.6V3zM5 19h14v2H5z"/></svg>
+          Unduh APK (semua HP)
+        </a>
+        <a class="btn btn-ghost" href="AturAjah-arm64.apk" download>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 2h10a2 2 0 012 2v16a2 2 0 01-2 2H7a2 2 0 01-2-2V4a2 2 0 012-2zm5 17a1.2 1.2 0 100 2.4 1.2 1.2 0 000-2.4z"/></svg>
+          Versi ringan 64-bit
+        </a>
+        <button class="btn btn-ghost" id="btnShare" type="button">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 16a3 3 0 00-2.2 1l-6-3.4a3 3 0 000-1.2l6-3.4A3 3 0 1015 6l-6 3.4a3 3 0 100 5.2l6 3.4A3 3 0 1018 16z"/></svg>
+          <span id="btnShareLabel">Bagikan tautan</span>
+        </button>
+      </div>
+      <p class="fineprint">Ukuran ±28 MB (universal) atau ±13 MB (64-bit). Tanpa akun, tanpa iklan, tanpa langganan. <a href="#pasang">Panduan pemasangan →</a></p>
+    </div>
+
+    <div class="phone" aria-hidden="true">
+      <div class="screen">
+        <div class="s-title">Kamis, 19 November</div>
+        <div class="s-head">Tugas Hari Ini</div>
+        <div class="banner">Jam tenang • 14.00–16.00 — Cocok untuk menyiapkan stok</div>
+        <div class="row"><span class="dot" style="background:#E53935"></span><div><div class="r-txt">Potong sayuran &amp; siapkan kaldu</div><div class="r-sub">09.30 • 30 mnt • Sari</div></div></div>
+        <div class="row"><span class="dot" style="background:#1E88E5"></span><div><div class="r-txt">Rekap penjualan mingguan</div><div class="r-sub">13.00 • 45 mnt</div></div></div>
+        <div class="row"><span class="dot" style="background:#F9A825"></span><div><div class="r-txt">Telepon supplier kemasan</div><div class="r-sub">16.30 • 15 mnt</div></div></div>
+        <div class="row"><span class="dot" style="background:#757575"></span><div><div class="r-txt">Rapikan etalase</div><div class="r-sub">20.00 • 20 mnt</div></div></div>
+        <div class="row"><span class="dot" style="background:#8E24AA"></span><div><div class="r-txt">Cek stok bahan besok</div><div class="r-sub">21.00 • 10 mnt</div></div></div>
+        <div class="tabs"><span class="on">Hari Ini</span><span>Jadwal</span><span>Mingguan</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="fitur">
+    <div class="sec-head">
+      <h2>Yang membuat beda</h2>
+      <p>Dirancang untuk pemilik usaha yang mengerjakan sendiri semuanya: prioritas jelas, waktu realistis, pengingat yang tidak bisa terlewat.</p>
+    </div>
+    <div class="grid">
+      <div class="card">
+        <div class="ico"><svg viewBox="0 0 24 24"><path d="M4 4h7v7H4zm9 0h7v7h-7zM4 13h7v7H4zm9 0h7v7h-7z"/></svg></div>
+        <h3>Matriks prioritas 4 kuadran</h3>
+        <p>Kerjakan Dahulu, Jadwalkan, Delegasikan, Nanti — setiap tugas langsung punya warna dan posisi yang jelas.</p>
+      </div>
+      <div class="card">
+        <div class="ico"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 100 20 10 10 0 000-20zm1 5v5.4l4.3 2.5-.9 1.6L11 13.6V7z"/></svg></div>
+        <h3>Jam operasional usaha</h3>
+        <p>Bagi hari jadi jam tenang, transisi, jam sibuk, dan tutup. Aplikasi memakai ini untuk menyarankan waktu pengerjaan.</p>
+      </div>
+      <div class="card">
+        <div class="ico"><svg viewBox="0 0 24 24"><path d="M12 22a2.5 2.5 0 002.5-2.5h-5A2.5 2.5 0 0012 22zm7-6v-5a7 7 0 00-5.5-6.8V3a1.5 1.5 0 00-3 0v1.2A7 7 0 005 11v5l-2 2v1h18v-1z"/></svg></div>
+        <h3>Alarm presisi &amp; layar pengingat</h3>
+        <p>Alarm tepat menit, getar, dan layar pengingat penuh dengan tombol <em>Tandai Selesai</em> atau <em>Tunda</em>. Bisa disetel terus berbunyi sampai dihentikan.</p>
+      </div>
+      <div class="card">
+        <div class="ico"><svg viewBox="0 0 24 24"><path d="M17 2l-1.4 1.4L18.2 6H13a7 7 0 100 14h1v-2h-1a5 5 0 110-10h5.2l-2.6 2.6L17 12l5-5z"/></svg></div>
+        <h3>Tugas berulang otomatis</h3>
+        <p>Tugas rutin seperti buka toko atau stok opname dibuat ulang setiap hari tanpa perlu mengetik ulang.</p>
+      </div>
+      <div class="card">
+        <div class="ico"><svg viewBox="0 0 24 24"><path d="M4 20V10h4v10zm6 0V4h4v16zm6 0v-7h4v7z"/></svg></div>
+        <h3>Ringkasan mingguan</h3>
+        <p>Tingkat penyelesaian, jumlah tunda, tugas berulang, dan tren tujuh hari terakhir — untuk melihat ke mana waktu pergi.</p>
+      </div>
+      <div class="card">
+        <div class="ico"><svg viewBox="0 0 24 24"><path d="M12 1l9 4v6c0 5.5-3.8 10.7-9 12-5.2-1.3-9-6.5-9-12V5zM12 7a2 2 0 00-2 2v4a2 2 0 004 0V9a2 2 0 00-2-2z"/></svg></div>
+        <h3>Data milik Anda, offline</h3>
+        <p>Semua tersimpan lokal di HP. Tidak ada server, tidak ada iklan, tidak ada pelacakan.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="pasang">
+    <div class="sec-head">
+      <h2>Cara memasang</h2>
+      <p>Butuh sekitar satu menit. Karena berkas diunduh langsung dari situs ini (bukan Play Store), Android akan meminta izin sekali di awal.</p>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <h3>Unduh APK</h3>
+        <p>Ketuk <strong>Unduh APK (semua HP)</strong>. Berkas <code>AturAjah.apk</code> masuk ke folder Download.</p>
+      </div>
+      <div class="step">
+        <h3>Buka berkasnya</h3>
+        <p>Ketuk notifikasi unduhan, atau buka <em>File Manager → Download → AturAjah.apk</em>.</p>
+      </div>
+      <div class="step">
+        <h3>Izinkan instalasi</h3>
+        <p>Jika muncul peringatan, pilih <strong>Setelan</strong> lalu aktifkan <strong>Izinkan dari sumber ini</strong>, kemudian kembali dan ketuk <strong>Pasang</strong>.</p>
+      </div>
+      <div class="step">
+        <h3>Nyalakan izin alarm</h3>
+        <p>Saat pertama dibuka, izinkan <strong>notifikasi</strong> dan <strong>alarm &amp; pengingat</strong> agar pengingat tidak terlambat.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="rilis">
+    <div class="sec-head">
+      <h2>Rilis terbaru</h2>
+      <p>Rincian versi diambil langsung dari berkas rilis resmi aplikasi.</p>
+    </div>
+    <div class="release">
+      <div class="release-top">
+        <div class="ver" id="relVersion">AturAjah v1.0.3</div>
+        <div class="chip ok" id="relDate">—</div>
+      </div>
+      <div class="notes" id="relNotes">Memuat catatan rilis…</div>
+      <div class="hash" id="relHash" hidden></div>
+    </div>
+  </section>
+
+  <section id="tanya">
+    <div class="sec-head">
+      <h2>Pertanyaan yang sering muncul</h2>
+    </div>
+    <details open>
+      <summary>Apakah aplikasi ini butuh internet?</summary>
+      <p>Tidak. Seluruh tugas, jadwal, dan pengaturan tersimpan di HP. Internet hanya dipakai saat Anda menekan <em>Periksa Pembaruan</em> di menu Pengaturan.</p>
+    </details>
+    <details>
+      <summary>Kenapa alarm tidak berbunyi di HP Xiaomi, Oppo, atau Vivo?</summary>
+      <p>Beberapa merek membatasi aplikasi latar belakang. Buka <em>Setelan → Aplikasi → AturAjah</em>, lalu aktifkan <strong>Autostart</strong>, izinkan <strong>Alarm &amp; pengingat</strong>, dan setel baterai ke <strong>Tanpa batas / Tidak dioptimalkan</strong>.</p>
+    </details>
+    <details>
+      <summary>Apa bedanya versi universal dan versi ringan 64-bit?</summary>
+      <p>Versi universal berjalan di semua HP Android (termasuk yang masih 32-bit) dengan ukuran ±28 MB. Versi ringan ±13 MB hanya untuk HP 64-bit — hampir semua HP keluaran 2018 ke atas. Kalau ragu, pilih universal.</p>
+    </details>
+    <details>
+      <summary>Bagaimana cara memperbarui ke versi berikutnya?</summary>
+      <p>Cukup buka <em>Pengaturan → Pembaruan Aplikasi → Periksa Pembaruan</em>. Jika ada versi baru, aplikasi mengunduh dan memasangnya sendiri tanpa Play Store.</p>
+    </details>
+    <details>
+      <summary>Apakah ada versi iPhone?</summary>
+      <p>Belum. Versi ini khusus Android 7.0 ke atas.</p>
+    </details>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap foot">
+    <div>AturAjah — dibuat dengan Flutter. Data tetap di perangkat Anda.</div>
+    <div>
+      <a href="AturAjah.apk" download>Unduh APK</a> ·
+      <a href="version.json">version.json</a>
+    </div>
   </div>
+</footer>
 
-  <script>
-    // Automatically trigger download on Android devices if ?download=true is in URL
-    window.addEventListener('DOMContentLoaded', () => {
-      const urlParams = new URLSearchParams(window.location.search);
-      if (urlParams.get('download') === 'true') {
-        const link = document.getElementById('downloadAndroidBtn');
-        if (link) {
-          link.click();
-        }
+<script>
+(function(){
+  var chip = document.getElementById('verChip');
+  /* ---------- deteksi perangkat: Android / iOS / desktop ---------- */
+  var ua = navigator.userAgent || '';
+  var platform = navigator.platform || '';
+  var isIOS = /iPad|iPhone|iPod/.test(ua) ||
+              (platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  var isAndroid = /Android/i.test(ua);
+  var isDesktop = !isIOS && !isAndroid && /Windows|Macintosh|Linux|X11/i.test(ua);
+
+  var note = document.getElementById('platformNote');
+  var noteText = document.getElementById('platformNoteText');
+  var btnShare = document.getElementById('btnShare');
+  var shareLabel = document.getElementById('btnShareLabel');
+  var pageUrl = location.origin + location.pathname;
+
+  function showNote(html){
+    if(!note || !noteText) return;
+    noteText.innerHTML = html;
+    note.hidden = false;
+  }
+
+  if (isIOS) {
+    showNote('<strong>Anda membuka halaman ini dari iPhone atau iPad.</strong> ' +
+             'AturAjah belum tersedia untuk iOS \u2014 berkas APK hanya bisa dipasang di Android. ' +
+             'Kirim tautan ini ke HP Android Anda lewat tombol <em>Bagikan tautan</em> di bawah, lalu unduh dari sana.');
+    if (shareLabel) shareLabel.textContent = 'Bagikan tautan ke HP Android';
+  } else if (isDesktop) {
+    showNote('<strong>Anda membuka halaman ini dari komputer.</strong> ' +
+             'Unduhan berupa berkas APK untuk HP Android. Setelah terunduh, pindahkan ' +
+             '<code>AturAjah.apk</code> ke HP lewat kabel USB atau Google Drive \u2014 ' +
+             'atau buka tautan ini langsung di HP dan unduh dari sana.');
+    if (shareLabel) shareLabel.textContent = 'Salin tautan untuk HP';
+  } else if (isAndroid) {
+    if (note) note.hidden = true;
+  }
+
+  if (btnShare) {
+    btnShare.addEventListener('click', function(){
+      var original = shareLabel ? shareLabel.textContent : '';
+      function fallback(){
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(pageUrl).then(function(){
+            if (shareLabel) shareLabel.textContent = 'Tautan disalin';
+            setTimeout(function(){ if (shareLabel) shareLabel.textContent = original; }, 2500);
+          }).catch(promptCopy);
+        } else { promptCopy(); }
       }
+      function promptCopy(){ window.prompt('Salin tautan ini:', pageUrl); }
+      if (navigator.share) {
+        navigator.share({title:'AturAjah', text:'Unduh AturAjah untuk Android', url: pageUrl})
+          .catch(fallback);
+      } else { fallback(); }
     });
-  </script>
+  }
+
+  var relVersion = document.getElementById('relVersion');
+  var relNotes = document.getElementById('relNotes');
+  var relDate = document.getElementById('relDate');
+
+  fetch('version.json', {cache:'no-store'})
+    .then(function(r){ return r.ok ? r.json() : null; })
+    .then(function(v){
+      if(!v) return;
+      if(v.version) {
+        chip.textContent = 'Versi ' + v.version;
+        relVersion.textContent = 'AturAjah v' + v.version + (v.versionCode ? ' · build ' + v.versionCode : '');
+      }
+      if(v.releaseNotes) relNotes.textContent = v.releaseNotes;
+      if(v.releaseDate){
+        var d = new Date(v.releaseDate);
+        relDate.textContent = isNaN(d) ? v.releaseDate :
+          d.toLocaleDateString('id-ID', {day:'numeric', month:'long', year:'numeric'});
+      }
+    })
+    .catch(function(){ /* offline: keep the static defaults */ });
+
+  // Deep link: /?download=true langsung memulai unduhan.
+  if(new URLSearchParams(location.search).get('download') === 'true'){
+    var btn = document.getElementById('btnUniversal');
+    if(btn) btn.click();
+  }
+})();
+</script>
 </body>
 </html>

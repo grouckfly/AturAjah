@@ -1,0 +1,9 @@
+{
+  "version": "1.0.3",
+  "versionCode": 10005,
+  "releaseDate": "2026-11-12",
+  "releaseNotes": "Fitur In-App Auto Update & Direct APK Download langsung dari aplikasi, perbaikan loop audio alarm berkelanjutan, dan pembaruan stabilitas sistem.",
+  "releaseNotesEn": "In-App Auto Update & Direct APK Download feature, continuous alarm audio looping, and stability enhancements.",
+  "apkUrl": "https://aturajah.vercel.app/AturAjah.apk",
+  "arm64ApkUrl": "https://aturajah.vercel.app/AturAjah-arm64.apk"
+}
