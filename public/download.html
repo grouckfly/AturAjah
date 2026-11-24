@@ -3,11 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Unduh AturAjah — Pengatur Tugas & Jadwal Harian untuk UMKM</title>
-<meta name="description" content="AturAjah membantu pemilik usaha kecil memprioritaskan tugas harian dengan matriks Eisenhower, jam operasional, alarm presisi, dan tugas berulang. 100% offline, tanpa iklan.">
+<title>AturAjah — Pengatur Tugas & Jadwal Harian untuk UMKM (Web & Android)</title>
+<meta name="description" content="AturAjah membantu pemilik UMKM memprioritaskan tugas harian dengan matriks Eisenhower, jam operasional, alarm presisi, template bisnis siap pakai, dan metrik efisiensi proposal. 100% offline di semua perangkat.">
 <meta name="theme-color" content="#F4511E">
-<meta property="og:title" content="Unduh AturAjah">
-<meta property="og:description" content="Pengatur tugas & jadwal harian untuk UMKM. Matriks prioritas, jam operasional, alarm presisi. 100% offline.">
+<meta property="og:title" content="AturAjah — Solusi Efisiensi Operasional UMKM">
+<meta property="og:description" content="Pengatur tugas & jadwal harian untuk UMKM. Matriks prioritas, jam operasional, alarm presisi, template usaha, dan metrik efisiensi. 100% offline & multiplatform.">
 <meta property="og:type" content="website">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -52,33 +52,37 @@
   .nav-links{display:flex;gap:22px;font-size:14px;font-weight:600;color:var(--ink-soft)}
   .nav-links a{text-decoration:none}
   .nav-links a:hover{color:var(--primary)}
-  .nav-cta{display:inline-flex;align-items:center;gap:8px;background:var(--primary-dark);color:#fff;text-decoration:none;
-    font-weight:700;font-size:14px;padding:11px 18px;border-radius:12px;box-shadow:0 8px 20px -10px rgba(244,81,30,.9)}
+  .nav-actions{display:flex;gap:10px;align-items:center}
+  .nav-cta-web{display:inline-flex;align-items:center;gap:7px;background:var(--surface);color:var(--ink);text-decoration:none;
+    font-weight:700;font-size:13.5px;padding:9px 15px;border-radius:11px;border:1px solid var(--line);box-shadow:var(--shadow-sm);transition:all .15s}
+  .nav-cta-web:hover{border-color:var(--primary);color:var(--primary-dark)}
+  .nav-cta{display:inline-flex;align-items:center;gap:7px;background:var(--primary-dark);color:#fff;text-decoration:none;
+    font-weight:700;font-size:13.5px;padding:9px 15px;border-radius:11px;box-shadow:0 8px 20px -10px rgba(244,81,30,.9);transition:all .15s}
   .nav-cta:hover{background:#BF360C}
   @media(max-width:820px){.nav-links{display:none}}
 
   /* ---------- hero ---------- */
-  .hero{padding:64px 0 40px;display:grid;grid-template-columns:1.15fr .85fr;gap:48px;align-items:center}
-  @media(max-width:900px){.hero{grid-template-columns:1fr;gap:36px;padding-top:44px}}
+  .hero{padding:56px 0 40px;display:grid;grid-template-columns:1.15fr .85fr;gap:48px;align-items:center}
+  @media(max-width:900px){.hero{grid-template-columns:1fr;gap:36px;padding-top:40px}}
   .eyebrow{display:inline-flex;align-items:center;gap:8px;background:var(--primary-soft);color:var(--primary-dark);
     font-size:12.5px;font-weight:700;padding:7px 13px;border-radius:999px;border:1px solid color-mix(in srgb,var(--primary) 22%,transparent)}
-  h1{font-size:clamp(34px,5vw,54px);line-height:1.08;letter-spacing:-.035em;font-weight:800;margin:18px 0 14px}
+  h1{font-size:clamp(32px,4.8vw,52px);line-height:1.1;letter-spacing:-.035em;font-weight:800;margin:18px 0 14px}
   h1 span{color:var(--primary)}
-  .lede{font-size:16.5px;color:var(--ink-soft);max-width:52ch}
+  .lede{font-size:16px;color:var(--ink-soft);max-width:54ch}
   .meta{display:flex;flex-wrap:wrap;gap:8px;margin:22px 0 26px}
-  .chip{font-size:12.5px;font-weight:700;padding:7px 12px;border-radius:10px;border:1px solid var(--line);
+  .chip{font-size:12px;font-weight:700;padding:6px 11px;border-radius:10px;border:1px solid var(--line);
     background:var(--surface);color:var(--ink-soft)}
   .chip.ok{background:var(--green-soft);color:var(--green-ink);border-color:color-mix(in srgb,var(--green) 18%,transparent)}
   .cta-row{display:flex;flex-wrap:wrap;gap:12px}
-  .cta-row .btn{flex:1 1 190px}
+  .cta-row .btn{flex:1 1 200px}
   @media(max-width:560px){.cta-row .btn{flex:1 1 100%}}
-  @media(min-width:561px){#btnShare{flex:0 0 auto;font-size:13.5px;padding:11px 16px;border-radius:12px}}
+  @media(min-width:561px){#btnShare{flex:0 0 auto;font-size:13.5px;padding:12px 16px;border-radius:12px}}
   .btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;text-decoration:none;
-    font-weight:700;font-size:15px;padding:15px 22px;border-radius:14px;border:1px solid transparent;
+    font-weight:700;font-size:14.5px;padding:14px 20px;border-radius:14px;border:1px solid transparent;
     transition:transform .12s ease,background .18s ease,box-shadow .18s ease}
   .btn:active{transform:translateY(1px)}
-  .btn-primary{background:var(--primary-dark);color:#fff;box-shadow:0 14px 26px -14px rgba(216,67,21,.95)}
-  .btn-primary:hover{background:#BF360C}
+  .btn-primary{background:linear-gradient(135deg,#F4511E,#FF7043);color:#fff;box-shadow:0 12px 24px -10px rgba(244,81,30,.85)}
+  .btn-primary:hover{background:linear-gradient(135deg,#D84315,#F4511E)}
   .btn-ghost{background:var(--surface);color:var(--ink);border-color:var(--line);box-shadow:var(--shadow-sm)}
   .btn-ghost:hover{border-color:color-mix(in srgb,var(--primary) 40%,var(--line))}
   .btn svg{width:18px;height:18px;fill:currentColor;flex:none}
@@ -86,12 +90,11 @@
     border-radius:14px;padding:13px 15px;margin:14px 0 18px;font-size:13.5px;line-height:1.5;color:var(--ink)}
   .pnote svg{width:18px;height:18px;fill:var(--primary);flex:none;margin-top:2px}
   .pnote strong{font-weight:800}
-  .link-btn{background:none;border:none;padding:0;font:inherit;color:var(--primary-dark);font-weight:700;cursor:pointer;text-decoration:underline}
   .fineprint{margin-top:14px;font-size:12.5px;color:var(--ink-soft)}
   .fineprint a{color:var(--primary);font-weight:600;text-decoration:none}
 
   /* phone mock */
-  .phone{position:relative;justify-self:center;width:290px;aspect-ratio:9/18.5;border-radius:38px;
+  .phone{position:relative;justify-self:center;width:295px;aspect-ratio:9/18.5;border-radius:38px;
     background:var(--surface);border:1px solid var(--line);box-shadow:var(--shadow);padding:14px;overflow:hidden}
   .phone::before{content:"";position:absolute;top:10px;left:50%;transform:translateX(-50%);
     width:74px;height:6px;border-radius:99px;background:var(--line)}
@@ -100,19 +103,20 @@
   .s-head{font-size:19px;font-weight:800;letter-spacing:-.02em}
   .banner{border-radius:12px;padding:10px 12px;background:var(--green);color:#F2FBF3;
     font-size:11.5px;font-weight:700;line-height:1.35}
-  .row{display:flex;align-items:center;gap:9px;border:1px solid var(--line);border-radius:12px;padding:10px}
+  .row{display:flex;align-items:center;gap:9px;border:1px solid var(--line);border-radius:12px;padding:9px 10px}
   .dot{width:9px;height:9px;border-radius:99px;flex:none}
   .r-txt{font-size:11.5px;font-weight:700;line-height:1.25}
-  .r-sub{font-size:10.5px;color:var(--ink-soft);font-weight:600}
+  .r-sub{font-size:10px;color:var(--ink-soft);font-weight:600}
+  .metric-badge{background:var(--primary-soft);border:1px solid color-mix(in srgb,var(--primary) 20%,transparent);border-radius:10px;padding:7px 10px;font-size:10.5px;font-weight:700;color:var(--primary-dark);display:flex;justify-content:space-between;align-items:center}
   .tabs{display:flex;gap:6px;margin-top:auto;padding-top:8px;border-top:1px solid var(--line);font-size:10px;font-weight:700;color:var(--ink-soft)}
   .tabs span{flex:1;text-align:center;padding:6px 0;border-radius:8px}
   .tabs .on{background:var(--primary-soft);color:var(--primary-dark)}
 
   /* ---------- sections ---------- */
-  section{padding:56px 0}
-  .sec-head{max-width:60ch;margin-bottom:32px}
-  .sec-head h2{font-size:clamp(24px,3.2vw,34px);letter-spacing:-.03em;font-weight:800;margin-bottom:10px}
-  .sec-head p{color:var(--ink-soft);font-size:15.5px}
+  section{padding:54px 0}
+  .sec-head{max-width:64ch;margin-bottom:30px}
+  .sec-head h2{font-size:clamp(23px,3vw,33px);letter-spacing:-.03em;font-weight:800;margin-bottom:10px}
+  .sec-head p{color:var(--ink-soft);font-size:15px}
   .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
   @media(max-width:900px){.grid{grid-template-columns:repeat(2,1fr)}}
   @media(max-width:620px){.grid{grid-template-columns:1fr}}
@@ -121,8 +125,8 @@
   .card .ico{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;margin-bottom:14px;
     background:var(--primary-soft)}
   .card .ico svg{width:20px;height:20px;fill:var(--primary)}
-  .card h3{font-size:16px;font-weight:800;letter-spacing:-.01em;margin-bottom:6px}
-  .card p{font-size:14px;color:var(--ink-soft)}
+  .card h3{font-size:15.5px;font-weight:800;letter-spacing:-.01em;margin-bottom:6px}
+  .card p{font-size:13.5px;color:var(--ink-soft);line-height:1.55}
 
   /* steps */
   .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;counter-reset:s}
@@ -132,8 +136,8 @@
   .step::before{counter-increment:s;content:counter(s);position:absolute;top:-14px;left:22px;width:30px;height:30px;
     border-radius:10px;background:var(--primary);color:#fff;font-weight:800;font-size:14px;display:grid;place-items:center}
   .step h3{font-size:14.5px;font-weight:800;margin:8px 0 6px}
-  .step p{font-size:13.5px;color:var(--ink-soft)}
-  code{background:var(--primary-soft);color:var(--primary-dark);padding:2px 6px;border-radius:6px;font-size:12.5px}
+  .step p{font-size:13px;color:var(--ink-soft);line-height:1.5}
+  code{background:var(--primary-soft);color:var(--primary-dark);padding:2px 6px;border-radius:6px;font-size:12px}
 
   /* faq */
   details{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px 18px;margin-bottom:10px}
@@ -159,7 +163,7 @@
 </style>
 </head>
 <body>
-<a class="skip" href="#unduh">Lompat ke tombol unduh</a>
+<a class="skip" href="#unduh">Lompat ke pilihan aplikasi</a>
 
 <header>
   <div class="wrap nav">
@@ -170,63 +174,76 @@
       AturAjah
     </div>
     <nav class="nav-links" aria-label="Navigasi">
-      <a href="#fitur">Fitur</a>
+      <a href="#fitur">Fitur Proposal</a>
       <a href="#pasang">Cara Pasang</a>
       <a href="#rilis">Rilis</a>
       <a href="#tanya">FAQ</a>
     </nav>
-    <a class="nav-cta" href="#unduh">
-      <svg viewBox="0 0 24 24" width="16" height="16" fill="#fff" aria-hidden="true"><path d="M12 3v10.6l3.3-3.3 1.4 1.4L12 17.4l-4.7-5.7 1.4-1.4L12 13.6V3zM5 19h14v2H5z"/></svg>
-      Unduh APK
-    </a>
+    <div class="nav-actions">
+      <a class="nav-cta-web" href="./app/">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+        Buka Web App
+      </a>
+      <a class="nav-cta" href="#unduh">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="#fff" aria-hidden="true"><path d="M12 3v10.6l3.3-3.3 1.4 1.4L12 17.4l-4.7-5.7 1.4-1.4L12 13.6V3zM5 19h14v2H5z"/></svg>
+        Unduh APK
+      </a>
+    </div>
   </div>
 </header>
 
 <main class="wrap">
   <section class="hero" id="unduh">
     <div>
-      <span class="eyebrow">Untuk UMKM &amp; usaha keluarga</span>
+      <span class="eyebrow">Solusi Efisiensi Operasional UMKM</span>
       <div class="pnote" id="platformNote" hidden>
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 7h2v6h-2zm0 8h2v2h-2zM12 2a10 10 0 100 20 10 10 0 000-20z"/></svg>
         <div id="platformNoteText"></div>
       </div>
-      <h1>Tugas harian beres, <span>tanpa lembur.</span></h1>
-      <p class="lede">AturAjah menyusun prioritas kerja dengan matriks Eisenhower, membagi waktu ke jam tenang dan jam sibuk, lalu membangunkan Anda tepat waktu — semuanya offline di HP.</p>
+      <h1>Tugas harian beres, <span>bebas bottleneck.</span></h1>
+      <p class="lede">AturAjah mengimplementasikan prioritas matriks Eisenhower, pembagian waktu jam tenang vs jam sibuk, template bisnis terverifikasi, dan metrik efisiensi operasional proposal — siap digunakan di device apa pun, 100% offline.</p>
 
       <div class="meta">
-        <span class="chip ok">100% offline</span>
-        <span class="chip" id="verChip">Versi 1.0.3</span>
-        <span class="chip">Android 7.0+</span>
+        <span class="chip ok">100% Offline &amp; SQLite Lokal</span>
+        <span class="chip" id="verChip">Versi 1.0.4</span>
+        <span class="chip">Web/PWA • iOS • Android • PC</span>
         <span class="chip">Bahasa ID / EN</span>
       </div>
 
       <div class="cta-row">
-        <a class="btn btn-primary" href="AturAjah.apk" download id="btnUniversal">
+        <a class="btn btn-primary" href="./app/" id="btnWebApp">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+          Buka Web App (Browser / PWA)
+        </a>
+        <a class="btn btn-ghost" href="AturAjah.apk" download id="btnUniversal">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v10.6l3.3-3.3 1.4 1.4L12 17.4l-4.7-5.7 1.4-1.4L12 13.6V3zM5 19h14v2H5z"/></svg>
-          Unduh APK (semua HP)
+          Unduh APK (Semua Android)
         </a>
         <a class="btn btn-ghost" href="AturAjah-arm64.apk" download>
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 2h10a2 2 0 012 2v16a2 2 0 01-2 2H7a2 2 0 01-2-2V4a2 2 0 012-2zm5 17a1.2 1.2 0 100 2.4 1.2 1.2 0 000-2.4z"/></svg>
-          Versi ringan 64-bit
+          Versi Ringan (arm64)
         </a>
         <button class="btn btn-ghost" id="btnShare" type="button">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 16a3 3 0 00-2.2 1l-6-3.4a3 3 0 000-1.2l6-3.4A3 3 0 1015 6l-6 3.4a3 3 0 100 5.2l6 3.4A3 3 0 1018 16z"/></svg>
           <span id="btnShareLabel">Bagikan tautan</span>
         </button>
       </div>
-      <p class="fineprint">Ukuran ±28 MB (universal) atau ±13 MB (64-bit). Tanpa akun, tanpa iklan, tanpa langganan. <a href="#pasang">Panduan pemasangan →</a></p>
+      <p class="fineprint">Ukuran APK ±28 MB (universal) atau ±13 MB (arm64). Tanpa server, tanpa login akun, tanpa iklan. Berjalan mulus di HP, tablet, maupun PC. <a href="#pasang">Panduan pemasangan →</a></p>
     </div>
 
     <div class="phone" aria-hidden="true">
       <div class="screen">
         <div class="s-title">Kamis, 19 November</div>
         <div class="s-head">Tugas Hari Ini</div>
-        <div class="banner">Jam tenang • 14.00–16.00 — Cocok untuk menyiapkan stok</div>
-        <div class="row"><span class="dot" style="background:#E53935"></span><div><div class="r-txt">Potong sayuran &amp; siapkan kaldu</div><div class="r-sub">09.30 • 30 mnt • Sari</div></div></div>
+        <div class="banner">Jam tenang • 14.00–16.00 — Persiapan stok bahan</div>
+        <div class="metric-badge">
+          <span>Efisiensi Jam Tenang</span>
+          <span>85% (Target ≥60%) ✓</span>
+        </div>
+        <div class="row"><span class="dot" style="background:#E53935"></span><div><div class="r-txt">Potong sayuran &amp; racik bumbu</div><div class="r-sub">09.30 • 30 mnt • Sari</div></div></div>
         <div class="row"><span class="dot" style="background:#1E88E5"></span><div><div class="r-txt">Rekap penjualan mingguan</div><div class="r-sub">13.00 • 45 mnt</div></div></div>
-        <div class="row"><span class="dot" style="background:#F9A825"></span><div><div class="r-txt">Telepon supplier kemasan</div><div class="r-sub">16.30 • 15 mnt</div></div></div>
-        <div class="row"><span class="dot" style="background:#757575"></span><div><div class="r-txt">Rapikan etalase</div><div class="r-sub">20.00 • 20 mnt</div></div></div>
-        <div class="row"><span class="dot" style="background:#8E24AA"></span><div><div class="r-txt">Cek stok bahan besok</div><div class="r-sub">21.00 • 10 mnt</div></div></div>
+        <div class="row"><span class="dot" style="background:#F9A825"></span><div><div class="r-txt">Pesan kemasan &amp; cup takeaway</div><div class="r-sub">16.30 • 15 mnt</div></div></div>
+        <div class="row"><span class="dot" style="background:#757575"></span><div><div class="r-txt">Bersihkan area kerja &amp; kompor</div><div class="r-sub">20.00 • 20 mnt</div></div></div>
         <div class="tabs"><span class="on">Hari Ini</span><span>Jadwal</span><span>Mingguan</span></div>
       </div>
     </div>
@@ -234,76 +251,123 @@
 
   <section id="fitur">
     <div class="sec-head">
-      <h2>Yang membuat beda</h2>
-      <p>Dirancang untuk pemilik usaha yang mengerjakan sendiri semuanya: prioritas jelas, waktu realistis, pengingat yang tidak bisa terlewat.</p>
+      <h2>Fitur Sesuai Proposal &amp; Kebutuhan Nyata UMKM</h2>
+      <p>Dibangun berdasarkan riset wawancara 5 jenis UMKM untuk menghilangkan bottleneck, membagi jam tenang vs jam sibuk, dan mengukur target evaluasi efisiensi operasional.</p>
     </div>
     <div class="grid">
       <div class="card">
+        <div class="ico"><svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg></div>
+        <h3>5 Template Usaha UMKM Siap Pakai</h3>
+        <p>1-klik terapkan jadwal &amp; tugas rutin khas riset lapangan: RM Padang, Warung Nasi Campur, Gerobak Gorengan, Kedai Kopi &amp; Coffee Bike, serta Toko Jus Buah.</p>
+      </div>
+      <div class="card">
+        <div class="ico"><svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14l-5-5 1.41-1.41L12 14.17l7.59-7.59L21 8l-9 9z"/></svg></div>
+        <h3>Metrik Evaluasi Target Proposal</h3>
+        <p>Kartu evaluasi Section 8 proposal: lacak persiapan jam tenang (target &ge;60%), penurunan keterlambatan layanan (target &ge;20%), dan jam kerja produktif harian/mingguan.</p>
+      </div>
+      <div class="card">
         <div class="ico"><svg viewBox="0 0 24 24"><path d="M4 4h7v7H4zm9 0h7v7h-7zM4 13h7v7H4zm9 0h7v7h-7z"/></svg></div>
-        <h3>Matriks prioritas 4 kuadran</h3>
-        <p>Kerjakan Dahulu, Jadwalkan, Delegasikan, Nanti — setiap tugas langsung punya warna dan posisi yang jelas.</p>
+        <h3>Matriks Prioritas 4 Kuadran</h3>
+        <p>Kerjakan Dahulu (Mendesak &amp; Penting), Jadwalkan, Delegasikan ke karyawan, dan Nanti — dengan kode warna jelas mencegah pesanan tertunda.</p>
       </div>
       <div class="card">
         <div class="ico"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 100 20 10 10 0 000-20zm1 5v5.4l4.3 2.5-.9 1.6L11 13.6V7z"/></svg></div>
-        <h3>Jam operasional usaha</h3>
-        <p>Bagi hari jadi jam tenang, transisi, jam sibuk, dan tutup. Aplikasi memakai ini untuk menyarankan waktu pengerjaan.</p>
+        <h3>Alokasi Jam Operasional</h3>
+        <p>Membagi hari ke jam tenang (persiapan stok), jam transisi, jam sibuk (pelayanan puncak), dan tutup — menyarankan waktu pengerjaan tugas optimal.</p>
       </div>
       <div class="card">
         <div class="ico"><svg viewBox="0 0 24 24"><path d="M12 22a2.5 2.5 0 002.5-2.5h-5A2.5 2.5 0 0012 22zm7-6v-5a7 7 0 00-5.5-6.8V3a1.5 1.5 0 00-3 0v1.2A7 7 0 005 11v5l-2 2v1h18v-1z"/></svg></div>
-        <h3>Alarm presisi &amp; layar pengingat</h3>
-        <p>Alarm tepat menit, getar, dan layar pengingat penuh dengan tombol <em>Tandai Selesai</em> atau <em>Tunda</em>. Bisa disetel terus berbunyi sampai dihentikan.</p>
+        <h3>Alarm Presisi &amp; Layar Pengingat</h3>
+        <p>Alarm tepat menit, getar, audio oscillator di web, dan layar pengingat darurat dengan tombol Tandai Selesai atau Tunda 5 menit.</p>
       </div>
       <div class="card">
         <div class="ico"><svg viewBox="0 0 24 24"><path d="M17 2l-1.4 1.4L18.2 6H13a7 7 0 100 14h1v-2h-1a5 5 0 110-10h5.2l-2.6 2.6L17 12l5-5z"/></svg></div>
-        <h3>Tugas berulang otomatis</h3>
-        <p>Tugas rutin seperti buka toko atau stok opname dibuat ulang setiap hari tanpa perlu mengetik ulang.</p>
+        <h3>Tugas Berulang Otomatis</h3>
+        <p>Rutinitas harian seperti buka warung, stok opname, atau deep cleaning otomatis disiapkan ulang setiap hari tanpa perlu mengetik berulang.</p>
       </div>
       <div class="card">
         <div class="ico"><svg viewBox="0 0 24 24"><path d="M4 20V10h4v10zm6 0V4h4v16zm6 0v-7h4v7z"/></svg></div>
-        <h3>Ringkasan mingguan</h3>
-        <p>Tingkat penyelesaian, jumlah tunda, tugas berulang, dan tren tujuh hari terakhir — untuk melihat ke mana waktu pergi.</p>
+        <h3>Ringkasan Mingguan Komprehensif</h3>
+        <p>Statistik penyelesaian 7 hari, riwayat tunda, diagram jam sibuk, dan pembagian tugas per nama karyawan/asisten.</p>
+      </div>
+      <div class="card">
+        <div class="ico"><svg viewBox="0 0 24 24"><path d="M4 6h16v10H4zm18 12H2v2h20z"/></svg></div>
+        <h3>Siap Pakai di Device Mana Pun (PWA)</h3>
+        <p>Responsif di layar ponsel, tablet, maupun layar desktop PC lebar (lebar terpusat max 560dp) tanpa membebani memori perangkat.</p>
       </div>
       <div class="card">
         <div class="ico"><svg viewBox="0 0 24 24"><path d="M12 1l9 4v6c0 5.5-3.8 10.7-9 12-5.2-1.3-9-6.5-9-12V5zM12 7a2 2 0 00-2 2v4a2 2 0 004 0V9a2 2 0 00-2-2z"/></svg></div>
-        <h3>Data milik Anda, offline</h3>
-        <p>Semua tersimpan lokal di HP. Tidak ada server, tidak ada iklan, tidak ada pelacakan.</p>
+        <h3>100% Data Lokal &amp; Privasi Terjamin</h3>
+        <p>Menggunakan SQLite lokal di Android dan SQLite IndexedDB di Web. Tidak butuh server cloud, tidak ada iklan, dan tidak ada pelacakan data.</p>
       </div>
     </div>
   </section>
 
   <section id="pasang">
     <div class="sec-head">
-      <h2>Cara memasang</h2>
-      <p>Butuh sekitar satu menit. Karena berkas diunduh langsung dari situs ini (bukan Play Store), Android akan meminta izin sekali di awal.</p>
+      <h2>Cara Memasang &amp; Menggunakan</h2>
+      <p>AturAjah dapat digunakan langsung melalui web browser (PWA) di semua perangkat (termasuk iPhone, iPad, PC), atau dipasang sebagai APK di Android.</p>
     </div>
-    <div class="steps">
-      <div class="step">
-        <h3>Unduh APK</h3>
-        <p>Ketuk <strong>Unduh APK (semua HP)</strong>. Berkas <code>AturAjah.apk</code> masuk ke folder Download.</p>
+    
+    <div style="margin-bottom:32px">
+      <h3 style="font-size:16.5px;font-weight:800;margin-bottom:14px;color:var(--primary);display:flex;align-items:center;gap:8px">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+        Opsi 1: Pengguna iPhone, iPad, Laptop, atau PC (PWA Instan Tanpa Unduh)
+      </h3>
+      <div class="steps">
+        <div class="step">
+          <h3>Buka Web App</h3>
+          <p>Ketuk tombol <strong>Buka Web App</strong> atau akses <code>/app/</code> di Safari atau browser pilihan Anda.</p>
+        </div>
+        <div class="step">
+          <h3>Pilih Tambah ke Layar Utama</h3>
+          <p>Di iPhone/iPad (Safari), ketuk tombol <strong>Share (Bagikan)</strong> &rarr; <strong>Tambah ke Layar Utama (Add to Home Screen)</strong>.</p>
+        </div>
+        <div class="step">
+          <h3>Buka Layar Penuh</h3>
+          <p>Ikon AturAjah akan muncul di layar utama gadget Anda dan dapat dijalankan fullscreen layaknya aplikasi native.</p>
+        </div>
+        <div class="step">
+          <h3>Tersimpan Offline</h3>
+          <p>Seluruh data disimpan langsung di browser perangkat via SQLite IndexedDB tanpa butuh sambungan internet terus menerus.</p>
+        </div>
       </div>
-      <div class="step">
-        <h3>Buka berkasnya</h3>
-        <p>Ketuk notifikasi unduhan, atau buka <em>File Manager → Download → AturAjah.apk</em>.</p>
-      </div>
-      <div class="step">
-        <h3>Izinkan instalasi</h3>
-        <p>Jika muncul peringatan, pilih <strong>Setelan</strong> lalu aktifkan <strong>Izinkan dari sumber ini</strong>, kemudian kembali dan ketuk <strong>Pasang</strong>.</p>
-      </div>
-      <div class="step">
-        <h3>Nyalakan izin alarm</h3>
-        <p>Saat pertama dibuka, izinkan <strong>notifikasi</strong> dan <strong>alarm &amp; pengingat</strong> agar pengingat tidak terlambat.</p>
+    </div>
+
+    <div>
+      <h3 style="font-size:16.5px;font-weight:800;margin-bottom:14px;color:var(--primary);display:flex;align-items:center;gap:8px">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M12 3v10.6l3.3-3.3 1.4 1.4L12 17.4l-4.7-5.7 1.4-1.4L12 13.6V3zM5 19h14v2H5z"/></svg>
+        Opsi 2: Pengguna HP Android (Instalasi Berkas APK)
+      </h3>
+      <div class="steps">
+        <div class="step">
+          <h3>Unduh APK</h3>
+          <p>Ketuk tombol <strong>Unduh APK</strong>. Berkas <code>AturAjah.apk</code> akan tersimpan di folder Download.</p>
+        </div>
+        <div class="step">
+          <h3>Buka Berkas Unduhan</h3>
+          <p>Ketuk notifikasi unduhan, atau buka melalui <em>File Manager &rarr; Download &rarr; AturAjah.apk</em>.</p>
+        </div>
+        <div class="step">
+          <h3>Izinkan Instalasi</h3>
+          <p>Bila muncul peringatan keamanan, buka <strong>Setelan</strong>, aktifkan <strong>Izinkan dari sumber ini</strong>, lalu tekan <strong>Pasang</strong>.</p>
+        </div>
+        <div class="step">
+          <h3>Nyalakan Izin Alarm</h3>
+          <p>Beri izin <strong>notifikasi</strong> dan <strong>alarm &amp; pengingat</strong> agar alarm jadwal tepat waktu saat HP terkunci.</p>
+        </div>
       </div>
     </div>
   </section>
 
   <section id="rilis">
     <div class="sec-head">
-      <h2>Rilis terbaru</h2>
+      <h2>Rilis Terbaru</h2>
       <p>Rincian versi diambil langsung dari berkas rilis resmi aplikasi.</p>
     </div>
     <div class="release">
       <div class="release-top">
-        <div class="ver" id="relVersion">AturAjah v1.0.3</div>
+        <div class="ver" id="relVersion">AturAjah v1.0.4</div>
         <div class="chip ok" id="relDate">—</div>
       </div>
       <div class="notes" id="relNotes">Memuat catatan rilis…</div>
@@ -313,35 +377,36 @@
 
   <section id="tanya">
     <div class="sec-head">
-      <h2>Pertanyaan yang sering muncul</h2>
+      <h2>Pertanyaan yang Sering Muncul (FAQ)</h2>
     </div>
     <details open>
-      <summary>Apakah aplikasi ini butuh internet?</summary>
-      <p>Tidak. Seluruh tugas, jadwal, dan pengaturan tersimpan di HP. Internet hanya dipakai saat Anda menekan <em>Periksa Pembaruan</em> di menu Pengaturan.</p>
+      <summary>Apakah aplikasi ini butuh sambungan internet?</summary>
+      <p>Tidak. Seluruh data tugas, template UMKM, dan metrik operasional tersimpan langsung di perangkat Anda (offline-first). Internet hanya digunakan saat Anda memeriksa pembaruan aplikasi secara sukarela.</p>
+    </details>
+    <details open>
+      <summary>Apakah bisa dipakai di iPhone, iPad, atau Laptop/PC?</summary>
+      <p>Bisa! AturAjah kini mendukung <strong>Progressive Web App (PWA)</strong>. Cukup tekan tombol <em>Buka Web App</em> di bagian atas. Di iPhone/iPad (Safari), ketuk ikon <strong>Share (Bagikan)</strong> lalu pilih <strong>Tambah ke Layar Utama (Add to Home Screen)</strong>. Di browser desktop (Chrome/Edge), Anda bisa mengklik tombol pasang aplikasi di bilah alamat.</p>
     </details>
     <details>
-      <summary>Kenapa alarm tidak berbunyi di HP Xiaomi, Oppo, atau Vivo?</summary>
-      <p>Beberapa merek membatasi aplikasi latar belakang. Buka <em>Setelan → Aplikasi → AturAjah</em>, lalu aktifkan <strong>Autostart</strong>, izinkan <strong>Alarm &amp; pengingat</strong>, dan setel baterai ke <strong>Tanpa batas / Tidak dioptimalkan</strong>.</p>
+      <summary>Apa bedanya versi universal dan versi ringan 64-bit untuk Android?</summary>
+      <p>Versi universal berjalan di seluruh model HP Android (termasuk model 32-bit lama). Versi ringan 64-bit dioptimalkan khusus untuk HP Android modern dengan ukuran berkas lebih ramping (±13 MB). Jika ragu, unduh versi universal.</p>
     </details>
     <details>
-      <summary>Apa bedanya versi universal dan versi ringan 64-bit?</summary>
-      <p>Versi universal berjalan di semua HP Android (termasuk yang masih 32-bit) dengan ukuran ±28 MB. Versi ringan ±13 MB hanya untuk HP 64-bit — hampir semua HP keluaran 2018 ke atas. Kalau ragu, pilih universal.</p>
+      <summary>Kenapa alarm perlu izin khusus di HP Xiaomi, Oppo, atau Vivo?</summary>
+      <p>Beberapa produsen menerapkan penghemat baterai agresif yang mematikan aplikasi di latar belakang. Cukup buka <em>Setelan &rarr; Aplikasi &rarr; AturAjah</em>, aktifkan <strong>Autostart</strong>, dan atur penghemat baterai ke <strong>Tanpa batas (Tidak dioptimalkan)</strong>.</p>
     </details>
     <details>
-      <summary>Bagaimana cara memperbarui ke versi berikutnya?</summary>
-      <p>Cukup buka <em>Pengaturan → Pembaruan Aplikasi → Periksa Pembaruan</em>. Jika ada versi baru, aplikasi mengunduh dan memasangnya sendiri tanpa Play Store.</p>
-    </details>
-    <details>
-      <summary>Apakah ada versi iPhone?</summary>
-      <p>Belum. Versi ini khusus Android 7.0 ke atas.</p>
+      <summary>Bagaimana cara menggunakan Template Usaha UMKM?</summary>
+      <p>Di halaman Tugas Hari Ini atau Tugas Berulang, ketuk ikon <strong>Template UMKM</strong> di bilah atas. Pilih salah satu dari 5 profil usaha (misal Rumah Makan Padang atau Kedai Kopi), dan seluruh jadwal persiapan jam tenang serta prioritas kerja akan otomatis diterapkan.</p>
     </details>
   </section>
 </main>
 
 <footer>
   <div class="wrap foot">
-    <div>AturAjah — dibuat dengan Flutter. Data tetap di perangkat Anda.</div>
+    <div>AturAjah — Solusi Efisiensi Operasional UMKM. Dibuat dengan Flutter &amp; SQLite.</div>
     <div>
+      <a href="./app/">Buka Web App</a> ·
       <a href="AturAjah.apk" download>Unduh APK</a> ·
       <a href="version.json">version.json</a>
     </div>
@@ -351,7 +416,6 @@
 <script>
 (function(){
   var chip = document.getElementById('verChip');
-  /* ---------- deteksi perangkat: Android / iOS / desktop ---------- */
   var ua = navigator.userAgent || '';
   var platform = navigator.platform || '';
   var isIOS = /iPad|iPhone|iPod/.test(ua) ||
@@ -373,15 +437,15 @@
 
   if (isIOS) {
     showNote('<strong>Anda membuka halaman ini dari iPhone atau iPad.</strong> ' +
-             'AturAjah belum tersedia untuk iOS \u2014 berkas APK hanya bisa dipasang di Android. ' +
-             'Kirim tautan ini ke HP Android Anda lewat tombol <em>Bagikan tautan</em> di bawah, lalu unduh dari sana.');
-    if (shareLabel) shareLabel.textContent = 'Bagikan tautan ke HP Android';
+             'Anda dapat langsung menggunakan AturAjah tanpa perlu instal berkas APK: ' +
+             '<a href="./app/" style="text-decoration:underline;font-weight:700">Buka Web App di sini</a>, ' +
+             'lalu ketuk tombol <em>Share (Bagikan)</em> &rarr; <em>Tambah ke Layar Utama (Add to Home Screen)</em>.');
+    if (shareLabel) shareLabel.textContent = 'Bagikan tautan';
   } else if (isDesktop) {
-    showNote('<strong>Anda membuka halaman ini dari komputer.</strong> ' +
-             'Unduhan berupa berkas APK untuk HP Android. Setelah terunduh, pindahkan ' +
-             '<code>AturAjah.apk</code> ke HP lewat kabel USB atau Google Drive \u2014 ' +
-             'atau buka tautan ini langsung di HP dan unduh dari sana.');
-    if (shareLabel) shareLabel.textContent = 'Salin tautan untuk HP';
+    showNote('<strong>Anda membuka halaman ini dari Komputer / Laptop.</strong> ' +
+             'Anda dapat langsung menjalankan <a href="./app/" style="text-decoration:underline;font-weight:700">AturAjah di Browser Anda</a> (PWA responsif dengan SQLite lokal), ' +
+             'atau unduh berkas APK di bawah jika ingin dipasang di HP Android.');
+    if (shareLabel) shareLabel.textContent = 'Salin tautan';
   } else if (isAndroid) {
     if (note) note.hidden = true;
   }
@@ -392,14 +456,14 @@
       function fallback(){
         if (navigator.clipboard && navigator.clipboard.writeText) {
           navigator.clipboard.writeText(pageUrl).then(function(){
-            if (shareLabel) shareLabel.textContent = 'Tautan disalin';
+            if (shareLabel) shareLabel.textContent = 'Tautan disalin!';
             setTimeout(function(){ if (shareLabel) shareLabel.textContent = original; }, 2500);
           }).catch(promptCopy);
         } else { promptCopy(); }
       }
       function promptCopy(){ window.prompt('Salin tautan ini:', pageUrl); }
       if (navigator.share) {
-        navigator.share({title:'AturAjah', text:'Unduh AturAjah untuk Android', url: pageUrl})
+        navigator.share({title:'AturAjah — Solusi Efisiensi UMKM', text:'Pengatur Tugas & Jadwal UMKM (Web & Android)', url: pageUrl})
           .catch(fallback);
       } else { fallback(); }
     });
@@ -426,7 +490,6 @@
     })
     .catch(function(){ /* offline: keep the static defaults */ });
 
-  // Deep link: /?download=true langsung memulai unduhan.
   if(new URLSearchParams(location.search).get('download') === 'true'){
     var btn = document.getElementById('btnUniversal');
     if(btn) btn.click();

@@ -8,6 +8,7 @@ import '../providers/locale_provider.dart';
 import '../providers/task_provider.dart';
 import '../services/shift_schedule_service.dart';
 import '../widgets/live_status_banner.dart';
+import '../widgets/msme_preset_sheet.dart';
 import '../widgets/task_card.dart';
 import 'settings_screen.dart';
 import 'task_input_screen.dart';
@@ -126,6 +127,18 @@ class DailyDashboardScreen extends StatelessWidget {
                           ),
                           const SizedBox(width: 8),
 
+                          // MSME Presets Button
+                          IconButton(
+                            icon: const Icon(
+                              Icons.storefront_outlined,
+                              color: AppColors.primary,
+                              size: 22,
+                            ),
+                            tooltip: context.tr('open_presets_btn'),
+                            onPressed: () => MsmePresetSheet.show(context),
+                          ),
+                          const SizedBox(width: 4),
+
                           // Settings Button (Replaces DF Circle)
                           IconButton(
                             icon: const Icon(
@@ -239,6 +252,23 @@ class DailyDashboardScreen extends StatelessWidget {
                             style: const TextStyle(
                               color: AppColors.textMuted,
                               fontSize: 14,
+                            ),
+                          ),
+                          const SizedBox(height: 16),
+                          OutlinedButton.icon(
+                            onPressed: () => MsmePresetSheet.show(context),
+                            icon: const Icon(Icons.storefront_outlined, size: 18),
+                            label: Text(context.tr('open_presets_btn')),
+                            style: OutlinedButton.styleFrom(
+                              foregroundColor: AppColors.primary,
+                              side: const BorderSide(color: AppColors.primary, width: 1.2),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 16,
+                                vertical: 10,
+                              ),
                             ),
                           ),
                         ],

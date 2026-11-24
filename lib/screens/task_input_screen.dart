@@ -222,9 +222,12 @@ class _TaskInputScreenState extends State<TaskInputScreen> {
         ],
       ),
       body: SafeArea(
-        child: Form(
-          key: _formKey,
-          child: ListView(
+        child: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 560),
+            child: Form(
+              key: _formKey,
+              child: ListView(
             padding: const EdgeInsets.all(16),
             children: [
               // Task Name
@@ -522,6 +525,8 @@ class _TaskInputScreenState extends State<TaskInputScreen> {
           ),
         ),
       ),
-    );
+    ),
+  ),
+);
   }
 }

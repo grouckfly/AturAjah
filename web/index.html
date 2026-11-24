@@ -18,19 +18,74 @@
 
   <meta charset="UTF-8">
   <meta content="IE=Edge" http-equiv="X-UA-Compatible">
-  <meta name="description" content="A new Flutter project.">
+  <meta name="description" content="AturAjah — Daily Task and Shift Schedule Manager untuk UMKM. 100% offline, berbasis matriks prioritas dan jam operasional.">
+  <meta name="theme-color" content="#F4511E">
 
   <!-- iOS meta tags & icons -->
   <meta name="mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <meta name="apple-mobile-web-app-title" content="dapur_flow">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="AturAjah">
   <link rel="apple-touch-icon" href="icons/Icon-192.png">
 
   <!-- Favicon -->
   <link rel="icon" type="image/png" href="favicon.png"/>
 
-  <title>dapur_flow</title>
+  <title>AturAjah — Pengatur Tugas & Jadwal UMKM</title>
   <link rel="manifest" href="manifest.json">
+  <script>
+    // Web Audio API alarm playback engine for browsers
+    let _webAlarmCtx = null;
+    let _webAlarmInterval = null;
+
+    window.startAturAjahWebAlarm = function(durationSeconds) {
+      window.stopAturAjahWebAlarm();
+      try {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        if (!AudioCtx) return;
+        _webAlarmCtx = new AudioCtx();
+
+        const beep = () => {
+          if (!_webAlarmCtx) return;
+          try {
+            const osc = _webAlarmCtx.createOscillator();
+            const gain = _webAlarmCtx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(880, _webAlarmCtx.currentTime);
+            gain.gain.setValueAtTime(0.2, _webAlarmCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, _webAlarmCtx.currentTime + 0.35);
+            osc.connect(gain);
+            gain.connect(_webAlarmCtx.destination);
+            osc.start();
+            osc.stop(_webAlarmCtx.currentTime + 0.35);
+          } catch (_) {}
+        };
+
+        beep();
+        _webAlarmInterval = setInterval(beep, 600);
+
+        if (durationSeconds > 0) {
+          setTimeout(window.stopAturAjahWebAlarm, durationSeconds * 1000);
+        }
+
+        if (navigator.vibrate) {
+          try { navigator.vibrate([400, 200, 400, 200, 400]); } catch (_) {}
+        }
+      } catch (e) {
+        console.warn('Web alarm audio error:', e);
+      }
+    };
+
+    window.stopAturAjahWebAlarm = function() {
+      if (_webAlarmInterval) {
+        clearInterval(_webAlarmInterval);
+        _webAlarmInterval = null;
+      }
+      if (_webAlarmCtx) {
+        try { _webAlarmCtx.close(); } catch (_) {}
+        _webAlarmCtx = null;
+      }
+    };
+  </script>
 </head>
 <body>
   <!--

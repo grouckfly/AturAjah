@@ -1,16 +1,19 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
+import 'alarm_audio_stub.dart'
+    if (dart.library.js_interop) 'alarm_audio_web.dart';
 import 'settings_service.dart';
 
 /// Direct hardware alarm playback & vibration service using native Android MediaPlayer and Vibrator.
-/// Completely bypasses OS notification rate limiters and ensures sound loops seamlessly.
+/// On Web platforms, gracefully falls back to Web Audio API alarm oscillator via conditional import.
 class VibrationService {
   static const MethodChannel _channel =
       MethodChannel('com.aturajah.app/vibrate');
 
   /// Start continuous alarm sound & vibration for [durationSeconds].
-  /// The audio loops seamlessly (isLooping = true) so the alarm sound never ends
+  /// On Android: The audio loops seamlessly (isLooping = true) so the alarm sound never ends
   /// before the specified alarm duration finishes.
+  /// On Web: Plays continuous rhythmic beeps via Web Audio API.
   static Future<void> startAlarm({
     int? durationSeconds,
     bool withAudio = true,
@@ -19,6 +22,11 @@ class VibrationService {
     final vibrationEnabled = SettingsService.instance.vibrationEnabled;
     final duration =
         durationSeconds ?? SettingsService.instance.alarmDurationSeconds;
+
+    if (kIsWeb) {
+      triggerWebAlarm(duration);
+      return;
+    }
 
     try {
       await _channel.invokeMethod('startAlarm', {
@@ -34,7 +42,6 @@ class VibrationService {
   }
 
   /// Start repeating rhythmic alarm vibration and sound for [durationSeconds].
-  /// Keeps vibrating rhythmically and playing audio as long as the alarm is active.
   static Future<void> startAlarmVibration({int? durationSeconds}) async {
     await startAlarm(
       durationSeconds: durationSeconds,
@@ -45,17 +52,25 @@ class VibrationService {
 
   /// Stop both alarm audio and vibration immediately
   static Future<void> stopAlarm() async {
+    if (kIsWeb) {
+      stopWebAlarm();
+      return;
+    }
+
     try {
       await _channel.invokeMethod('stopAlarm');
     } catch (_) {}
   }
 
   /// Trigger a strong hardware vibration if vibration is enabled by user.
-  /// When called repeatedly (spam testing), each call cancels previous vibration
-  /// and immediately fires anew.
   static Future<void> vibrate({int durationMs = 400}) async {
     final enabled = SettingsService.instance.vibrationEnabled;
     if (!enabled) return;
+
+    if (kIsWeb) {
+      // On web, navigator.vibrate is handled in JS helper if supported
+      return;
+    }
 
     try {
       await _channel.invokeMethod('vibrate', {'duration': durationMs});

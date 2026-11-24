@@ -23,6 +23,7 @@ class UpdateService {
   /// Check whether a newer version exists on the server.
   /// Fails silently and safely returns null if user is offline or server unreachable.
   Future<UpdateInfoModel?> checkForUpdate() async {
+    if (kIsWeb) return null;
     try {
       final client = HttpClient();
       client.connectionTimeout = const Duration(seconds: 5);
@@ -50,6 +51,7 @@ class UpdateService {
 
   /// Get local cache file path for update APK
   Future<String> getDownloadPath() async {
+    if (kIsWeb) return '';
     try {
       final String? path = await _channel.invokeMethod('getDownloadPath');
       if (path != null && path.isNotEmpty) {
@@ -67,6 +69,10 @@ class UpdateService {
     required void Function(String error) onError,
     required void Function() onSuccess,
   }) async {
+    if (kIsWeb) {
+      onError('Unduhan APK hanya didukung pada perangkat Android.');
+      return;
+    }
     HttpClient? client;
     IOSink? sink;
     try {
@@ -129,6 +135,7 @@ class UpdateService {
 
   /// Trigger Android system PackageInstaller via FileProvider
   Future<bool> installApk(String filePath) async {
+    if (kIsWeb) return false;
     try {
       final bool? result = await _channel.invokeMethod('installApk', {
         'filePath': filePath,

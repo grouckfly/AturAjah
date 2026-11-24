@@ -197,6 +197,21 @@ class AppLocalizations {
       'weekly_no_tasks': 'Tidak ada tugas',
       'weekly_today': 'Hari ini',
 
+      // Presets & Proposal Evaluation
+      'preset_sheet_title': 'Template Usaha UMKM',
+      'preset_sheet_subtitle': 'Pilih contoh jadwal operasional sesuai jenis usaha Anda',
+      'preset_save_as_recurring': 'Simpan juga sebagai tugas berulang harian',
+      'apply_preset_cta': 'Terapkan Template',
+      'open_presets_btn': 'Template Cepat UMKM',
+      'proposal_metrics_title': 'Evaluasi Kinerja Operasional',
+      'proposal_target_badge': 'Target Proposal',
+      'metric_quiet_prep_title': 'Persiapan Jam Tenang',
+      'metric_quiet_prep_desc': 'Selesai sebelum jam sibuk',
+      'metric_delay_reduction_title': 'Ketepatan Waktu Layanan',
+      'metric_delay_reduction_desc': 'Tugas selesai tanpa ditunda',
+      'metric_productive_hours_title': 'Waktu Produktif Selesai',
+      'metric_productive_hours_desc': 'Total durasi kerja operasional',
+
       // General
       'language_switch': 'Bahasa',
       'close': 'Tutup',
@@ -379,6 +394,21 @@ class AppLocalizations {
       'weekly_snoozed': 'Snoozed',
       'weekly_no_tasks': 'No tasks',
       'weekly_today': 'Today',
+
+      // Presets & Proposal Evaluation
+      'preset_sheet_title': 'MSME Business Templates',
+      'preset_sheet_subtitle': 'Choose an operational schedule preset tailored to your business',
+      'preset_save_as_recurring': 'Also save as daily recurring tasks',
+      'apply_preset_cta': 'Apply Template',
+      'open_presets_btn': 'MSME Starter Presets',
+      'proposal_metrics_title': 'Operational Performance Evaluation',
+      'proposal_target_badge': 'Proposal Target',
+      'metric_quiet_prep_title': 'Quiet Hours Preparation',
+      'metric_quiet_prep_desc': 'Completed before peak rush',
+      'metric_delay_reduction_title': 'Service Punctuality',
+      'metric_delay_reduction_desc': 'Tasks completed without delay',
+      'metric_productive_hours_title': 'Productive Hours Completed',
+      'metric_productive_hours_desc': 'Total operational work duration',
 
       // General
       'language_switch': 'Language',

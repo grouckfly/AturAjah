@@ -1,7 +1,7 @@
 name: dapur_flow
 description: "AturAjah - Daily Task & Shift Schedule Manager"
 publish_to: 'none'
-version: 1.0.3+10005
+version: 1.0.4+10006
 
 environment:
   sdk: '>=3.0.0 <4.0.0'
@@ -27,6 +27,7 @@ dependencies:
 
   # Internationalization & Formatting
   intl: ^0.20.3
+  sqflite_common_ffi_web: ^1.2.2
 
 dev_dependencies:
   flutter_test:

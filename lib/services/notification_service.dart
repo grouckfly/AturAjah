@@ -85,6 +85,11 @@ class NotificationService {
 
   /// Initialize local notification channels and timezone database
   Future<void> initialize() async {
+    if (kIsWeb) {
+      _timeZonesReady = true;
+      return;
+    }
+
     // Initialize timezone database for exact scheduling (and fix tz.local).
     ensureTimeZones();
 
@@ -309,6 +314,7 @@ class NotificationService {
 
   /// Schedule an exact notification for a task at its targetTime
   Future<void> scheduleTaskAlarm(TaskModel task) async {
+    if (kIsWeb) return;
     if (task.id == null || task.isCompleted) return;
     ensureTimeZones();
 
@@ -348,6 +354,7 @@ class NotificationService {
 
   /// Schedule a snooze repeating alarm after N minutes
   Future<void> scheduleSnoozeAlarm(TaskModel task, int snoozeMinutes) async {
+    if (kIsWeb) return;
     if (task.id == null) return;
     ensureTimeZones();
 
@@ -376,6 +383,7 @@ class NotificationService {
   /// Immediately trigger notification (for test alert / preview CTA)
   Future<void> triggerImmediateNotification(TaskModel task,
       {int? durationSeconds}) async {
+    if (kIsWeb) return;
     _autoCancelTimer?.cancel();
 
     int id;
@@ -420,6 +428,10 @@ class NotificationService {
 
   /// Cancel all test notifications and stop test vibration
   Future<void> cancelTestAlarms() async {
+    if (kIsWeb) {
+      await VibrationService.cancel();
+      return;
+    }
     _autoCancelTimer?.cancel();
     _autoCancelTimer = null;
     for (int i = 0; i < 15; i++) {
@@ -435,6 +447,10 @@ class NotificationService {
 
   /// Cancel notification for a task (when marked as done or deleted)
   Future<void> cancelTaskAlarm(int taskId) async {
+    if (kIsWeb) {
+      await VibrationService.cancel();
+      return;
+    }
     try {
       await _notificationsPlugin.cancel(taskId);
       await VibrationService.cancel();
@@ -450,6 +466,7 @@ class NotificationService {
     required String title,
     required String body,
   }) async {
+    if (kIsWeb) return;
     const androidDetails = AndroidNotificationDetails(
       'flow_app_updates',
       'Pembaruan Aplikasi AturAjah',
@@ -478,6 +495,10 @@ class NotificationService {
 
   /// Cancel all pending notifications
   Future<void> cancelAll() async {
+    if (kIsWeb) {
+      await VibrationService.cancel();
+      return;
+    }
     _autoCancelTimer?.cancel();
     _autoCancelTimer = null;
     await _notificationsPlugin.cancelAll();

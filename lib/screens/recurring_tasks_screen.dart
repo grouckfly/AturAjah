@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../constants/app_colors.dart';
 import '../l10n/app_localizations.dart';
 import '../providers/task_provider.dart';
+import '../widgets/msme_preset_sheet.dart';
 
 /// Manages the daily recurring task templates (proposal: repetitive MSME
 /// preparation work should not be retyped every morning).
@@ -52,9 +53,19 @@ class RecurringTasksScreen extends StatelessWidget {
           icon: const Icon(Icons.arrow_back),
           onPressed: () => Navigator.of(context).pop(),
         ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.storefront_outlined, color: AppColors.primary),
+            tooltip: context.tr('open_presets_btn'),
+            onPressed: () => MsmePresetSheet.show(context),
+          ),
+        ],
       ),
       body: SafeArea(
-        child: provider.templates.isEmpty
+        child: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 560),
+            child: provider.templates.isEmpty
             ? Center(
                 child: Padding(
                   padding: const EdgeInsets.all(32),
@@ -73,6 +84,23 @@ class RecurringTasksScreen extends StatelessWidget {
                         style: const TextStyle(
                           color: AppColors.textMuted,
                           fontSize: 14,
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      OutlinedButton.icon(
+                        onPressed: () => MsmePresetSheet.show(context),
+                        icon: const Icon(Icons.storefront_outlined, size: 18),
+                        label: Text(context.tr('open_presets_btn')),
+                        style: OutlinedButton.styleFrom(
+                          foregroundColor: AppColors.primary,
+                          side: const BorderSide(color: AppColors.primary, width: 1.2),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 10,
+                          ),
                         ),
                       ),
                     ],
@@ -169,6 +197,8 @@ class RecurringTasksScreen extends StatelessWidget {
                   );
                 },
               ),
+            ),
+          ),
       ),
     );
   }

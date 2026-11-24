@@ -6,6 +6,7 @@ import '../l10n/app_localizations.dart';
 import '../models/task_model.dart';
 import '../providers/locale_provider.dart';
 import '../providers/task_provider.dart';
+import '../widgets/proposal_metrics_card.dart';
 
 /// Weekly overview (proposal objective 4: "a clear overview of daily and
 /// weekly tasks", plus the evaluation metrics of section 8).
@@ -126,6 +127,10 @@ class _WeeklyOverviewScreenState extends State<WeeklyOverviewScreen> {
                       ),
                     ],
                   ),
+                  const SizedBox(height: 16),
+
+                  // Proposal Section 8 Evaluation Metrics Card
+                  ProposalMetricsCard(allTasks: allTasks),
                   const SizedBox(height: 18),
 
                   ...entries.reversed.map((entry) {

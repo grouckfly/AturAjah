@@ -270,7 +270,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
         ),
       ),
       body: SafeArea(
-        child: ListView(
+        child: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 560),
+            child: ListView(
           padding: const EdgeInsets.all(16),
           children: [
             // 0. Operating Hours (proposal feature 3: user-defined traffic)
@@ -763,7 +766,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
           ],
         ),
       ),
-    );
+    ),
+  ),
+);
   }
 
   Widget _buildSectionHeader({required String title, required IconData icon}) {

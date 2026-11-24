@@ -1,13 +1,15 @@
+import 'package:flutter/foundation.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
+import 'package:sqflite_common_ffi_web/sqflite_ffi_web.dart';
 import '../models/task_model.dart';
 import '../models/task_template.dart';
 
 /// 100% Offline SQLite database manager for AturAjah.
 ///
-/// Schema v2 menambahkan tabel `task_templates` (tugas berulang harian) dan
-/// kolom `template_id` pada `tasks`, sehingga pekerjaan persiapan yang sama
-/// tidak perlu diketik ulang setiap pagi.
+/// Mendukung multi-platform: Android, iOS, Desktop, dan Web (IndexedDB via Wasm).
+/// Schema v3 menambahkan tabel `task_templates` (tugas berulang harian) dan
+/// `template_skips` untuk menjaga konsistensi jadwal.
 class DatabaseHelper {
   static final DatabaseHelper instance = DatabaseHelper._init();
   static Database? _database;
@@ -23,6 +25,18 @@ class DatabaseHelper {
   }
 
   Future<Database> _initDB(String filePath) async {
+    if (kIsWeb) {
+      databaseFactory = databaseFactoryFfiWeb;
+      return await databaseFactory.openDatabase(
+        filePath,
+        options: OpenDatabaseOptions(
+          version: schemaVersion,
+          onCreate: _createDB,
+          onUpgrade: _upgradeDB,
+        ),
+      );
+    }
+
     final dbPath = await getDatabasesPath();
     final path = join(dbPath, filePath);
 

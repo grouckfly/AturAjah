@@ -84,7 +84,11 @@ class _MainNavigationScreenState extends State<MainNavigationScreen>
       });
     }
 
-    return Scaffold(
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isWide = screenWidth > 640;
+
+    final Widget appShell = Scaffold(
+      backgroundColor: AppColors.background,
       body: IndexedStack(
         index: _currentIndex,
         children: _screens,
@@ -123,5 +127,28 @@ class _MainNavigationScreenState extends State<MainNavigationScreen>
         ),
       ),
     );
+
+    if (isWide) {
+      return Container(
+        color: const Color(0xFFF2EFE9), // Desktop canvas backdrop
+        child: Center(
+          child: Container(
+            constraints: const BoxConstraints(maxWidth: 560),
+            decoration: BoxDecoration(
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.08),
+                  blurRadius: 24,
+                  offset: const Offset(0, 4),
+                ),
+              ],
+            ),
+            child: ClipRect(child: appShell),
+          ),
+        ),
+      );
+    }
+
+    return appShell;
   }
 }
