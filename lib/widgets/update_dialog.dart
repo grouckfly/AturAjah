@@ -13,7 +13,7 @@ class UpdateDialog extends StatefulWidget {
   static Future<void> show(BuildContext context, UpdateInfoModel updateInfo) {
     return showDialog(
       context: context,
-      barrierDismissible: false,
+      barrierDismissible: true,
       builder: (ctx) => UpdateDialog(updateInfo: updateInfo),
     );
   }
@@ -29,6 +29,7 @@ class _UpdateDialogState extends State<UpdateDialog> {
   int _totalBytes = 0;
   String? _errorMessage;
   bool _isDownloaded = false;
+  bool _needsInstallPermission = false;
 
   String _formatBytes(int bytes) {
     if (bytes <= 0) return '0 B';
@@ -46,6 +47,7 @@ class _UpdateDialogState extends State<UpdateDialog> {
     setState(() {
       _isDownloading = true;
       _errorMessage = null;
+      _needsInstallPermission = false;
       _progress = 0.0;
       _receivedBytes = 0;
       _totalBytes = 0;
@@ -70,6 +72,13 @@ class _UpdateDialogState extends State<UpdateDialog> {
           });
         }
       },
+      onPermissionNeeded: () {
+        if (mounted) {
+          setState(() {
+            _needsInstallPermission = true;
+          });
+        }
+      },
       onSuccess: () {
         if (mounted) {
           setState(() {
@@ -79,6 +88,35 @@ class _UpdateDialogState extends State<UpdateDialog> {
         }
       },
     );
+  }
+
+  Future<void> _installDownloadedApk() async {
+    final canInstall =
+        await UpdateService.instance.canRequestPackageInstalls();
+    if (!canInstall) {
+      if (mounted) {
+        setState(() {
+          _needsInstallPermission = true;
+        });
+      }
+      await UpdateService.instance.openInstallPermissionSettings();
+      return;
+    }
+
+    if (mounted) {
+      setState(() {
+        _needsInstallPermission = false;
+        _errorMessage = null;
+      });
+    }
+
+    final path = await UpdateService.instance.getDownloadPath();
+    final opened = await UpdateService.instance.installApk(path);
+    if (!opened && mounted) {
+      setState(() {
+        _errorMessage = context.tr('install_conflict_hint');
+      });
+    }
   }
 
   @override
@@ -93,9 +131,9 @@ class _UpdateDialogState extends State<UpdateDialog> {
     return Dialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       backgroundColor: AppColors.surface,
-      insetPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
+      insetPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
       child: Padding(
-        padding: const EdgeInsets.all(22),
+        padding: const EdgeInsets.all(20),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -130,7 +168,7 @@ class _UpdateDialogState extends State<UpdateDialog> {
                       ),
                       const SizedBox(height: 2),
                       Text(
-                        'v${widget.updateInfo.version} (${context.tr('current_version_prefix')}: v${UpdateService.currentVersion})',
+                        'v${widget.updateInfo.version} (${context.tr('current_version_prefix')}: v${UpdateService.appVersion})',
                         style: const TextStyle(
                           fontSize: 12,
                           color: AppColors.textSecondary,
@@ -143,7 +181,7 @@ class _UpdateDialogState extends State<UpdateDialog> {
               ],
             ),
 
-            const SizedBox(height: 18),
+            const SizedBox(height: 16),
             const Divider(color: AppColors.divider, height: 1),
             const SizedBox(height: 14),
 
@@ -188,6 +226,7 @@ class _UpdateDialogState extends State<UpdateDialog> {
                   border: Border.all(color: Colors.red.shade200),
                 ),
                 child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Icon(Icons.error_outline,
                         color: Colors.red.shade700, size: 18),
@@ -198,6 +237,36 @@ class _UpdateDialogState extends State<UpdateDialog> {
                         style: TextStyle(
                           fontSize: 12,
                           color: Colors.red.shade800,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+
+            if (_needsInstallPermission) ...[
+              const SizedBox(height: 12),
+              Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: Colors.orange.shade50,
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(color: Colors.orange.shade200),
+                ),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Icon(Icons.security_update_warning_outlined,
+                        color: Colors.orange.shade800, size: 18),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        context.tr('install_permission_needed'),
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Colors.orange.shade900,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
@@ -241,7 +310,7 @@ class _UpdateDialogState extends State<UpdateDialog> {
               ),
             ],
 
-            if (_isDownloaded) ...[
+            if (_isDownloaded && !_needsInstallPermission) ...[
               const SizedBox(height: 14),
               Container(
                 padding: const EdgeInsets.all(10),
@@ -250,19 +319,32 @@ class _UpdateDialogState extends State<UpdateDialog> {
                   borderRadius: BorderRadius.circular(8),
                   border: Border.all(color: Colors.green.shade200),
                 ),
-                child: Row(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Icon(Icons.check_circle_outline,
-                        color: Colors.green.shade700, size: 18),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: Text(
-                        context.tr('download_complete_install_prompt'),
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Colors.green.shade800,
-                          fontWeight: FontWeight.w600,
+                    Row(
+                      children: [
+                        Icon(Icons.check_circle_outline,
+                            color: Colors.green.shade700, size: 18),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: Text(
+                            context.tr('download_complete_install_prompt'),
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.green.shade800,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
                         ),
+                      ],
+                    ),
+                    const SizedBox(height: 6),
+                    Text(
+                      context.tr('install_conflict_hint'),
+                      style: TextStyle(
+                        fontSize: 11,
+                        color: Colors.green.shade900,
                       ),
                     ),
                   ],
@@ -270,7 +352,7 @@ class _UpdateDialogState extends State<UpdateDialog> {
               ),
             ],
 
-            const SizedBox(height: 22),
+            const SizedBox(height: 20),
 
             // Action Buttons
             Row(
@@ -278,51 +360,76 @@ class _UpdateDialogState extends State<UpdateDialog> {
                 if (!_isDownloading)
                   Expanded(
                     child: OutlinedButton(
-                      onPressed: () => Navigator.of(context).pop(),
+                      onPressed: () async {
+                        await UpdateService.instance
+                            .snoozeUpdate(widget.updateInfo.versionCode);
+                        if (context.mounted) {
+                          Navigator.of(context).pop();
+                        }
+                      },
                       style: OutlinedButton.styleFrom(
                         side: const BorderSide(color: AppColors.divider),
                         foregroundColor: AppColors.textSecondary,
-                        padding: const EdgeInsets.symmetric(vertical: 12),
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 12, horizontal: 8),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
                       ),
-                      child: Text(context.tr('later_btn')),
+                      child: FittedBox(
+                        fit: BoxFit.scaleDown,
+                        child: Text(context.tr('later_btn')),
+                      ),
                     ),
                   ),
                 if (!_isDownloading) const SizedBox(width: 10),
                 Expanded(
-                  flex: _isDownloading ? 1 : 1,
+                  flex: 2,
                   child: ElevatedButton(
                     onPressed: _isDownloading
                         ? null
                         : (_isDownloaded
-                            ? () async {
-                                final path = await UpdateService.instance
-                                    .getDownloadPath();
-                                await UpdateService.instance.installApk(path);
-                              }
+                            ? _installDownloadedApk
                             : _startDownload),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.primary,
                       foregroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(vertical: 12),
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 12, horizontal: 12),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
                     ),
-                    child: Text(
-                      _isDownloaded
-                          ? context.tr('install_now_btn')
-                          : (_isDownloading
-                              ? context.tr('downloading_btn')
-                              : context.tr('update_now_btn')),
-                      style: const TextStyle(fontWeight: FontWeight.w700),
+                    child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Text(
+                        _isDownloaded
+                            ? context.tr('install_now_btn')
+                            : (_isDownloading
+                                ? context.tr('downloading_btn')
+                                : context.tr('update_now_btn')),
+                        style: const TextStyle(fontWeight: FontWeight.w700),
+                      ),
                     ),
                   ),
                 ),
               ],
             ),
+
+            if (!_isDownloading && (_errorMessage != null || _isDownloaded)) ...[
+              const SizedBox(height: 8),
+              SizedBox(
+                width: double.infinity,
+                child: TextButton.icon(
+                  onPressed: () => UpdateService.instance.openDownloadPage(),
+                  icon: const Icon(Icons.open_in_browser, size: 17),
+                  label: Text(context.tr('open_browser_btn')),
+                  style: TextButton.styleFrom(
+                    foregroundColor: AppColors.primary,
+                  ),
+                ),
+              ),
+            ],
           ],
         ),
       ),

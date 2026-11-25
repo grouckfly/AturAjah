@@ -36,12 +36,21 @@ class _SettingsScreenState extends State<SettingsScreen> {
     super.dispose();
   }
 
+  @override
+  void initState() {
+    super.initState();
+    UpdateService.instance.ensureVersionLoaded().then((_) {
+      if (mounted) setState(() {});
+    });
+  }
+
   Future<void> _handleManualCheckUpdate() async {
     setState(() {
       _isCheckingUpdate = true;
     });
 
-    final updateInfo = await UpdateService.instance.checkForUpdate();
+    final updateInfo =
+        await UpdateService.instance.checkForUpdate(ignoreSnooze: true);
 
     if (!mounted) return;
 
@@ -56,7 +65,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
-            context.tr('app_is_up_to_date', [UpdateService.currentVersion]),
+            context.tr('app_is_up_to_date', [UpdateService.appVersion]),
           ),
           backgroundColor: AppColors.secondary,
           duration: const Duration(seconds: 2),
@@ -663,9 +672,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text(
-                        'AturAjah v${UpdateService.currentVersion}',
-                        style: TextStyle(
+                      Text(
+                        'AturAjah v${UpdateService.appVersion}',
+                        style: const TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.w700,
                           color: AppColors.textPrimary,
@@ -679,9 +688,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           borderRadius: BorderRadius.circular(6),
                           border: Border.all(color: AppColors.divider),
                         ),
-                        child: const Text(
-                          'Build ${UpdateService.currentVersionCode}',
-                          style: TextStyle(
+                        child: Text(
+                          'Build ${UpdateService.appVersionCode}',
+                          style: const TextStyle(
                             fontSize: 11,
                             color: AppColors.textSecondary,
                             fontWeight: FontWeight.w600,

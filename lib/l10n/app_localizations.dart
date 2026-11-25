@@ -132,6 +132,11 @@ class AppLocalizations {
       'update_now_btn': 'Perbarui Sekarang',
       'downloading_btn': 'Mengunduh...',
       'install_now_btn': 'Pasang Sekarang',
+      'open_browser_btn': 'Unduh di Browser',
+      'install_permission_needed':
+          'Izinkan "Pasang aplikasi tidak dikenal" untuk AturAjah di Setelan yang terbuka, lalu kembali dan ketuk Pasang Sekarang.',
+      'install_conflict_hint':
+          'Jika gagal terpasang karena bentrok versi lama, hapus aplikasi AturAjah lama terlebih dahulu lalu pasang APK terbaru dari browser.',
       'check_update_section': 'Pembaruan Aplikasi',
       'check_update_btn': 'Periksa Pembaruan',
       'app_is_up_to_date': 'Aplikasi sudah dalam versi terbaru (v%s)',
@@ -330,6 +335,11 @@ class AppLocalizations {
       'update_now_btn': 'Update Now',
       'downloading_btn': 'Downloading...',
       'install_now_btn': 'Install Now',
+      'open_browser_btn': 'Open in Browser',
+      'install_permission_needed':
+          'Allow "Install unknown apps" for AturAjah in the opened Settings, then return and tap Install Now.',
+      'install_conflict_hint':
+          'If installation is rejected due to a signature conflict with an older build, uninstall the old app first and install the new APK from the browser.',
       'check_update_section': 'App Updates',
       'check_update_btn': 'Check for Updates',
       'app_is_up_to_date': 'App is already up to date (v%s)',

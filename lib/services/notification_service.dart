@@ -493,6 +493,14 @@ class NotificationService {
     );
   }
 
+  /// Cancel the dedicated in-app update notification if present
+  Future<void> cancelUpdateNotification() async {
+    if (kIsWeb) return;
+    try {
+      await _notificationsPlugin.cancel(8888);
+    } catch (_) {}
+  }
+
   /// Cancel all pending notifications
   Future<void> cancelAll() async {
     if (kIsWeb) {

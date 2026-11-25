@@ -55,6 +55,68 @@ class MainActivity : FlutterActivity() {
                     val cacheFile = java.io.File(applicationContext.cacheDir, "AturAjah-update.apk")
                     result.success(cacheFile.absolutePath)
                 }
+                "getAppVersion" -> {
+                    try {
+                        val pInfo = packageManager.getPackageInfo(packageName, 0)
+                        val code = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                            pInfo.longVersionCode.toInt()
+                        } else {
+                            @Suppress("DEPRECATION")
+                            pInfo.versionCode
+                        }
+                        result.success(mapOf(
+                            "versionName" to (pInfo.versionName ?: ""),
+                            "versionCode" to code
+                        ))
+                    } catch (e: Exception) {
+                        result.success(null)
+                    }
+                }
+                "canRequestPackageInstalls" -> {
+                    val canInstall = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        packageManager.canRequestPackageInstalls()
+                    } else {
+                        true
+                    }
+                    result.success(canInstall)
+                }
+                "openInstallPermissionSettings" -> {
+                    try {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                            val intent = android.content.Intent(
+                                android.provider.Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES,
+                                Uri.parse("package:$packageName")
+                            ).apply {
+                                addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK)
+                            }
+                            startActivity(intent)
+                        }
+                        result.success(true)
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                        result.success(false)
+                    }
+                }
+                "openUrl" -> {
+                    val url = call.argument<String>("url")
+                    if (!url.isNullOrBlank()) {
+                        try {
+                            val intent = android.content.Intent(
+                                android.content.Intent.ACTION_VIEW,
+                                Uri.parse(url)
+                            ).apply {
+                                addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK)
+                            }
+                            startActivity(intent)
+                            result.success(true)
+                        } catch (e: Exception) {
+                            e.printStackTrace()
+                            result.success(false)
+                        }
+                    } else {
+                        result.success(false)
+                    }
+                }
                 "installApk" -> {
                     val path = call.argument<String>("filePath")
                     if (path != null) {

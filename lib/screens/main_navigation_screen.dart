@@ -56,10 +56,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen>
   Future<void> _checkAutoUpdate() async {
     final updateInfo = await UpdateService.instance.checkForUpdate();
     if (updateInfo != null && mounted) {
-      await UpdateService.instance.showUpdateNotification(updateInfo);
-      if (mounted) {
-        UpdateDialog.show(context, updateInfo);
-      }
+      UpdateDialog.show(context, updateInfo);
     }
   }
 
