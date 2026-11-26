@@ -12,7 +12,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='6' fill='%23F4511E'/%3E%3Cpath d='M7 7h4v4H7zm6 0h4v4h-4zM7 13h4v4H7zm6 0h4v4h-4z' fill='white'/%3E%3C/svg%3E">
+<link rel="icon" type="image/png" href="logo.png">
+<link rel="apple-touch-icon" href="logo.png">
 <style>
   :root{
     --primary:#F4511E; --primary-dark:#D84315; --primary-soft:#FFF1EB;
@@ -46,9 +47,7 @@
     background:color-mix(in srgb,var(--bg) 82%,transparent);border-bottom:1px solid var(--line)}
   .nav{display:flex;align-items:center;justify-content:space-between;gap:16px;height:64px}
   .brand{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:-.02em;font-size:17px}
-  .brand-mark{width:32px;height:32px;border-radius:9px;background:linear-gradient(140deg,#FF7043,var(--primary));
-    display:grid;place-items:center;box-shadow:0 6px 14px -6px rgba(244,81,30,.8)}
-  .brand-mark svg{width:18px;height:18px;fill:#fff}
+  .brand-mark{width:34px;height:34px;border-radius:9px;display:block;box-shadow:0 6px 14px -6px rgba(244,81,30,.6);flex:none}
   .nav-links{display:flex;gap:22px;font-size:14px;font-weight:600;color:var(--ink-soft)}
   .nav-links a{text-decoration:none}
   .nav-links a:hover{color:var(--primary)}
@@ -168,9 +167,7 @@
 <header>
   <div class="wrap nav">
     <div class="brand">
-      <span class="brand-mark" aria-hidden="true">
-        <svg viewBox="0 0 24 24"><path d="M7 7h4v4H7zm6 0h4v4h-4zM7 13h4v4H7zm6 0h4v4h-4z"/></svg>
-      </span>
+      <img class="brand-mark" src="logo.png" alt="Logo AturAjah" width="34" height="34">
       AturAjah
     </div>
     <nav class="nav-links" aria-label="Navigasi">
@@ -205,7 +202,7 @@
 
       <div class="meta">
         <span class="chip ok">100% Offline &amp; SQLite Lokal</span>
-        <span class="chip" id="verChip">Versi 1.0.4</span>
+        <span class="chip" id="verChip">Versi 1.0.5</span>
         <span class="chip">Web/PWA • iOS • Android • PC</span>
         <span class="chip">Bahasa ID / EN</span>
       </div>
@@ -228,7 +225,7 @@
           <span id="btnShareLabel">Bagikan tautan</span>
         </button>
       </div>
-      <p class="fineprint">Ukuran APK ±28 MB (universal) atau ±13 MB (arm64). Tanpa server, tanpa login akun, tanpa iklan. Berjalan mulus di HP, tablet, maupun PC. <a href="#pasang">Panduan pemasangan →</a></p>
+      <p class="fineprint">Ukuran APK ±31 MB (universal) atau ±14 MB (arm64). Tanpa server, tanpa login akun, tanpa iklan. Berjalan mulus di HP, tablet, maupun PC. <a href="#pasang">Panduan pemasangan →</a></p>
     </div>
 
     <div class="phone" aria-hidden="true">
@@ -238,7 +235,10 @@
         <div class="banner">Jam tenang • 14.00–16.00 — Persiapan stok bahan</div>
         <div class="metric-badge">
           <span>Efisiensi Jam Tenang</span>
-          <span>85% (Target ≥60%) ✓</span>
+          <span style="display:inline-flex;align-items:center;gap:4px">
+            85% (Target ≥60%)
+            <svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor" aria-hidden="true"><path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z"/></svg>
+          </span>
         </div>
         <div class="row"><span class="dot" style="background:#E53935"></span><div><div class="r-txt">Potong sayuran &amp; racik bumbu</div><div class="r-sub">09.30 • 30 mnt • Sari</div></div></div>
         <div class="row"><span class="dot" style="background:#1E88E5"></span><div><div class="r-txt">Rekap penjualan mingguan</div><div class="r-sub">13.00 • 45 mnt</div></div></div>
@@ -367,7 +367,7 @@
     </div>
     <div class="release">
       <div class="release-top">
-        <div class="ver" id="relVersion">AturAjah v1.0.4</div>
+        <div class="ver" id="relVersion">AturAjah v1.0.5</div>
         <div class="chip ok" id="relDate">—</div>
       </div>
       <div class="notes" id="relNotes">Memuat catatan rilis…</div>
@@ -396,8 +396,8 @@
       <p>Beberapa produsen menerapkan penghemat baterai agresif yang mematikan aplikasi di latar belakang. Cukup buka <em>Setelan &rarr; Aplikasi &rarr; AturAjah</em>, aktifkan <strong>Autostart</strong>, dan atur penghemat baterai ke <strong>Tanpa batas (Tidak dioptimalkan)</strong>.</p>
     </details>
     <details>
-      <summary>Bagaimana jika gagal memasang APK v1.0.4 di atas versi lama (v1.0.3)?</summary>
-      <p>Mulai versi <strong>1.0.4</strong>, tanda tangan paket (signing key) telah diperbarui untuk mendukung proses rilis berkelanjutan. Jika Anda sebelumnya sudah memasang AturAjah v1.0.3 dan muncul pesan <em>"Aplikasi tidak terpasang / paket bertentangan"</em>, cukup <strong>hapus (uninstall) AturAjah versi lama terlebih dahulu</strong>, lalu pasang berkas APK v1.0.4 ini.</p>
+      <summary>Bagaimana jika gagal memasang APK terbaru di atas versi lama (v1.0.3)?</summary>
+      <p>Mulai rilis terbaru, tanda tangan paket (signing key) telah diperbarui untuk mendukung rilis berkelanjutan. Jika Anda sebelumnya masih memakai AturAjah v1.0.3 dan muncul pesan <em>"Aplikasi tidak terpasang / paket bertentangan"</em>, cukup <strong>hapus (uninstall) AturAjah versi lama sekali saja</strong>, lalu pasang berkas APK v1.0.5 ini.</p>
     </details>
     <details>
       <summary>Bagaimana cara menggunakan Template Usaha UMKM?</summary>

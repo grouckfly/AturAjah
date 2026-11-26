@@ -499,17 +499,10 @@ class _TaskInputScreenState extends State<TaskInputScreen> {
               const SizedBox(height: 28),
 
               // Primary CTA Button (Full-width dark button at bottom)
-              ElevatedButton(
+              ElevatedButton.icon(
                 onPressed: _saveOrUpdateTask,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.textPrimary,
-                  foregroundColor: Colors.white,
-                  minimumSize: const Size.fromHeight(54),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(14),
-                  ),
-                ),
-                child: Text(
+                icon: const Icon(Icons.check_rounded, size: 20),
+                label: Text(
                   isEditing
                       ? context.tr('update_task_cta')
                       : context.tr('save_task_cta'),
@@ -517,6 +510,14 @@ class _TaskInputScreenState extends State<TaskInputScreen> {
                     fontSize: 16,
                     fontWeight: FontWeight.w700,
                     letterSpacing: 0.2,
+                  ),
+                ),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.textPrimary,
+                  foregroundColor: Colors.white,
+                  minimumSize: const Size.fromHeight(54),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(14),
                   ),
                 ),
               ),

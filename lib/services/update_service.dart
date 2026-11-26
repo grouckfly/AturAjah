@@ -11,8 +11,8 @@ import 'notification_service.dart';
 class UpdateService {
   static final UpdateService instance = UpdateService._internal();
 
-  static const String currentVersion = '1.0.4';
-  static const int currentVersionCode = 10006;
+  static const String currentVersion = '1.0.5';
+  static const int currentVersionCode = 10007;
   static const String updateMetadataUrl =
       'https://aturajah.vercel.app/version.json';
   static const String downloadPageUrl = 'https://aturajah.vercel.app/';

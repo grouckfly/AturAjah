@@ -82,7 +82,7 @@ void main() {
 
       await tester.enterText(find.byType(TextFormField).at(0), 'Cuci gelas');
       await tester.enterText(find.byType(TextFormField).at(2), 'Sari');
-      await tester.tap(find.text('✓ Simpan Tugas'));
+      await tester.tap(find.text('Simpan Tugas'));
       await tester.pumpAndSettle();
 
       expect(provider.tasks.single.assignee, 'Sari');
@@ -122,7 +122,7 @@ void main() {
       expect(find.text('07:00'), findsOneWidget);
 
       await tester.enterText(find.byType(TextFormField).at(0), 'Siapkan bumbu');
-      await tester.tap(find.text('✓ Simpan Tugas'));
+      await tester.tap(find.text('Simpan Tugas'));
       await tester.pumpAndSettle();
 
       expect(provider.tasks.single.targetTime, '07:00');

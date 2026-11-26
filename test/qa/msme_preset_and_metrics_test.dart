@@ -2,7 +2,9 @@ import 'package:dapur_flow/models/msme_preset.dart';
 import 'package:dapur_flow/models/priority_quadrant.dart';
 import 'package:dapur_flow/models/task_model.dart';
 import 'package:dapur_flow/providers/task_provider.dart';
+import 'package:dapur_flow/widgets/msme_preset_sheet.dart';
 import 'package:dapur_flow/widgets/proposal_metrics_card.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'support/test_harness.dart';
@@ -28,11 +30,29 @@ void main() {
       for (final p in presets) {
         expect(p.title.isNotEmpty, isTrue);
         expect(p.tasks.isNotEmpty, isTrue);
+        expect(p.icon, isA<IconData>());
         for (final task in p.tasks) {
           expect(task.title.isNotEmpty, isTrue);
           expect(task.durationMinutes, greaterThan(0));
           expect(task.targetTime, matches(RegExp(r'^\d{2}:\d{2}$')));
         }
+      }
+    });
+
+    testWidgets('MsmePresetSheet renders Material icon badges with no emoji',
+        (tester) async {
+      final provider = TaskProvider();
+      await provider.loadTasks();
+
+      await pumpTestApp(
+        tester,
+        provider: provider,
+        home: const Scaffold(body: MsmePresetSheet()),
+      );
+
+      for (final p in MsmePreset.presets) {
+        expect(find.text(p.title), findsOneWidget);
+        expect(find.byIcon(p.icon), findsOneWidget);
       }
     });
 

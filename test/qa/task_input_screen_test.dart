@@ -45,8 +45,8 @@ void main() {
       await tester.tap(find.text('Delegasikan'));
       await tester.pumpAndSettle();
 
-      await tester.ensureVisible(find.text('✓ Simpan Tugas'));
-      await tester.tap(find.text('✓ Simpan Tugas'));
+      await tester.ensureVisible(find.text('Simpan Tugas'));
+      await tester.tap(find.text('Simpan Tugas'));
       await tester.pumpAndSettle();
 
       expect(provider.tasks.length, 1);
@@ -69,7 +69,7 @@ void main() {
       await provider.loadTasks();
 
       await pumpPushedScreen(tester, const TaskInputScreen(), provider: provider);
-      await tester.tap(find.text('✓ Simpan Tugas'));
+      await tester.tap(find.text('Simpan Tugas'));
       await tester.pumpAndSettle();
 
       expect(find.text('Nama tugas tidak boleh kosong'), findsOneWidget);
@@ -84,7 +84,7 @@ void main() {
       await pumpPushedScreen(tester, const TaskInputScreen(), provider: provider);
       await tester.enterText(find.byType(TextFormField).at(0), 'Cuci gelas');
       await tester.enterText(find.byType(TextFormField).at(1), '0');
-      await tester.tap(find.text('✓ Simpan Tugas'));
+      await tester.tap(find.text('Simpan Tugas'));
       await tester.pumpAndSettle();
 
       expect(find.text('Durasi harus lebih dari 0 menit'), findsOneWidget);
@@ -98,7 +98,7 @@ void main() {
 
       await pumpPushedScreen(tester, const TaskInputScreen(), provider: provider);
       await tester.enterText(find.byType(TextFormField).at(0), 'Buka warung');
-      await tester.tap(find.text('✓ Simpan Tugas'));
+      await tester.tap(find.text('Simpan Tugas'));
       await tester.pumpAndSettle();
 
       final saved = provider.tasks.single;
@@ -133,8 +133,8 @@ void main() {
       await tester.tap(find.text('Jadwalkan'));
       await tester.pumpAndSettle();
 
-      await tester.ensureVisible(find.text('✓ Simpan Perubahan'));
-      await tester.tap(find.text('✓ Simpan Perubahan'));
+      await tester.ensureVisible(find.text('Simpan Perubahan'));
+      await tester.tap(find.text('Simpan Perubahan'));
       await tester.pumpAndSettle();
 
       expect(provider.tasks.length, 1);

@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'priority_quadrant.dart';
 
 /// Predefined task model for MSME business starter packs based on
@@ -23,14 +24,16 @@ class MsmePreset {
   final String id;
   final String title;
   final String subtitle;
-  final String iconEmoji;
+  final IconData icon;
+  final Color accentColor;
   final List<MsmePresetTask> tasks;
 
   const MsmePreset({
     required this.id,
     required this.title,
     required this.subtitle,
-    required this.iconEmoji,
+    required this.icon,
+    required this.accentColor,
     required this.tasks,
   });
 
@@ -40,7 +43,8 @@ class MsmePreset {
           id: 'padang',
           title: 'Rumah Makan Padang',
           subtitle: 'Persiapan bumbu & rendang pagi, tata display sebelum makan siang',
-          iconEmoji: '🍛',
+          icon: Icons.dinner_dining_rounded,
+          accentColor: Color(0xFFD84315),
           tasks: [
             MsmePresetTask(
               title: 'Rebus rendang & ungkep ayam gulai',
@@ -82,7 +86,8 @@ class MsmePreset {
           id: 'nasi_campur',
           title: 'Warung Nasi Campur',
           subtitle: 'Belanja sayur, masak lauk matang, siapkan katering & makan siang',
-          iconEmoji: '🍚',
+          icon: Icons.rice_bowl_rounded,
+          accentColor: Color(0xFFEF6C00),
           tasks: [
             MsmePresetTask(
               title: 'Belanja sayuran segar & bahan harian',
@@ -124,7 +129,8 @@ class MsmePreset {
           id: 'gorengan',
           title: 'Gerobak Gorengan',
           subtitle: 'Kupas pisang/tahu, racik adonan tepung, goreng awal sebelum ramai',
-          iconEmoji: '🥟',
+          icon: Icons.bakery_dining_rounded,
+          accentColor: Color(0xFFF57C00),
           tasks: [
             MsmePresetTask(
               title: 'Kupas pisang, potong tahu & tempe',
@@ -159,7 +165,8 @@ class MsmePreset {
           id: 'kopi',
           title: 'Kedai Kopi & Coffee Bike',
           subtitle: 'Remukkan es batu, seduh konsentrat kopi, atur cup sebelum antrean',
-          iconEmoji: '☕',
+          icon: Icons.local_cafe_rounded,
+          accentColor: Color(0xFF6D4C41),
           tasks: [
             MsmePresetTask(
               title: 'Hancurkan es batu & isi termos es',
@@ -194,7 +201,8 @@ class MsmePreset {
           id: 'jus',
           title: 'Toko Jus Buah Segar',
           subtitle: 'Kupas buah, porsi per bungkus, siapkan gula cair sebelum jam ramai',
-          iconEmoji: '🥤',
+          icon: Icons.local_bar_rounded,
+          accentColor: Color(0xFF2E7D32),
           tasks: [
             MsmePresetTask(
               title: 'Kupas & potong buah (alpukat, mangga, naga)',

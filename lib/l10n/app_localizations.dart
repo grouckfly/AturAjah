@@ -68,8 +68,8 @@ class AppLocalizations {
       'target_time_label': 'Target Waktu',
       'duration_label': 'Durasi (Menit)',
       'priority_matrix_title': 'Matriks Prioritas (Eisenhower)',
-      'save_task_cta': '✓ Simpan Tugas',
-      'update_task_cta': '✓ Simpan Perubahan',
+      'save_task_cta': 'Simpan Tugas',
+      'update_task_cta': 'Simpan Perubahan',
       'error_title_empty': 'Nama tugas tidak boleh kosong',
       'error_duration_invalid': 'Durasi harus lebih dari 0 menit',
 
@@ -271,8 +271,8 @@ class AppLocalizations {
       'target_time_label': 'Target Time',
       'duration_label': 'Duration (Minutes)',
       'priority_matrix_title': 'Priority Matrix (Eisenhower)',
-      'save_task_cta': '✓ Save Task',
-      'update_task_cta': '✓ Save Changes',
+      'save_task_cta': 'Save Task',
+      'update_task_cta': 'Save Changes',
       'error_title_empty': 'Task name cannot be empty',
       'error_duration_invalid': 'Duration must be greater than 0 minutes',
 

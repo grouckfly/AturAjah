@@ -1,9 +1,9 @@
 {
-  "version": "1.0.4",
-  "versionCode": 10006,
-  "releaseDate": "2026-11-25",
-  "releaseNotes": "Catatan: Jika pembaruan gagal terpasang di atas v1.0.3, hapus aplikasi lama terlebih dahulu lalu pasang APK v1.0.4 dari aturajah.vercel.app. Fitur baru: 5 Template Usaha UMKM, Metrik Efisiensi Proposal, perbaikan izin pasang & sistem update, serta PWA multi-perangkat.",
-  "releaseNotesEn": "Note: If in-place update fails over v1.0.3, uninstall the older app first and install the latest v1.0.4 APK from aturajah.vercel.app. Includes 5 MSME templates, Operational Efficiency Metrics, updater permission fixes, and multi-device PWA support.",
+  "version": "1.0.5",
+  "versionCode": 10007,
+  "releaseDate": "2026-11-26",
+  "releaseNotes": "Logo aplikasi baru AturAjah dan antarmuka UI Layout Material murni bebas emoji di seluruh halaman. Catatan: jika sebelumnya terpasang v1.0.3 dan pembaruan gagal menimpa, hapus versi lama sekali saja lalu pasang APK v1.0.5.",
+  "releaseNotesEn": "New AturAjah app logo and pure Material UI Layout across all screens with zero emoji. Note: if upgrading directly over v1.0.3 fails, uninstall v1.0.3 once and install the v1.0.5 APK.",
   "apkUrl": "https://aturajah.vercel.app/AturAjah.apk",
   "arm64ApkUrl": "https://aturajah.vercel.app/AturAjah-arm64.apk"
 }

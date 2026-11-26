@@ -187,18 +187,35 @@ class _MsmePresetSheetState extends State<MsmePresetSheet> {
                       itemBuilder: (context, index) {
                         final preset = presets[index];
 
-                        return Container(
-                          decoration: BoxDecoration(
-                            color: AppColors.surface,
+                        return Material(
+                          color: AppColors.surface,
+                          clipBehavior: Clip.antiAlias,
+                          shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(14),
-                            border: Border.all(color: AppColors.divider, width: 1.2),
+                            side: const BorderSide(
+                              color: AppColors.divider,
+                              width: 1.2,
+                            ),
                           ),
                           child: Theme(
                             data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
                             child: ExpansionTile(
-                              leading: Text(
-                                preset.iconEmoji,
-                                style: const TextStyle(fontSize: 26),
+                              leading: Container(
+                                width: 44,
+                                height: 44,
+                                decoration: BoxDecoration(
+                                  color: preset.accentColor.withValues(alpha: 0.12),
+                                  borderRadius: BorderRadius.circular(12),
+                                  border: Border.all(
+                                    color: preset.accentColor.withValues(alpha: 0.25),
+                                    width: 1,
+                                  ),
+                                ),
+                                child: Icon(
+                                  preset.icon,
+                                  color: preset.accentColor,
+                                  size: 22,
+                                ),
                               ),
                               title: Text(
                                 preset.title,

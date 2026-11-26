@@ -11,11 +11,11 @@ void main() {
       SharedPreferences.setMockInitialValues({});
     });
 
-    test('currentVersion and currentVersionCode match v1.0.4+10006', () {
-      expect(UpdateService.currentVersion, '1.0.4');
-      expect(UpdateService.currentVersionCode, 10006);
-      expect(UpdateService.appVersion, '1.0.4');
-      expect(UpdateService.appVersionCode, 10006);
+    test('currentVersion and currentVersionCode match v1.0.5+10007', () {
+      expect(UpdateService.currentVersion, '1.0.5');
+      expect(UpdateService.currentVersionCode, 10007);
+      expect(UpdateService.appVersion, '1.0.5');
+      expect(UpdateService.appVersionCode, 10007);
     });
 
     test('snoozeUpdate persists snoozed versionCode in SharedPreferences', () async {
